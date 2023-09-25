@@ -1,4 +1,4 @@
-import { Layout } from "antd";
+import { Empty, Layout, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import Header from "../HomePage/Header";
 import { Content } from "antd/es/layout/layout";
@@ -18,7 +18,7 @@ const Bookmark: React.FC<any> = ({
 
   const colRef = collection(db, "posts");
 
-  const getLikedPosts = () => {
+  const getBookmarkPosts = () => {
     getDocs(colRef)
       .then((snapshot) => {
         let postDocs: any = [];
@@ -43,9 +43,15 @@ const Bookmark: React.FC<any> = ({
       });
   };
 
+  const handleRemoveBookmarkPosts = (id: any) => {
+    setUserPost((prevState) =>
+      prevState.filter((post: any) => post.postId !== id)
+    );
+  };
+
   useEffect(() => {
-    getLikedPosts();
-  }, [userPost]);
+    getBookmarkPosts();
+  }, []);
 
   return (
     <Layout>
@@ -58,11 +64,17 @@ const Bookmark: React.FC<any> = ({
         ) : null}
         <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
           {loading ? (
-            <div className="loading"></div>
+            <div className="loading-spin">
+              <Spin tip="Loading" size="large">
+                <div className="content" />
+              </Spin>
+            </div>
           ) : (
             <div>
               {userPost?.length === 0 ? (
-                <p className="no-comments-text">No posts</p>
+                <div style={{ marginTop: "100px" }}>
+                  <Empty />
+                </div>
               ) : (
                 <div>
                   {userPost.map((newPost: any, index: any) => {
@@ -74,6 +86,7 @@ const Bookmark: React.FC<any> = ({
                         deleteLikePost={deleteLikePost}
                         bookmarkPost={bookmarkPost}
                         removeBookmarkPosts={removeBookmarkPosts}
+                        handleRemoveBookmarkPosts={handleRemoveBookmarkPosts}
                       />
                     );
                   })}

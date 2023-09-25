@@ -35,7 +35,7 @@ const SignUp: React.FC = () => {
   return (
     <Layout style={{ height: "100vh" }}>
       <div className="form-div" style={{ height: "100vh" }}>
-        <div className="sign-box" style={{ paddingBottom: "70px" }}>
+        <div className="sign-box" style={{ paddingBottom: "10px" }}>
           <div className="form-title">
             <Title level={3} type="secondary">
               Sign Up

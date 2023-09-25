@@ -1,6 +1,15 @@
 import React, { useMemo, useState } from "react";
 import { useUserAuth } from "../../context/AuthContext";
-import { Layout, Space, Input, Button, Form, notification } from "antd";
+import {
+  Layout,
+  Space,
+  Input,
+  Button,
+  Form,
+  notification,
+  Empty,
+  Spin,
+} from "antd";
 import Posts from "./Posts";
 import Header from "./Header";
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
@@ -38,6 +47,9 @@ const Home: React.FC<any> = ({
   };
 
   const handlePost = async () => {
+    if (!currUser) {
+      return openNotificationWithIcon("error", "Please Login First");
+    }
     if (post.trim().length !== 0 && !limit) {
       addDoc(collection(db, "posts"), {
         date: date,
@@ -45,12 +57,16 @@ const Home: React.FC<any> = ({
         userId: user.uid,
         username: username,
         profile: currUser?.profile,
-      }).then((res) => {
-        updateDoc(doc(db, "posts", res.id), {
-          postId: res.id,
+      })
+        .then((res) => {
+          updateDoc(doc(db, "posts", res.id), {
+            postId: res.id,
+          });
+          openNotificationWithIcon("success", "Post Successful");
+        })
+        .catch((err: any) => {
+          console.log(err.message);
         });
-        openNotificationWithIcon("success", "Post Successful");
-      });
       setPost("");
     } else {
       openNotificationWithIcon("error", "Please try again!");
@@ -125,11 +141,17 @@ const Home: React.FC<any> = ({
             ) : null}
 
             {loading ? (
-              <div className="loading"></div>
+              <div className="loading-spin">
+                <Spin tip="Loading" size="large">
+                  <div className="content" />
+                </Spin>
+              </div>
             ) : (
               <div>
                 {posts.length === 0 ? (
-                  <p className="no-comments-text">No posts</p>
+                  <div style={{ marginTop: "100px" }}>
+                    <Empty />
+                  </div>
                 ) : (
                   <Posts
                     posts={posts}

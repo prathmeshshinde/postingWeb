@@ -1,4 +1,4 @@
-import { Layout } from "antd";
+import { Empty, Layout, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import Header from "../HomePage/Header";
 import { Content } from "antd/es/layout/layout";
@@ -34,7 +34,6 @@ const Like: React.FC<any> = ({
             }
           });
         });
-
         setUserPost(newLikedPosts);
         setLoading(false);
       })
@@ -43,9 +42,15 @@ const Like: React.FC<any> = ({
       });
   };
 
+  const handleRemoveLike = (id: any) => {
+    setUserPost((prevState) =>
+      prevState.filter((post: any) => post.postId !== id)
+    );
+  };
+
   useEffect(() => {
     getLikedPosts();
-  }, [userPost]);
+  }, []);
 
   return (
     <Layout>
@@ -57,11 +62,17 @@ const Like: React.FC<any> = ({
             <p className="no-comments-text">Error Please try Again!</p>
           ) : null}
           {loading ? (
-            <div className="loading"></div>
+            <div className="loading-spin">
+              <Spin tip="Loading" size="large">
+                <div className="content" />
+              </Spin>
+            </div>
           ) : (
             <div>
               {userPost?.length === 0 ? (
-                <p className="no-comments-text">No posts</p>
+                <div style={{ marginTop: "100px" }}>
+                  <Empty />
+                </div>
               ) : (
                 <div>
                   {userPost.map((newPost: any, index: any) => {
@@ -74,6 +85,7 @@ const Like: React.FC<any> = ({
                         bookmarkPost={bookmarkPost}
                         removeBookmarkPosts={removeBookmarkPosts}
                         userPost={userPost}
+                        handleRemoveLike={handleRemoveLike}
                       />
                     );
                   })}

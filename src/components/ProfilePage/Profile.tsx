@@ -1,5 +1,5 @@
-import { Button, Layout, notification } from "antd";
-import React, { useEffect, useMemo, useState } from "react";
+import { Button, Empty, Image, Layout, Spin, notification } from "antd";
+import React, { useEffect, useState } from "react";
 import Header from "../HomePage/Header";
 import { Content } from "antd/es/layout/layout";
 import { useUserAuth } from "../../context/AuthContext";
@@ -10,8 +10,6 @@ import ProfileUpdateModal from "./ProfileUpdateModal";
 import { Link } from "react-router-dom";
 
 type NotificationType = "success" | "info" | "warning" | "error";
-
-const Context = React.createContext({ name: "Default" });
 
 const Profile: React.FC<any> = ({
   posts,
@@ -90,15 +88,42 @@ const Profile: React.FC<any> = ({
     setUserProfile(currUser);
   }, [currUser, posts]);
 
-  const contextValue = useMemo(() => ({ name: "Ant Design" }), []);
-
   return (
-    <Context.Provider value={contextValue}>
+    <>
       {contextHolder}
-      {currUser?.userId ? (
+      {!userProfile || currUser === undefined ? (
+        <>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "250px",
+              height: "100vh",
+              width: "100vw",
+            }}
+          >
+            <Link
+              to="/login"
+              style={{
+                textDecoration: "underline",
+                textAlign: "center",
+                fontSize: "25px",
+                marginTop: "30px",
+                fontWeight: "600",
+              }}
+            >
+              Login here
+            </Link>
+          </div>
+        </>
+      ) : (
         <>
           {loading ? (
-            <div className="loading"></div>
+            <div className="loading-spin">
+              <Spin tip="Loading" size="large">
+                <div className="content" />
+              </Spin>
+            </div>
           ) : (
             <Layout className="profile-payout-div">
               <Layout className="site-layout scroll-app profile-layout">
@@ -106,7 +131,7 @@ const Profile: React.FC<any> = ({
                 <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
                   <div className="profile-main">
                     <div className="profile-head">
-                      <div className="image-circle">
+                      <div>
                         {currUser?.profile === "" ? (
                           <div className="profile-image-conatainer">
                             <p className="profile-image-circle">
@@ -114,11 +139,22 @@ const Profile: React.FC<any> = ({
                             </p>
                           </div>
                         ) : (
-                          <img
-                            className="image-circle"
-                            src={userProfile?.profile}
-                            alt="profile"
-                          />
+                          <div>
+                            <div className="image-circle">
+                              <Image
+                                className="image-circle"
+                                src={userProfile?.profile}
+                                alt="profile"
+                              />
+                            </div>
+                            <div>
+                              <p className="username-profile">
+                                {userProfile?.username}{" "}
+                              </p>
+                              <p className="email-profile">{user?.email}</p>
+                              <p className="bio-profile">{userProfile?.bio}</p>
+                            </div>
+                          </div>
                         )}
                       </div>
                       <div>
@@ -126,13 +162,6 @@ const Profile: React.FC<any> = ({
                           Edit Profile
                         </Button>
                       </div>
-                    </div>
-                    <div>
-                      <p className="username-profile">
-                        {userProfile?.username}{" "}
-                      </p>
-                      <p className="email-profile">{user?.email}</p>
-                      <p className="bio-profile">{userProfile?.bio}</p>
                     </div>
                   </div>
 
@@ -144,7 +173,10 @@ const Profile: React.FC<any> = ({
                   />
 
                   {userPost.length === 0 ? (
-                    <p className="user-posts">User not posted Anything</p>
+                    <div style={{ marginTop: "100px" }}>
+                      <Empty />
+                      <p className="user-posts">User not posted Anything</p>
+                    </div>
                   ) : (
                     <Posts
                       posts={userPost}
@@ -159,21 +191,8 @@ const Profile: React.FC<any> = ({
             </Layout>
           )}
         </>
-      ) : (
-        <Link
-          to="/login"
-          style={{
-            textDecoration: "underline",
-            textAlign: "center",
-            fontSize: "25px",
-            marginTop: "30px",
-            fontWeight: "600",
-          }}
-        >
-          Login here
-        </Link>
       )}
-    </Context.Provider>
+    </>
   );
 };
 

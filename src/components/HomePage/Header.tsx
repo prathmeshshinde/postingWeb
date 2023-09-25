@@ -1,12 +1,13 @@
 import React from "react";
 import { useUserAuth } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "antd";
 import ResponsiveNav from "./ResponsiveNav";
 
 const Header: React.FC = () => {
   const { signout }: any = useUserAuth();
   const navigate = useNavigate();
+  const { currUser }: any = useUserAuth();
 
   const handleSignOut = async () => {
     try {
@@ -16,6 +17,7 @@ const Header: React.FC = () => {
       console.log(err.message);
     }
   };
+
   return (
     <div className="header">
       <div>
@@ -23,9 +25,15 @@ const Header: React.FC = () => {
       </div>
       <ResponsiveNav />
       <div className="button-logout">
-        <Button type="primary" onClick={handleSignOut}>
-          Log out
-        </Button>
+        {currUser ? (
+          <Button type="primary" onClick={handleSignOut}>
+            Log out
+          </Button>
+        ) : (
+          <Button type="primary">
+            <Link to="/login">Log In</Link>
+          </Button>
+        )}
       </div>
     </div>
   );

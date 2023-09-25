@@ -1,4 +1,4 @@
-import { Button, Form, Input, Layout, Space } from "antd";
+import { Button, Form, Input, Layout, Space, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import { Content } from "antd/es/layout/layout";
 import { useLocation } from "react-router-dom";
@@ -27,7 +27,7 @@ const Comment: React.FC<any> = ({
   const [error, setError] = useState<any>();
 
   const getComments = async () => {
-    const docRef = collection(db, "posts", postItem.id, "comments");
+    const docRef = collection(db, "posts", postItem?.id, "comments");
     getDocs(docRef)
       .then((snapshot) => {
         let commentDocs: any = [];
@@ -43,13 +43,17 @@ const Comment: React.FC<any> = ({
   };
 
   const getPost = async () => {
-    const docRef = doc(db, "posts", postItem.id);
+    const docRef = doc(db, "posts", postItem?.id);
     const document = await getDoc(docRef);
-    const post = { ...document.data(), id: postItem.id };
+    const post = { ...document.data(), id: postItem?.id };
     setMainPost(post);
   };
 
   const handleComment = async () => {
+    if (!currUser) {
+      alert("Please login first");
+    }
+
     try {
       if (comment.trim().length !== 0) {
         const obj = {
@@ -58,19 +62,18 @@ const Comment: React.FC<any> = ({
           userId: user.uid,
           username: username,
           profile: currUser?.profile,
-          id: postItem.id,
+          id: postItem?.id,
         };
         const res = await addDoc(
-          collection(db, "posts", postItem.id, "comments"),
+          collection(db, "posts", postItem?.id, "comments"),
           obj
         );
 
         setComments((prevState: any) => [{ ...obj, id: res.id }, ...prevState]);
-
         setComment("");
       }
     } catch (err: any) {
-      setError(err.message);
+      setError("Please Try Again!");
     }
   };
 
@@ -100,7 +103,7 @@ const Comment: React.FC<any> = ({
     <>
       <Layout className="profile-payout-div">
         <Layout className="site-layout scroll-app ">
-          <Content style={{ margin: "10px 0px 0", overflow: "initial" }}>
+          <Content style={{ margin: "0px 0px 0", overflow: "initial" }}>
             <Header />
             <div
               style={{
@@ -124,7 +127,7 @@ const Comment: React.FC<any> = ({
               removeBookmarkPosts={removeBookmarkPosts}
             />
 
-            <div className="post-div">
+            <div className="post-div" style={{ marginTop: "20px" }}>
               <Space.Compact
                 style={{
                   height: "40px",
@@ -167,17 +170,21 @@ const Comment: React.FC<any> = ({
             </p>
 
             {loading ? (
-              <div className="loading"></div>
+              <div className="loading-spin">
+                <Spin tip="Loading" size="large">
+                  <div className="content" />
+                </Spin>
+              </div>
             ) : (
               <div>
-                {comments.length === 0 ? (
+                {comments?.length === 0 ? (
                   <p className="no-comments-text">No Comments</p>
                 ) : (
                   comments?.map((postItem: any, index: number) => {
                     return (
                       <SinglePost
                         compare={location.state.postItem.userId}
-                        deleteId={postItem.id}
+                        deleteId={postItem?.id}
                         postItem={postItem}
                         key={index}
                         postCommentDeleltId={mainPost}

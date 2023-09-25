@@ -17,7 +17,7 @@ const UpdatePostModal: React.FC<any> = ({
 
   const onFinish = async (values: any) => {
     try {
-      const updateProfile = doc(db, "posts", post.id);
+      const updateProfile = doc(db, "posts", post?.id);
       await updateDoc(updateProfile, {
         post: values.post.post,
         date: date,
@@ -56,7 +56,7 @@ const UpdatePostModal: React.FC<any> = ({
           <Form.Item
             name={["post", "post"]}
             label="Post"
-            initialValue={post.post}
+            initialValue={post?.post}
           >
             <Input.TextArea />
           </Form.Item>

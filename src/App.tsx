@@ -43,6 +43,7 @@ function App() {
         snapshot?.docs?.forEach((doc) => {
           postDocs.push({ ...doc.data(), id: doc.id });
         });
+
         setPosts(postDocs);
         setLoading(false);
       })

@@ -22,7 +22,7 @@
 }
 
 .form-box {
-  background-color: rgb(255, 187, 187);
+  background-color: #bed9ff;
   padding: 40px 20px 50px 20px;
   border-radius: 8px;
   width: 30%;
@@ -30,11 +30,9 @@
 }
 
 .sign-box {
-  background-color: rgb(255, 187, 187);
+  background-color: #bed9ff;
   padding: 40px 20px 50px 20px;
   border-radius: 8px;
-  /* width: 30%; */
-  height: 50vh;
 }
 
 .form-title {
@@ -62,14 +60,17 @@
   font-weight: 600;
   color: #3087ff;
   margin: 0px 0px 0px 30px;
-  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0px 20px 0px 0px;
+  padding: 10px 20px 10px 0px;
+  background-color: #bed9ff;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .post-div {
@@ -83,10 +84,21 @@
   height: 2rem;
   border-radius: 100%;
   margin: 0 auto;
-  margin-top: 50px;
-  border: 5px solid #ff3535;
-  border-top: 6px solid #ff8b8b;
+  margin-top: 100px;
+  border: 5px solid #3087ff;
+  border-top: 6px solid #bed9ff;
   animation: spin 2s infinite linear;
+}
+
+.loading-spin {
+  display: flex;
+  justify-content: center;
+  margin-top: 100px;
+}
+
+.content {
+  padding: 50px;
+  border-radius: 4px;
 }
 
 .label-sidebar {
@@ -118,9 +130,9 @@
 .post-main {
   margin: 10px;
   border-radius: 8px;
-  background-color: #cde2ff;
+  background-color: #bed9ff;
   padding: 5px;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   width: 70%;
 }
 
@@ -209,12 +221,15 @@
 
 .delete-button,
 .update-button {
-  padding: 10px;
+  padding: 5px;
   cursor: pointer;
 }
 
-.update-button {
-  border-bottom: 1px solid red;
+.delete-button:hover,
+.update-button:hover {
+  background-color: #1677ff;
+  color: white;
+  border-radius: 4px;
 }
 
 .edited-text {
@@ -278,12 +293,12 @@
 /* --------------------------------PROFILE SECTION---------------------------------- */
 
 .profile-main {
-  margin: 0px 20px;
+  padding: 10px 0px;
 }
 
 .profile-head {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
 }
 
@@ -395,7 +410,6 @@
 
   .sign-box {
     width: 50%;
-    height: 50vh;
   }
 
   .sider {
@@ -441,7 +455,6 @@
   }
   .sign-box {
     width: 30%;
-    height: 50vh;
   }
 }
 
@@ -452,8 +465,5 @@
   .form-box {
     width: 40%;
     height: 40vh;
-  }
-  .sign-box {
-    height: 50vh;
   }
 }

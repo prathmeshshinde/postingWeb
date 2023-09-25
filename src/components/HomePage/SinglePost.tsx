@@ -11,7 +11,7 @@ import UpdatePostModal from "../ProfilePage/UpdatePostModal";
 import { useUserAuth } from "../../context/AuthContext";
 import DeletePostModal from "../ProfilePage/DeletePostModal";
 import { Link, useLocation } from "react-router-dom";
-import { Tooltip, notification } from "antd";
+import { Popover, Tooltip, notification } from "antd";
 import {
   addDoc,
   collection,
@@ -35,7 +35,8 @@ const SinglePost: React.FC<any> = ({
   deleteLikePost,
   bookmarkPost,
   removeBookmarkPosts,
-  userPost,
+  handleRemoveLike,
+  handleRemoveBookmarkPosts,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState<any>(false);
   const [openPop, setOpenPop] = useState<any>(false);
@@ -113,6 +114,9 @@ const SinglePost: React.FC<any> = ({
         await deleteDoc(doc(db, "likes", items?.likedId));
       }
     });
+    if (location.pathname === "/like") {
+      handleRemoveLike(postItem?.postId);
+    }
   };
 
   const handleBookmark = async (post_id: string, user_id: string) => {
@@ -161,7 +165,26 @@ const SinglePost: React.FC<any> = ({
         await deleteDoc(doc(db, "bookmarks", items.bookmarkedId));
       }
     });
+
+    if (location.pathname === "/bookmark") {
+      handleRemoveBookmarkPosts(postItem?.postId);
+    }
   };
+
+  const content = (
+    <div>
+      <div>
+        {currUser?.userId === compare ? null : (
+          <p className="update-button" onClick={() => updatePost()}>
+            Update the post
+          </p>
+        )}
+        <p className="delete-button" onClick={showModal}>
+          Delete
+        </p>
+      </div>
+    </div>
+  );
 
   const contextValue = useMemo(() => ({ name: "Ant Design" }), []);
 
@@ -199,66 +222,64 @@ const SinglePost: React.FC<any> = ({
             </div>
             <div style={{ position: "relative" }}>
               <div>
-                <div style={{ display: "flex", justifyContent: "end" }}>
-                  {currUser?.userId === postItem?.userId ||
-                  currUser?.userId === compare ? (
-                    <MoreOutlined
-                      onClick={() => setOpenPop(!openPop)}
-                      style={{ fontSize: "20px", color: "#000" }}
-                    />
-                  ) : null}
-                </div>
+                {location.pathname !== "/like" &&
+                location.pathname !== "/bookmark" &&
+                currUser ? (
+                  <Popover placement="leftTop" content={content}>
+                    <div style={{ display: "flex", justifyContent: "end" }}>
+                      {currUser?.userId === postItem?.userId ||
+                      currUser?.userId === compare ? (
+                        <MoreOutlined
+                          onClick={() => setOpenPop(!openPop)}
+                          style={{ fontSize: "20px", color: "#000" }}
+                        />
+                      ) : null}
+                    </div>
+                  </Popover>
+                ) : null}
+
                 <div>
                   <p className="edited-text">{postItem?.edited}</p>
                 </div>
               </div>
-              <div>
-                {openPop && (
-                  <div className="updateDelete">
-                    {currUser?.userId === compare ? null : (
-                      <p className="update-button" onClick={() => updatePost()}>
-                        Update the post
-                      </p>
-                    )}
-                    <p className="delete-button" onClick={showModal}>
-                      Delete
-                    </p>
-                    <DeletePostModal
-                      isDeleteOpenModal={isDeleteModalOpen}
-                      setDeleteIsModalOpen={setDeleteIsModalOpen}
-                      postId={postItem?.id}
-                      setOpenPop={setOpenPop}
-                      postCommentDeleltId={postCommentDeleltId}
-                    />
-
-                    <UpdatePostModal
-                      isModalOpen={isModalOpen}
-                      handleCancel={handleCancel}
-                      post={postItem}
-                      setOpenPop={setOpenPop}
-                    />
-                  </div>
-                )}
-              </div>
             </div>
           </div>
+
+          <DeletePostModal
+            isDeleteOpenModal={isDeleteModalOpen}
+            setDeleteIsModalOpen={setDeleteIsModalOpen}
+            postId={postItem?.id}
+            setOpenPop={setOpenPop}
+            postCommentDeleltId={postCommentDeleltId}
+          />
+
+          <UpdatePostModal
+            isModalOpen={isModalOpen}
+            handleCancel={handleCancel}
+            post={postItem}
+            setOpenPop={setOpenPop}
+          />
+
           <p className="post-text">{postItem?.post}</p>
 
           {location.pathname !== "/comment" ? (
             <div className="post-feature-buttons">
-              <Link
-                to="/comment"
-                className="link-style"
-                state={{
-                  postItem: postItem,
-                }}
-              >
-                <Tooltip title="Comment">
-                  <CommentOutlined
-                    style={{ fontSize: "20px", marginLeft: "20px" }}
-                  />
-                </Tooltip>
-              </Link>
+              {location.pathname !== "/like" &&
+              location.pathname !== "/bookmark" ? (
+                <Link
+                  to="/comment"
+                  className="link-style"
+                  state={{
+                    postItem: postItem,
+                  }}
+                >
+                  <Tooltip title="Comment">
+                    <CommentOutlined
+                      style={{ fontSize: "20px", marginLeft: "20px" }}
+                    />
+                  </Tooltip>
+                </Link>
+              ) : null}
 
               {location.pathname !== "/profile" ? (
                 <div>
@@ -296,6 +317,7 @@ const SinglePost: React.FC<any> = ({
                           fontSize: "20px",
                           marginRight: "20px",
                           cursor: "pointer",
+                          color: "#1677ff",
                         }}
                       />
                     </Tooltip>
