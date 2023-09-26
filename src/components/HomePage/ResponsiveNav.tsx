@@ -6,13 +6,14 @@ import {
   HeartOutlined,
   ReadOutlined,
   LogoutOutlined,
+  LoginOutlined,
 } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserAuth } from "../../context/AuthContext";
 import { Dropdown, MenuProps, Space } from "antd";
 
 const ResponsiveNav: React.FC = () => {
-  const { signout }: any = useUserAuth();
+  const { signout, currUser }: any = useUserAuth();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -48,8 +49,12 @@ const ResponsiveNav: React.FC = () => {
     {
       key: "5",
       danger: true,
-      label: <p onClick={handleSignOut}>Logout</p>,
-      icon: <LogoutOutlined />,
+      label: currUser ? (
+        <p onClick={handleSignOut}>Logout</p>
+      ) : (
+        <Link to="/login">Login</Link>
+      ),
+      icon: currUser ? <LogoutOutlined /> : <LoginOutlined />,
     },
   ];
 

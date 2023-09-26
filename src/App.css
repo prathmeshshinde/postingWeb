@@ -9,8 +9,12 @@
 }
 
 .scroll-app {
-  height: 750px;
+  height: 770px;
   overflow-y: scroll;
+}
+
+.loading-spin-infinte {
+  margin: 0px 0px 40px 0px;
 }
 
 .form-div {
@@ -77,6 +81,7 @@
   display: flex;
   justify-content: center;
   position: relative;
+  margin: 20px 0px 0px 0px;
 }
 
 .loading {
@@ -133,6 +138,11 @@
   background-color: #bed9ff;
   padding: 5px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  width: 70%;
+}
+
+.card-div {
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   width: 70%;
 }
 
@@ -195,7 +205,7 @@
 }
 .post-input {
   height: 40px;
-  width: 300px;
+  width: 450px;
   margin: 0px 10px 0px 0px;
 }
 
@@ -243,7 +253,7 @@
 }
 
 .post-feature-buttons {
-  margin: 15px;
+  margin: 0px;
   display: flex;
   justify-content: space-between;
 }
@@ -465,5 +475,8 @@
   .form-box {
     width: 40%;
     height: 40vh;
+  }
+  .card-div {
+    width: 100%;
   }
 }

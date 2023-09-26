@@ -11,7 +11,7 @@ import UpdatePostModal from "../ProfilePage/UpdatePostModal";
 import { useUserAuth } from "../../context/AuthContext";
 import DeletePostModal from "../ProfilePage/DeletePostModal";
 import { Link, useLocation } from "react-router-dom";
-import { Popover, Tooltip, notification } from "antd";
+import { Card, Divider, Popover, Tooltip, notification } from "antd";
 import {
   addDoc,
   collection,
@@ -69,6 +69,9 @@ const SinglePost: React.FC<any> = ({
   };
 
   const handleLike = async (post_id: string, user_id: string) => {
+    if (!currUser) {
+      return alert("Login First");
+    }
     try {
       await addDoc(collection(db, "likes"), {
         postId: post_id,
@@ -109,6 +112,11 @@ const SinglePost: React.FC<any> = ({
   };
 
   const handleDislike = async () => {
+    if (!currUser) {
+      return alert("Login First");
+    } else {
+      console.log("jello");
+    }
     deleteLikePost?.map(async (items: any) => {
       if (items.postId === postItem?.postId) {
         await deleteDoc(doc(db, "likes", items?.likedId));
@@ -120,6 +128,9 @@ const SinglePost: React.FC<any> = ({
   };
 
   const handleBookmark = async (post_id: string, user_id: string) => {
+    if (!currUser) {
+      return alert("Login First");
+    }
     try {
       await addDoc(collection(db, "bookmarks"), {
         postId: post_id,
@@ -160,6 +171,9 @@ const SinglePost: React.FC<any> = ({
   };
 
   const handleRemoveBookmark = async () => {
+    if (!currUser) {
+      return alert("Login First");
+    }
     removeBookmarkPosts?.map(async (items: any) => {
       if (items?.postId === postItem?.postId) {
         await deleteDoc(doc(db, "bookmarks", items.bookmarkedId));
@@ -196,7 +210,7 @@ const SinglePost: React.FC<any> = ({
   return (
     <Context.Provider value={contextValue}>
       {contextHolder}
-      <div className="posts-container">
+      {/* <div className="posts-container">
         <div className="post-main">
           <div className="post-head">
             <div className="post-user">
@@ -340,6 +354,303 @@ const SinglePost: React.FC<any> = ({
             </div>
           ) : null}
         </div>
+      </div> */}
+      {/* <div className="posts-container">
+        <div className="post-main">
+          <div className="post-head">
+            <div className="post-user">
+              <div>
+                {postItem?.profile === "" ? (
+                  <div className="text-conatainer">
+                    <p className="text-profile">
+                      {postItem?.username.charAt(0)}
+                    </p>
+                  </div>
+                ) : (
+                  <img
+                    className="image-container"
+                    src={postItem?.profile}
+                    alt="profile"
+                  />
+                )}
+              </div>
+              <div className="post-section">
+                <p className="post-username">{postItem?.username}</p>
+                <p className="post-date">{postItem?.date}</p>
+              </div>
+            </div>
+            <div style={{ position: "relative" }}>
+              <div>
+                {location.pathname !== "/like" &&
+                location.pathname !== "/bookmark" &&
+                currUser ? (
+                  <Popover placement="leftTop" content={content}>
+                    <div style={{ display: "flex", justifyContent: "end" }}>
+                      {currUser?.userId === postItem?.userId ||
+                      currUser?.userId === compare ? (
+                        <MoreOutlined
+                          onClick={() => setOpenPop(!openPop)}
+                          style={{ fontSize: "20px", color: "#000" }}
+                        />
+                      ) : null}
+                    </div>
+                  </Popover>
+                ) : null}
+
+                <div>
+                  <p className="edited-text">{postItem?.edited}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <DeletePostModal
+            isDeleteOpenModal={isDeleteModalOpen}
+            setDeleteIsModalOpen={setDeleteIsModalOpen}
+            postId={postItem?.id}
+            setOpenPop={setOpenPop}
+            postCommentDeleltId={postCommentDeleltId}
+          />
+
+          <UpdatePostModal
+            isModalOpen={isModalOpen}
+            handleCancel={handleCancel}
+            post={postItem}
+            setOpenPop={setOpenPop}
+          />
+
+          <p className="post-text">{postItem?.post}</p>
+
+          {location.pathname !== "/comment" ? (
+            <div className="post-feature-buttons">
+              {location.pathname !== "/like" &&
+              location.pathname !== "/bookmark" ? (
+                <Link
+                  to="/comment"
+                  className="link-style"
+                  state={{
+                    postItem: postItem,
+                  }}
+                >
+                  <Tooltip title="Comment">
+                    <CommentOutlined
+                      style={{ fontSize: "20px", marginLeft: "20px" }}
+                    />
+                  </Tooltip>
+                </Link>
+              ) : null}
+
+              {location.pathname !== "/profile" ? (
+                <div>
+                  {likedPostId?.includes(postItem?.postId) ? (
+                    <Tooltip title="Dislike">
+                      <HeartFilled
+                        onClick={() => handleDislike()}
+                        style={{
+                          fontSize: "20px",
+                          cursor: "pointer",
+                          color: "#1677ff",
+                        }}
+                      />
+                    </Tooltip>
+                  ) : (
+                    <Tooltip title="Like">
+                      <HeartOutlined
+                        onClick={() =>
+                          handleLike(postItem?.id, postItem?.userId)
+                        }
+                        style={{ fontSize: "20px", cursor: "pointer" }}
+                      />
+                    </Tooltip>
+                  )}
+                </div>
+              ) : null}
+
+              {location.pathname !== "/profile" ? (
+                <div>
+                  {bookmarkPostId?.includes(postItem?.postId) ? (
+                    <Tooltip title="Remove Bookmark">
+                      <ReadFilled
+                        onClick={() => handleRemoveBookmark()}
+                        style={{
+                          fontSize: "20px",
+                          marginRight: "20px",
+                          cursor: "pointer",
+                          color: "#1677ff",
+                        }}
+                      />
+                    </Tooltip>
+                  ) : (
+                    <Tooltip title="Bookmark">
+                      <ReadOutlined
+                        onClick={() =>
+                          handleBookmark(postItem?.id, postItem?.userId)
+                        }
+                        style={{
+                          fontSize: "20px",
+                          marginRight: "20px",
+                          cursor: "pointer",
+                        }}
+                      />
+                    </Tooltip>
+                  )}
+                </div>
+              ) : null}
+            </div>
+          ) : null}
+        </div>
+      </div> */}
+
+      <div className="posts-container">
+        <Card
+          style={{
+            margin: "10px",
+          }}
+          className="card-div"
+        >
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div className="post-user">
+              <div>
+                {postItem?.profile === "" ? (
+                  <div className="text-conatainer">
+                    <p className="text-profile">
+                      {postItem?.username.charAt(0)}
+                    </p>
+                  </div>
+                ) : (
+                  <img
+                    className="image-container"
+                    src={postItem?.profile}
+                    alt="profile"
+                  />
+                )}
+              </div>
+              <div className="post-section">
+                <p className="post-username">{postItem?.username}</p>
+                <p className="post-date">{postItem?.date}</p>
+              </div>
+            </div>
+            <div style={{ position: "relative" }}>
+              <div>
+                {location.pathname !== "/like" &&
+                location.pathname !== "/bookmark" &&
+                currUser ? (
+                  <Popover placement="leftTop" content={content}>
+                    <div style={{ display: "flex", justifyContent: "end" }}>
+                      {currUser?.userId === postItem?.userId ||
+                      currUser?.userId === compare ? (
+                        <MoreOutlined
+                          onClick={() => setOpenPop(!openPop)}
+                          style={{ fontSize: "20px", color: "#000" }}
+                        />
+                      ) : null}
+                    </div>
+                  </Popover>
+                ) : null}
+
+                <div>
+                  <p className="edited-text">{postItem?.edited}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <DeletePostModal
+            isDeleteOpenModal={isDeleteModalOpen}
+            setDeleteIsModalOpen={setDeleteIsModalOpen}
+            postId={postItem?.id}
+            setOpenPop={setOpenPop}
+            postCommentDeleltId={postCommentDeleltId}
+          />
+
+          <UpdatePostModal
+            isModalOpen={isModalOpen}
+            handleCancel={handleCancel}
+            post={postItem}
+            setOpenPop={setOpenPop}
+          />
+          <p className="post-text">{postItem?.post}</p>
+
+          <Divider style={{ margin: "20px 0px" }} />
+
+          {location.pathname !== "/comment" ? (
+            <div className="post-feature-buttons">
+              {location.pathname !== "/like" &&
+              location.pathname !== "/bookmark" ? (
+                <Link
+                  to="/comment"
+                  className="link-style"
+                  state={{
+                    postItem: postItem,
+                  }}
+                >
+                  <Tooltip title="Comment">
+                    <CommentOutlined
+                      style={{ fontSize: "20px", marginLeft: "20px" }}
+                    />
+                  </Tooltip>
+                </Link>
+              ) : null}
+
+              {location.pathname !== "/profile" ? (
+                <div>
+                  {likedPostId?.includes(postItem?.postId) ? (
+                    <Tooltip title="Dislike">
+                      <HeartFilled
+                        onClick={() => handleDislike()}
+                        style={{
+                          fontSize: "20px",
+                          cursor: "pointer",
+                          color: "#1677ff",
+                        }}
+                      />
+                    </Tooltip>
+                  ) : (
+                    <Tooltip title="Like">
+                      <HeartOutlined
+                        onClick={() =>
+                          handleLike(postItem?.id, postItem?.userId)
+                        }
+                        style={{ fontSize: "20px", cursor: "pointer" }}
+                      />
+                    </Tooltip>
+                  )}
+                </div>
+              ) : null}
+
+              {location.pathname !== "/profile" ? (
+                <div>
+                  {bookmarkPostId?.includes(postItem?.postId) ? (
+                    <Tooltip title="Remove Bookmark">
+                      <ReadFilled
+                        onClick={() => handleRemoveBookmark()}
+                        style={{
+                          fontSize: "20px",
+                          marginRight: "20px",
+                          cursor: "pointer",
+                          color: "#1677ff",
+                        }}
+                      />
+                    </Tooltip>
+                  ) : (
+                    <Tooltip title="Bookmark">
+                      <ReadOutlined
+                        onClick={() =>
+                          handleBookmark(postItem?.id, postItem?.userId)
+                        }
+                        style={{
+                          fontSize: "20px",
+                          marginRight: "20px",
+                          cursor: "pointer",
+                        }}
+                      />
+                    </Tooltip>
+                  )}
+                </div>
+              ) : null}
+            </div>
+          ) : null}
+        </Card>
       </div>
     </Context.Provider>
   );

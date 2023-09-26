@@ -35,6 +35,7 @@ function App() {
   const [bookmarkPost, setBookmarkPost] = useState<any>();
   const [removeBookmarkPosts, setRemoveBookmarkPosts] = useState<any>();
   const location = useLocation();
+  const [infinteLoader, setInfinteLoader] = useState(true);
 
   const getPosts = () => {
     getDocs(q)
@@ -89,15 +90,19 @@ function App() {
   };
 
   const forInfiniteScroll = (e: any) => {
-    if (e.target.scrollHeight - e.target.scrollTop <= e.target.clientHeight) {
+    if (
+      e.target.scrollHeight - e.target.scrollTop <=
+      e.target.clientHeight + 10
+    ) {
       setScroll((prevState) => prevState + 10);
+      setInfinteLoader(false);
     }
   };
 
   useEffect(() => {
-    getPosts();
     getLikedPosts();
     getBookmarkedPosts();
+    getPosts();
   }, [scroll]);
 
   return (
@@ -122,6 +127,7 @@ function App() {
                   deleteLikePost={deleteLikePost}
                   bookmarkPost={bookmarkPost}
                   removeBookmarkPosts={removeBookmarkPosts}
+                  infinteLoader={infinteLoader}
                 />
               }
             />

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useUserAuth } from "../../context/AuthContext";
 import {
   Layout,
@@ -29,6 +29,7 @@ const Home: React.FC<any> = ({
   deleteLikePost,
   bookmarkPost,
   removeBookmarkPosts,
+  infinteLoader,
 }) => {
   const [post, setPost] = useState("");
   const [date, setDate] = useState("");
@@ -163,6 +164,14 @@ const Home: React.FC<any> = ({
                 )}
               </div>
             )}
+
+            {infinteLoader && !loading ? (
+              <div className="loading-spin-infinte">
+                <Spin tip="Loading" size="large">
+                  <div className="content" />
+                </Spin>
+              </div>
+            ) : null}
           </Content>
         </Layout>
       </Layout>
