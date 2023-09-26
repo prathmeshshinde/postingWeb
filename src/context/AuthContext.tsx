@@ -6,7 +6,6 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../App";
 
@@ -23,7 +22,6 @@ export function useUserAuth() {
 const AuthContext: React.FC<IAuthContextProps> = (props) => {
   const { children } = props;
   const auth = getAuth();
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [username, setUsername] = useState("");
