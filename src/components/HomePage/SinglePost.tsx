@@ -12,16 +12,12 @@ import { useUserAuth } from "../../context/AuthContext";
 import DeletePostModal from "../ProfilePage/DeletePostModal";
 import { Link, useLocation } from "react-router-dom";
 import { Card, Divider, Popover, Tooltip, notification } from "antd";
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
-import { db } from "../../App";
+import { showLikedPosts } from "./Utils/showLikedPosts";
+import { showBookmarkedPosts } from "./Utils/showBookmarkedPosts";
+import { handleLike } from "./Utils/handleLike";
+import { handleDislike } from "./Utils/handleDislike";
+import { handleBookmark } from "./Utils/handleBookmark";
+import { handleRemoveBookmark } from "./Utils/removeBookmarkPosts";
 
 type NotificationType = "success" | "info" | "warning" | "error";
 
@@ -70,150 +66,6 @@ const SinglePost: React.FC<any> = ({
     setDeleteIsModalOpen(true);
   };
 
-  const handleLike = async (post_id: string) => {
-    if (!currUser) {
-      return alert("Login First");
-    }
-    try {
-      await addDoc(collection(db, "likes"), {
-        postId: post_id,
-        userId: currUser.userId,
-      });
-    } catch (err) {
-      openNotificationWithIcon(
-        "error",
-        "Something went wrong please try again!"
-      );
-    }
-  };
-
-  const showLikedPosts = () => {
-    if (
-      likedPosts?.length !== 0 &&
-      location.pathname !== "/comment" &&
-      location.pathname !== "/profile"
-    ) {
-      getDocs(
-        query(
-          collection(db, "posts"),
-          where("userId", "==", postItem?.userId),
-          where("postId", "in", likedPostsId)
-        )
-      )
-        .then((snapshot) => {
-          let postDocs: any = [];
-          let postUserId: any = [];
-          snapshot?.docs?.forEach((doc) => {
-            postDocs.push(doc?.data());
-            postUserId.push(doc.data().userId);
-          });
-
-          let newLikedPosts: any = [];
-          postDocs.map((post: any) => {
-            likedPosts.map((postDetail: any) => {
-              if (
-                post.postId === postDetail.postId &&
-                postDetail.userId === currUser.userId
-              ) {
-                newLikedPosts.push(post.postId);
-              }
-            });
-          });
-          setLikedPostId(newLikedPosts);
-        })
-        .catch((err) => {
-          console.log(err.message, "SinglePost Page 2");
-        });
-    }
-  };
-
-  const handleDislike = async () => {
-    if (!currUser) {
-      return alert("Login First");
-    }
-    deleteLikePost?.map(async (items: any) => {
-      if (items.postId === postItem?.postId) {
-        await deleteDoc(doc(db, "likes", items?.likedId));
-      }
-    });
-    if (location.pathname === "/like") {
-      handleRemoveLike(postItem?.postId);
-    }
-  };
-
-  const handleBookmark = async (post_id: string, user_id: string) => {
-    if (!currUser) {
-      return alert("Login First");
-    }
-    try {
-      await addDoc(collection(db, "bookmarks"), {
-        postId: post_id,
-        userId: currUser?.userId,
-      });
-    } catch (err) {
-      openNotificationWithIcon(
-        "error",
-        "Something went wrong please try again!"
-      );
-    }
-  };
-
-  const showBookmarkedPosts = () => {
-    if (
-      bookmarkPost?.length !== 0 &&
-      location.pathname !== "/comment" &&
-      location.pathname !== "/profile"
-    ) {
-      getDocs(
-        query(
-          collection(db, "posts"),
-          where("userId", "==", postItem?.userId),
-          where("postId", "in", bookmarkedPostId)
-        )
-      )
-        .then((snapshot) => {
-          let postDocs: any = [];
-          let postUserId: any = [];
-          snapshot?.docs?.forEach((doc) => {
-            postDocs.push(doc.data());
-            postUserId.push(doc.data()?.userId);
-          });
-
-          let newBookmarkPosts: any = [];
-          postDocs.map((post: any) => {
-            bookmarkPost.map((postDetail: any) => {
-              if (
-                post.postId === postDetail.postId &&
-                postDetail.userId === currUser?.userId
-              ) {
-                newBookmarkPosts.push(post.postId);
-              }
-            });
-          });
-
-          setBookmarkPostId(newBookmarkPosts);
-        })
-        .catch((err) => {
-          console.log(err.message, "singlePost pages 1");
-        });
-    }
-  };
-
-  const handleRemoveBookmark = async () => {
-    if (!currUser) {
-      return alert("Login First");
-    }
-    removeBookmarkPosts?.map(async (items: any) => {
-      if (items?.postId === postItem?.postId) {
-        await deleteDoc(doc(db, "bookmarks", items.bookmarkedId));
-      }
-    });
-
-    if (location.pathname === "/bookmark") {
-      handleRemoveBookmarkPosts(postItem?.postId);
-    }
-  };
-
   const content = (
     <div>
       <div>
@@ -232,8 +84,22 @@ const SinglePost: React.FC<any> = ({
   const contextValue = useMemo(() => ({ name: "Ant Design" }), []);
 
   useEffect(() => {
-    showLikedPosts();
-    showBookmarkedPosts();
+    showLikedPosts(
+      likedPosts,
+      location,
+      postItem,
+      likedPostsId,
+      currUser,
+      setLikedPostId
+    );
+    showBookmarkedPosts(
+      bookmarkedPostId,
+      bookmarkPost,
+      location,
+      postItem,
+      currUser,
+      setBookmarkPostId
+    );
   }, [currUser, compare, deleteLikePost, removeBookmarkPosts]);
 
   return (
@@ -338,7 +204,15 @@ const SinglePost: React.FC<any> = ({
                   {likedPostId?.includes(postItem?.postId) ? (
                     <Tooltip title="Dislike">
                       <HeartFilled
-                        onClick={() => handleDislike()}
+                        onClick={() =>
+                          handleDislike(
+                            currUser,
+                            deleteLikePost,
+                            postItem,
+                            handleRemoveLike,
+                            location
+                          )
+                        }
                         style={{
                           fontSize: "20px",
                           cursor: "pointer",
@@ -349,7 +223,13 @@ const SinglePost: React.FC<any> = ({
                   ) : (
                     <Tooltip title="Like">
                       <HeartOutlined
-                        onClick={() => handleLike(postItem?.id)}
+                        onClick={() =>
+                          handleLike(
+                            postItem?.id,
+                            currUser,
+                            openNotificationWithIcon
+                          )
+                        }
                         style={{ fontSize: "20px", cursor: "pointer" }}
                       />
                     </Tooltip>
@@ -362,7 +242,15 @@ const SinglePost: React.FC<any> = ({
                   {bookmarkPostId?.includes(postItem?.postId) ? (
                     <Tooltip title="Remove Bookmark">
                       <ReadFilled
-                        onClick={() => handleRemoveBookmark()}
+                        onClick={() =>
+                          handleRemoveBookmark(
+                            currUser,
+                            removeBookmarkPosts,
+                            postItem,
+                            location,
+                            handleRemoveBookmarkPosts
+                          )
+                        }
                         style={{
                           fontSize: "20px",
                           marginRight: "20px",
@@ -375,7 +263,11 @@ const SinglePost: React.FC<any> = ({
                     <Tooltip title="Bookmark">
                       <ReadOutlined
                         onClick={() =>
-                          handleBookmark(postItem?.id, postItem?.userId)
+                          handleBookmark(
+                            postItem?.id,
+                            currUser,
+                            openNotificationWithIcon
+                          )
                         }
                         style={{
                           fontSize: "20px",

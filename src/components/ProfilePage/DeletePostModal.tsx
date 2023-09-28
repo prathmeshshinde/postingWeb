@@ -21,7 +21,6 @@ const DeletePostModal: React.FC<any> = ({
         navigate("/");
       }
       setDeleteIsModalOpen(false);
-
       setOpenPop(false);
     } catch (err) {}
 
@@ -30,7 +29,6 @@ const DeletePostModal: React.FC<any> = ({
         doc(db, "posts", postCommentDeleltId.id, "comments", postId)
       );
       setDeleteIsModalOpen(false);
-
       setOpenPop(false);
     } catch (err) {}
   };

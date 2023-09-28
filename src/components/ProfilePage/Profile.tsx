@@ -3,11 +3,12 @@ import React, { useEffect, useState } from "react";
 import Header from "../HomePage/Header";
 import { Content } from "antd/es/layout/layout";
 import { useUserAuth } from "../../context/AuthContext";
-import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../App";
-import Posts from "../HomePage/Posts";
 import ProfileUpdateModal from "./ProfileUpdateModal";
 import { Link } from "react-router-dom";
+import SinglePost from "../HomePage/SinglePost";
+import { getPosts } from "./Utils/getPosts";
 
 type NotificationType = "success" | "info" | "warning" | "error";
 
@@ -62,29 +63,8 @@ const Profile: React.FC<any> = ({
     }
   };
 
-  const colRef = collection(db, "posts");
-
-  const getPosts = () => {
-    getDocs(colRef)
-      .then((snapshot) => {
-        let postDocs: any = [];
-        snapshot.docs.forEach((doc) => {
-          postDocs.push({ ...doc.data(), id: doc.id });
-        });
-
-        const newposts = postDocs.filter((ele: any) => {
-          return ele?.userId === currUser?.userId;
-        });
-        setUserPost(newposts);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err.message, "Profile");
-      });
-  };
-
   useEffect(() => {
-    getPosts();
+    getPosts(currUser, setUserPost, setLoading);
     setUserProfile(currUser);
   }, [currUser, posts]);
 
@@ -178,13 +158,20 @@ const Profile: React.FC<any> = ({
                       <p className="user-posts">User not posted Anything</p>
                     </div>
                   ) : (
-                    <Posts
-                      posts={userPost}
-                      likedPosts={likedPosts}
-                      deleteLikePost={deleteLikePost}
-                      bookmarkPost={bookmarkPost}
-                      removeBookmarkPosts={removeBookmarkPosts}
-                    />
+                    <div style={{ marginTop: "20px" }}>
+                      {userPost?.map((postItem: any, index: number) => {
+                        return (
+                          <SinglePost
+                            key={index}
+                            postItem={postItem}
+                            likedPosts={likedPosts}
+                            deleteLikePost={deleteLikePost}
+                            bookmarkPost={bookmarkPost}
+                            removeBookmarkPosts={removeBookmarkPosts}
+                          />
+                        );
+                      })}
+                    </div>
                   )}
                 </Content>
               </Layout>

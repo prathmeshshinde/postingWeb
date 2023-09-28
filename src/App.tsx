@@ -7,29 +7,24 @@ import { initializeApp } from "firebase/app";
 import { config } from "./firebase_config";
 import AuthContext from "./context/AuthContext";
 import SignUp from "./components/SignUp";
-import {
-  collection,
-  getDocs,
-  getFirestore,
-  limit,
-  query,
-} from "firebase/firestore";
+import { getFirestore, limit } from "firebase/firestore";
 import Profile from "./components/ProfilePage/Profile";
 import Comment from "./components/CommentsPage/Comment";
 import Like from "./components/LikePage/Like";
 import Bookmark from "./components/BookmarkPage/Bookmark";
 import SideBar from "./components/SideBar";
 import { Layout } from "antd";
+import { getPosts } from "./Utils/getPosts";
+import { getLikedPosts } from "./Utils/getLikedPosts";
+import { getBookmarkedPosts } from "./Utils/getBookmarkedPosts";
 
 initializeApp(config.firebaseConfig);
 export const db = getFirestore();
 
 function App() {
   const [posts, setPosts] = useState<any>([]);
-  const colRef = collection(db, "posts");
   const [loading, setLoading] = useState<boolean>(true);
   const [scroll, setScroll] = useState(10);
-  const q = query(colRef, limit(scroll));
   const [likedPosts, setLikedPosts] = useState<any>([]);
   const [deleteLikePost, SetDeleteLikePost] = useState<any>([]);
   const [bookmarkPost, setBookmarkPost] = useState<any>();
@@ -38,64 +33,6 @@ function App() {
   const [infinteLoader, setInfinteLoader] = useState(true);
   const [likedPostId, setLikedPostId] = useState<any>();
   const [bookmarkPostId, setBookmarkPostId] = useState<any>();
-
-  const getPosts = () => {
-    getDocs(q)
-      .then((snapshot) => {
-        let postDocs: any = [];
-        snapshot?.docs?.forEach((doc) => {
-          postDocs.push({ ...doc.data(), id: doc.id });
-        });
-
-        setPosts(postDocs);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err.message, "app");
-      });
-  };
-
-  const getLikedPosts = () => {
-    const likedposts = query(collection(db, "likes"));
-    getDocs(likedposts)
-      .then((snapshot) => {
-        let likedPosts: any = [];
-        let toDeleteLike: any = [];
-        let likedPostsId: any = [];
-        snapshot?.docs.forEach((doc) => {
-          likedPosts.push(doc.data());
-          toDeleteLike.push({ ...doc.data(), likedId: doc.id });
-          likedPostsId.push(doc.data().postId);
-        });
-        SetDeleteLikePost(toDeleteLike);
-        setLikedPosts(likedPosts);
-        setLikedPostId(likedPostsId);
-      })
-      .catch((err) => {
-        console.log(err.message, "app");
-      });
-  };
-
-  const getBookmarkedPosts = () => {
-    const bookmarkposts = query(collection(db, "bookmarks"));
-    getDocs(bookmarkposts)
-      .then((snapshot) => {
-        let bookmarkPosts: any = [];
-        let toRemoveBookmark: any = [];
-        let bookmarkPostId: any = [];
-        snapshot?.docs.forEach((doc) => {
-          bookmarkPosts.push(doc.data());
-          toRemoveBookmark.push({ ...doc.data(), bookmarkedId: doc.id });
-          bookmarkPostId.push(doc.data().postId);
-        });
-        setRemoveBookmarkPosts(toRemoveBookmark);
-        setBookmarkPost(bookmarkPosts);
-        setBookmarkPostId(bookmarkPostId);
-      })
-      .catch((err) => {
-        console.log(err.message, "app");
-      });
-  };
 
   const forInfiniteScroll = (e: any) => {
     if (
@@ -108,9 +45,13 @@ function App() {
   };
 
   useEffect(() => {
-    getLikedPosts();
-    getBookmarkedPosts();
-    getPosts();
+    getLikedPosts(SetDeleteLikePost, setLikedPostId, setLikedPosts);
+    getBookmarkedPosts(
+      setRemoveBookmarkPosts,
+      setBookmarkPost,
+      setBookmarkPostId
+    );
+    getPosts(limit, scroll, setPosts, setLoading);
   }, [scroll]);
 
   return (

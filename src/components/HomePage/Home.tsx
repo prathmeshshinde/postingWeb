@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useUserAuth } from "../../context/AuthContext";
 import {
   Layout,
@@ -10,10 +10,9 @@ import {
   Empty,
   Spin,
 } from "antd";
-import Posts from "./Posts";
 import Header from "./Header";
-import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
-import { db } from "../../App";
+import SinglePost from "./SinglePost";
+import { handlePost } from "./Utils/handlePost";
 
 type NotificationType = "success" | "info" | "warning" | "error";
 
@@ -47,33 +46,6 @@ const Home: React.FC<any> = ({
     api[type]({
       message: message,
     });
-  };
-
-  const handlePost = async () => {
-    if (!currUser) {
-      return openNotificationWithIcon("error", "Please Login First");
-    }
-    if (post.trim().length !== 0 && !limit) {
-      addDoc(collection(db, "posts"), {
-        date: date,
-        post: post,
-        userId: user.uid,
-        username: username,
-        profile: currUser?.profile,
-      })
-        .then((res) => {
-          updateDoc(doc(db, "posts", res.id), {
-            postId: res.id,
-          });
-          openNotificationWithIcon("success", "Post Successful");
-        })
-        .catch((err: any) => {
-          console.log(err.message, "home Page");
-        });
-      setPost("");
-    } else {
-      openNotificationWithIcon("error", "Please try again!");
-    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,7 +88,18 @@ const Home: React.FC<any> = ({
               >
                 <Form
                   style={{ display: "flex", justifyContent: "center" }}
-                  onFinish={handlePost}
+                  onFinish={() =>
+                    handlePost(
+                      currUser,
+                      user,
+                      openNotificationWithIcon,
+                      setPost,
+                      post,
+                      date,
+                      limit,
+                      username
+                    )
+                  }
                 >
                   <Form.Item>
                     <Input
@@ -156,15 +139,22 @@ const Home: React.FC<any> = ({
                     <Empty />
                   </div>
                 ) : (
-                  <Posts
-                    posts={posts}
-                    likedPosts={likedPosts}
-                    deleteLikePost={deleteLikePost}
-                    bookmarkPost={bookmarkPost}
-                    removeBookmarkPosts={removeBookmarkPosts}
-                    likedPostsId={likedPostsId}
-                    bookmarkedPostId={bookmarkedPostId}
-                  />
+                  <div style={{ marginTop: "20px" }}>
+                    {posts?.map((postItem: any, index: number) => {
+                      return (
+                        <SinglePost
+                          postItem={postItem}
+                          key={index}
+                          likedPosts={likedPosts}
+                          deleteLikePost={deleteLikePost}
+                          bookmarkPost={bookmarkPost}
+                          removeBookmarkPosts={removeBookmarkPosts}
+                          likedPostsId={likedPostsId}
+                          bookmarkedPostId={bookmarkedPostId}
+                        />
+                      );
+                    })}
+                  </div>
                 )}
               </div>
             )}
