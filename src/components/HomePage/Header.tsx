@@ -14,7 +14,7 @@ const Header: React.FC = () => {
       await signout();
       navigate("/login");
     } catch (err: any) {
-      console.log(err.message);
+      console.log(err.message, "header Page");
     }
   };
 

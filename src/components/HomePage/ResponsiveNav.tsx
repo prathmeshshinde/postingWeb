@@ -21,7 +21,7 @@ const ResponsiveNav: React.FC = () => {
       await signout();
       navigate("/login");
     } catch (err: any) {
-      console.log(err.message);
+      console.log(err.message, "Responsive Nav page");
     }
   };
 

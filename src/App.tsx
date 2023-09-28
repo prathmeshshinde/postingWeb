@@ -36,6 +36,8 @@ function App() {
   const [removeBookmarkPosts, setRemoveBookmarkPosts] = useState<any>();
   const location = useLocation();
   const [infinteLoader, setInfinteLoader] = useState(true);
+  const [likedPostId, setLikedPostId] = useState<any>();
+  const [bookmarkPostId, setBookmarkPostId] = useState<any>();
 
   const getPosts = () => {
     getDocs(q)
@@ -49,7 +51,7 @@ function App() {
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err.message);
+        console.log(err.message, "app");
       });
   };
 
@@ -59,15 +61,18 @@ function App() {
       .then((snapshot) => {
         let likedPosts: any = [];
         let toDeleteLike: any = [];
+        let likedPostsId: any = [];
         snapshot?.docs.forEach((doc) => {
-          likedPosts.push(doc.data().postId);
+          likedPosts.push(doc.data());
           toDeleteLike.push({ ...doc.data(), likedId: doc.id });
+          likedPostsId.push(doc.data().postId);
         });
         SetDeleteLikePost(toDeleteLike);
         setLikedPosts(likedPosts);
+        setLikedPostId(likedPostsId);
       })
       .catch((err) => {
-        console.log(err.message);
+        console.log(err.message, "app");
       });
   };
 
@@ -77,15 +82,18 @@ function App() {
       .then((snapshot) => {
         let bookmarkPosts: any = [];
         let toRemoveBookmark: any = [];
+        let bookmarkPostId: any = [];
         snapshot?.docs.forEach((doc) => {
-          bookmarkPosts.push(doc.data().postId);
+          bookmarkPosts.push(doc.data());
           toRemoveBookmark.push({ ...doc.data(), bookmarkedId: doc.id });
+          bookmarkPostId.push(doc.data().postId);
         });
         setRemoveBookmarkPosts(toRemoveBookmark);
         setBookmarkPost(bookmarkPosts);
+        setBookmarkPostId(bookmarkPostId);
       })
       .catch((err) => {
-        console.log(err.message);
+        console.log(err.message, "app");
       });
   };
 
@@ -128,6 +136,8 @@ function App() {
                   bookmarkPost={bookmarkPost}
                   removeBookmarkPosts={removeBookmarkPosts}
                   infinteLoader={infinteLoader}
+                  likedPostsId={likedPostId}
+                  bookmarkedPostId={bookmarkPostId}
                 />
               }
             />
@@ -152,6 +162,8 @@ function App() {
                   deleteLikePost={deleteLikePost}
                   bookmarkPost={bookmarkPost}
                   removeBookmarkPosts={removeBookmarkPosts}
+                  likedPostsId={likedPostId}
+                  bookmarkedPostId={bookmarkPostId}
                 />
               }
             />
@@ -163,6 +175,8 @@ function App() {
                   deleteLikePost={deleteLikePost}
                   bookmarkPost={bookmarkPost}
                   removeBookmarkPosts={removeBookmarkPosts}
+                  bookmarkedPostId={bookmarkPostId}
+                  likedPostsId={likedPostId}
                 />
               }
             />

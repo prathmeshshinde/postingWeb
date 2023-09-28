@@ -5,16 +5,20 @@ import { Content } from "antd/es/layout/layout";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../App";
 import SinglePost from "../HomePage/SinglePost";
+import { useUserAuth } from "../../context/AuthContext";
 
 const Bookmark: React.FC<any> = ({
   likedPosts,
   deleteLikePost,
   bookmarkPost,
   removeBookmarkPosts,
+  bookmarkedPostId,
+  likedPostsId,
 }) => {
   const [userPost, setUserPost] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>();
+  const { currUser }: any = useUserAuth();
 
   const colRef = collection(db, "posts");
 
@@ -26,16 +30,19 @@ const Bookmark: React.FC<any> = ({
           postDocs.push({ ...doc.data() });
         });
 
-        let newLikedPosts: any = [];
+        let newBookmarkedPosts: any = [];
         postDocs.map((post: any) => {
-          bookmarkPost.map((ids: any) => {
-            if (post.postId === ids) {
-              newLikedPosts.push(post);
+          bookmarkPost.map((postDetail: any) => {
+            if (
+              post.postId === postDetail.postId &&
+              postDetail.userId === currUser.userId
+            ) {
+              newBookmarkedPosts.push(post);
             }
           });
         });
 
-        setUserPost(newLikedPosts);
+        setUserPost(newBookmarkedPosts);
         setLoading(false);
       })
       .catch((err) => {
@@ -87,6 +94,8 @@ const Bookmark: React.FC<any> = ({
                         bookmarkPost={bookmarkPost}
                         removeBookmarkPosts={removeBookmarkPosts}
                         handleRemoveBookmarkPosts={handleRemoveBookmarkPosts}
+                        bookmarkedPostId={bookmarkedPostId}
+                        likedPostsId={likedPostsId}
                       />
                     );
                   })}

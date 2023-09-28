@@ -30,6 +30,8 @@ const Home: React.FC<any> = ({
   bookmarkPost,
   removeBookmarkPosts,
   infinteLoader,
+  likedPostsId,
+  bookmarkedPostId,
 }) => {
   const [post, setPost] = useState("");
   const [date, setDate] = useState("");
@@ -66,7 +68,7 @@ const Home: React.FC<any> = ({
           openNotificationWithIcon("success", "Post Successful");
         })
         .catch((err: any) => {
-          console.log(err.message);
+          console.log(err.message, "home Page");
         });
       setPost("");
     } else {
@@ -160,6 +162,8 @@ const Home: React.FC<any> = ({
                     deleteLikePost={deleteLikePost}
                     bookmarkPost={bookmarkPost}
                     removeBookmarkPosts={removeBookmarkPosts}
+                    likedPostsId={likedPostsId}
+                    bookmarkedPostId={bookmarkedPostId}
                   />
                 )}
               </div>

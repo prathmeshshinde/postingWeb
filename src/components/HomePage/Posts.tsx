@@ -7,6 +7,8 @@ const Posts: React.FC<any> = ({
   deleteLikePost,
   bookmarkPost,
   removeBookmarkPosts,
+  likedPostsId,
+  bookmarkedPostId,
 }) => {
   return (
     <div style={{ marginTop: "20px" }}>
@@ -19,6 +21,8 @@ const Posts: React.FC<any> = ({
             deleteLikePost={deleteLikePost}
             bookmarkPost={bookmarkPost}
             removeBookmarkPosts={removeBookmarkPosts}
+            likedPostsId={likedPostsId}
+            bookmarkedPostId={bookmarkedPostId}
           />
         );
       })}

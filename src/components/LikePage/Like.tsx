@@ -5,16 +5,20 @@ import { Content } from "antd/es/layout/layout";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../App";
 import SinglePost from "../HomePage/SinglePost";
+import { useUserAuth } from "../../context/AuthContext";
 
 const Like: React.FC<any> = ({
   likedPosts,
   deleteLikePost,
   bookmarkPost,
   removeBookmarkPosts,
+  likedPostsId,
+  bookmarkedPostId,
 }) => {
   const [userPost, setUserPost] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>();
+  const { currUser }: any = useUserAuth();
 
   const colRef = collection(db, "posts");
 
@@ -28,12 +32,16 @@ const Like: React.FC<any> = ({
 
         let newLikedPosts: any = [];
         postDocs.map((post: any) => {
-          likedPosts.map((ids: any) => {
-            if (post.postId === ids) {
+          likedPosts.map((postDetail: any) => {
+            if (
+              post.postId === postDetail.postId &&
+              postDetail.userId === currUser.userId
+            ) {
               newLikedPosts.push(post);
             }
           });
         });
+
         setUserPost(newLikedPosts);
         setLoading(false);
       })
@@ -86,6 +94,8 @@ const Like: React.FC<any> = ({
                         removeBookmarkPosts={removeBookmarkPosts}
                         userPost={userPost}
                         handleRemoveLike={handleRemoveLike}
+                        likedPostsId={likedPostsId}
+                        bookmarkedPostId={bookmarkedPostId}
                       />
                     );
                   })}

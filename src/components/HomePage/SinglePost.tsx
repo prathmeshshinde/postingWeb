@@ -37,6 +37,8 @@ const SinglePost: React.FC<any> = ({
   removeBookmarkPosts,
   handleRemoveLike,
   handleRemoveBookmarkPosts,
+  likedPostsId,
+  bookmarkedPostId,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState<any>(false);
   const [openPop, setOpenPop] = useState<any>(false);
@@ -68,14 +70,14 @@ const SinglePost: React.FC<any> = ({
     setDeleteIsModalOpen(true);
   };
 
-  const handleLike = async (post_id: string, user_id: string) => {
+  const handleLike = async (post_id: string) => {
     if (!currUser) {
       return alert("Login First");
     }
     try {
       await addDoc(collection(db, "likes"), {
         postId: post_id,
-        userId: user_id,
+        userId: currUser.userId,
       });
     } catch (err) {
       openNotificationWithIcon(
@@ -95,18 +97,32 @@ const SinglePost: React.FC<any> = ({
         query(
           collection(db, "posts"),
           where("userId", "==", postItem?.userId),
-          where("postId", "in", likedPosts)
+          where("postId", "in", likedPostsId)
         )
       )
         .then((snapshot) => {
           let postDocs: any = [];
+          let postUserId: any = [];
           snapshot?.docs?.forEach((doc) => {
-            postDocs.push(doc?.data().postId);
+            postDocs.push(doc?.data());
+            postUserId.push(doc.data().userId);
           });
-          setLikedPostId(postDocs);
+
+          let newLikedPosts: any = [];
+          postDocs.map((post: any) => {
+            likedPosts.map((postDetail: any) => {
+              if (
+                post.postId === postDetail.postId &&
+                postDetail.userId === currUser.userId
+              ) {
+                newLikedPosts.push(post.postId);
+              }
+            });
+          });
+          setLikedPostId(newLikedPosts);
         })
         .catch((err) => {
-          console.log(err.message);
+          console.log(err.message, "SinglePost Page 2");
         });
     }
   };
@@ -114,8 +130,6 @@ const SinglePost: React.FC<any> = ({
   const handleDislike = async () => {
     if (!currUser) {
       return alert("Login First");
-    } else {
-      console.log("jello");
     }
     deleteLikePost?.map(async (items: any) => {
       if (items.postId === postItem?.postId) {
@@ -134,7 +148,7 @@ const SinglePost: React.FC<any> = ({
     try {
       await addDoc(collection(db, "bookmarks"), {
         postId: post_id,
-        userId: user_id,
+        userId: currUser?.userId,
       });
     } catch (err) {
       openNotificationWithIcon(
@@ -154,18 +168,33 @@ const SinglePost: React.FC<any> = ({
         query(
           collection(db, "posts"),
           where("userId", "==", postItem?.userId),
-          where("postId", "in", bookmarkPost)
+          where("postId", "in", bookmarkedPostId)
         )
       )
         .then((snapshot) => {
           let postDocs: any = [];
+          let postUserId: any = [];
           snapshot?.docs?.forEach((doc) => {
-            postDocs.push(doc.data().postId);
+            postDocs.push(doc.data());
+            postUserId.push(doc.data()?.userId);
           });
-          setBookmarkPostId(postDocs);
+
+          let newBookmarkPosts: any = [];
+          postDocs.map((post: any) => {
+            bookmarkPost.map((postDetail: any) => {
+              if (
+                post.postId === postDetail.postId &&
+                postDetail.userId === currUser?.userId
+              ) {
+                newBookmarkPosts.push(post.postId);
+              }
+            });
+          });
+
+          setBookmarkPostId(newBookmarkPosts);
         })
         .catch((err) => {
-          console.log(err.message);
+          console.log(err.message, "singlePost pages 1");
         });
     }
   };
@@ -281,7 +310,9 @@ const SinglePost: React.FC<any> = ({
           />
           <p className="post-text">{postItem?.post}</p>
 
-          <Divider style={{ margin: "20px 0px" }} />
+          {location.pathname !== "/comment" ? (
+            <Divider style={{ margin: "20px 0px" }} />
+          ) : null}
 
           {location.pathname !== "/comment" ? (
             <div className="post-feature-buttons">
@@ -318,9 +349,7 @@ const SinglePost: React.FC<any> = ({
                   ) : (
                     <Tooltip title="Like">
                       <HeartOutlined
-                        onClick={() =>
-                          handleLike(postItem?.id, postItem?.userId)
-                        }
+                        onClick={() => handleLike(postItem?.id)}
                         style={{ fontSize: "20px", cursor: "pointer" }}
                       />
                     </Tooltip>

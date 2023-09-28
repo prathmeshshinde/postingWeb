@@ -79,7 +79,7 @@ const Profile: React.FC<any> = ({
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err.message);
+        console.log(err.message, "Profile");
       });
   };
 

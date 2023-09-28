@@ -28,10 +28,6 @@ const SignUp: React.FC = () => {
     }
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Error", errorInfo);
-  };
-
   return (
     <Layout style={{ height: "100vh" }}>
       <div className="form-div" style={{ height: "100vh" }}>
@@ -60,7 +56,6 @@ const SignUp: React.FC = () => {
             className="login-form"
             initialValues={{ remember: true }}
             onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
           >
             <Form.Item
               name="email"
