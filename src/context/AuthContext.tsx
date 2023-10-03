@@ -37,6 +37,7 @@ const AuthContext: React.FC<IAuthContextProps> = (props) => {
     return signInWithEmailAndPassword(auth, email, password);
   }
   function signout() {
+    localStorage.removeItem("userId");
     return signOut(auth);
   }
 
@@ -48,6 +49,7 @@ const AuthContext: React.FC<IAuthContextProps> = (props) => {
       setUserDoc(doc.id);
       setCurrUser(dataUsername);
       setUsername(dataUsername.username);
+      localStorage.setItem("userId", dataUsername.userId);
     });
   }
 

@@ -1,5 +1,6 @@
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../../App";
+import { message } from "antd";
 
 export const handleComment = async (
   currUser: any,
@@ -13,7 +14,8 @@ export const handleComment = async (
   user: any
 ) => {
   if (!currUser) {
-    alert("Please login first");
+    message.error("Please login first");
+    return;
   }
   try {
     if (comment.trim().length !== 0) {
@@ -32,6 +34,8 @@ export const handleComment = async (
 
       setComments((prevState: any) => [{ ...obj, id: res.id }, ...prevState]);
       setComment("");
+    } else {
+      message.error("Please enter valid comment");
     }
   } catch (err: any) {
     setError("Please Try Again!");

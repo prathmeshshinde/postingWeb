@@ -9,15 +9,24 @@ import {
 } from "@ant-design/icons";
 import UpdatePostModal from "../ProfilePage/UpdatePostModal";
 import { useUserAuth } from "../../context/AuthContext";
-import DeletePostModal from "../ProfilePage/DeletePostModal";
-import { Link, useLocation } from "react-router-dom";
-import { Card, Divider, Popover, Tooltip, notification } from "antd";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  Card,
+  Divider,
+  Popconfirm,
+  Popover,
+  Tooltip,
+  message,
+  notification,
+} from "antd";
 import { showLikedPosts } from "./Utils/showLikedPosts";
 import { showBookmarkedPosts } from "./Utils/showBookmarkedPosts";
 import { handleLike } from "./Utils/handleLike";
 import { handleDislike } from "./Utils/handleDislike";
 import { handleBookmark } from "./Utils/handleBookmark";
 import { handleRemoveBookmark } from "./Utils/removeBookmarkPosts";
+import { deleteDoc, doc } from "firebase/firestore";
+import { db } from "../../App";
 
 type NotificationType = "success" | "info" | "warning" | "error";
 
@@ -35,14 +44,16 @@ const SinglePost: React.FC<any> = ({
   handleRemoveBookmarkPosts,
   likedPostsId,
   bookmarkedPostId,
+  setToUpdateComments,
+  toUpdateComments,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState<any>(false);
-  const [isDeleteModalOpen, setDeleteIsModalOpen] = useState<any>(false);
   const { currUser }: any = useUserAuth();
   const [likedPostId, setLikedPostId] = useState<any>();
   const [bookmarkPostId, setBookmarkPostId] = useState<any>();
   const location = useLocation();
   const [api, contextHolder] = notification.useNotification();
+  const navigate = useNavigate();
 
   const openNotificationWithIcon = (
     type: NotificationType,
@@ -61,8 +72,28 @@ const SinglePost: React.FC<any> = ({
     setIsModalOpen(false);
   };
 
-  const showModal = () => {
-    setDeleteIsModalOpen(true);
+  const handleOk = async () => {
+    if (location.pathname === "/comment") {
+      try {
+        await deleteDoc(
+          doc(db, "posts", postCommentDeleltId.id, "comments", postItem?.id)
+        );
+        setToUpdateComments(!toUpdateComments);
+        message.success("Comment Deleted");
+      } catch (err) {
+        message.error("Something went wrong please try again");
+      }
+    } else {
+      try {
+        await deleteDoc(doc(db, "posts", postItem?.id));
+        if (location.pathname === "/comment") {
+          navigate("/");
+        }
+        message.success("Post Deleted");
+      } catch (err) {
+        message.error("Something went wrong please try again");
+      }
+    }
   };
 
   const content = (
@@ -73,9 +104,15 @@ const SinglePost: React.FC<any> = ({
             Update the post
           </p>
         )}
-        <p className="delete-button" onClick={showModal}>
-          Delete
-        </p>
+        <Popconfirm
+          title="Delete the post"
+          description="Are you sure to delete this post?"
+          onConfirm={handleOk}
+          okText="Yes"
+          cancelText="No"
+        >
+          <p className="delete-button">Delete</p>
+        </Popconfirm>
       </div>
     </div>
   );
@@ -163,13 +200,6 @@ const SinglePost: React.FC<any> = ({
               </div>
             </div>
           </div>
-
-          <DeletePostModal
-            isDeleteOpenModal={isDeleteModalOpen}
-            setDeleteIsModalOpen={setDeleteIsModalOpen}
-            postId={postItem?.id}
-            postCommentDeleltId={postCommentDeleltId}
-          />
 
           <UpdatePostModal
             isModalOpen={isModalOpen}

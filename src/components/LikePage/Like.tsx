@@ -1,4 +1,4 @@
-import { Empty, Layout, Spin } from "antd";
+import { Divider, Empty, Layout, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import Header from "../HomePage/Header";
 import { Content } from "antd/es/layout/layout";
@@ -18,6 +18,7 @@ const Like: React.FC<any> = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>();
   const { currUser }: any = useUserAuth();
+  const localStore = localStorage.getItem("userId");
 
   const handleRemoveLike = (id: any) => {
     setUserPost((prevState) =>
@@ -27,35 +28,39 @@ const Like: React.FC<any> = ({
 
   useEffect(() => {
     getLikedPosts(setUserPost, setError, setLoading, likedPosts, currUser);
-  }, []);
+  }, [currUser]);
 
   return (
     <Layout>
       <Layout className="site-layout scroll-app">
         <Header />
-        <h1 className="like-title">Liked Posts</h1>
-        {!currUser?.userId ? (
-          <p className="no-comments-text">Please login to see liked posts</p>
-        ) : (
-          <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
-            {error ? (
-              <p className="no-comments-text">Error Please try Again!</p>
-            ) : null}
-            {loading ? (
-              <div className="loading-spin">
-                <Spin tip="Loading" size="large">
-                  <div className="content" />
-                </Spin>
-              </div>
-            ) : (
+        <Divider
+          style={{
+            fontSize: "22px",
+            color: "#3087ff",
+            fontWeight: "700",
+          }}
+        >
+          Liked Posts
+        </Divider>
+
+        {error && currUser ? (
+          <p className="no-comments-text">Error Please try Again!</p>
+        ) : null}
+
+        <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
+          {loading ? (
+            <div className="loading-spin">
+              <Spin tip="Loading" size="large">
+                <div className="content" />
+              </Spin>
+            </div>
+          ) : (
+            <div>
               <div>
-                {userPost?.length === 0 ? (
-                  <div style={{ marginTop: "100px" }}>
-                    <Empty />
-                  </div>
-                ) : (
+                {userPost?.length !== 0 ? (
                   <div>
-                    {userPost.map((newPost: any, index: any) => {
+                    {userPost.map((newPost: any, index: number) => {
                       return (
                         <SinglePost
                           key={index}
@@ -72,11 +77,23 @@ const Like: React.FC<any> = ({
                       );
                     })}
                   </div>
+                ) : (
+                  <div style={{ marginTop: "100px" }}>
+                    <Empty />
+                  </div>
                 )}
               </div>
-            )}
-          </Content>
-        )}
+            </div>
+          )}
+
+          {!localStore ? (
+            <div>
+              <p className="no-comments-text">
+                Please login to see liked posts
+              </p>
+            </div>
+          ) : null}
+        </Content>
       </Layout>
     </Layout>
   );

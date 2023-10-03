@@ -1,13 +1,13 @@
 import React from "react";
 import { useUserAuth } from "../../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Menu } from "antd";
+import { Button } from "antd";
 import ResponsiveNav from "./ResponsiveNav";
 
 const Header: React.FC = () => {
   const { signout }: any = useUserAuth();
   const navigate = useNavigate();
-  const { currUser }: any = useUserAuth();
+  const localStore = localStorage.getItem("userId");
 
   const handleSignOut = async () => {
     try {
@@ -25,7 +25,7 @@ const Header: React.FC = () => {
       </div>
       <ResponsiveNav />
       <div className="button-logout">
-        {currUser ? (
+        {localStore ? (
           <Button type="primary" onClick={handleSignOut}>
             Log out
           </Button>

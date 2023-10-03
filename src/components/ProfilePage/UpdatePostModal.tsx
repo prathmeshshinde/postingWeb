@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal } from "antd";
+import { Button, Form, Input, Modal, message } from "antd";
 import React, { useEffect, useState } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../App";
@@ -22,6 +22,7 @@ const UpdatePostModal: React.FC<any> = ({
         date: date,
         edited: "Edited",
       });
+      message.success("Post updated");
       handleCancel();
     } catch (err) {}
   };

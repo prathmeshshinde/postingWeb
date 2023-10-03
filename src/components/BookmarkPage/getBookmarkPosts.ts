@@ -8,6 +8,10 @@ export const getBookmarkPosts = (
   setLoading: any,
   setUserPost: any
 ) => {
+  if (!currUser?.userId) {
+    setLoading(false);
+    return;
+  }
   const colRef = collection(db, "posts");
   getDocs(colRef)
     .then((snapshot) => {

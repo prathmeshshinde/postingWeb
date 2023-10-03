@@ -33,6 +33,6 @@ export const handlePost = async (
       });
     setPost("");
   } else {
-    openNotificationWithIcon("error", "Please enter something!");
+    openNotificationWithIcon("error", "Please enter valid post!");
   }
 };

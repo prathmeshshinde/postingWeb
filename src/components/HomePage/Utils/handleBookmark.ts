@@ -1,5 +1,6 @@
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../../App";
+import { message } from "antd";
 
 export const handleBookmark = async (
   post_id: string,
@@ -7,7 +8,7 @@ export const handleBookmark = async (
   openNotificationWithIcon: any
 ) => {
   if (!currUser) {
-    return alert("Login First");
+    return message.error("Please Login to Bookmark");
   }
   try {
     await addDoc(collection(db, "bookmarks"), {

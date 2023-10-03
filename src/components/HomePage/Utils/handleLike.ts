@@ -1,5 +1,6 @@
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../../App";
+import { message } from "antd";
 
 export const handleLike = async (
   post_id: string,
@@ -7,7 +8,7 @@ export const handleLike = async (
   openNotificationWithIcon: any
 ) => {
   if (!currUser) {
-    return alert("Login First");
+    return message.error("Please Login to Like");
   }
   try {
     await addDoc(collection(db, "likes"), {

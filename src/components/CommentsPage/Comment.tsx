@@ -26,6 +26,7 @@ const Comment: React.FC<any> = ({
   const [loading, setLoading] = useState<boolean>(true);
   const [mainPost, setMainPost] = useState<any>();
   const [error, setError] = useState<any>();
+  const [toUpdateComments, setToUpdateComments] = useState<boolean>(false);
 
   const getPost = async () => {
     const docRef = doc(db, "posts", postItem?.id);
@@ -54,7 +55,7 @@ const Comment: React.FC<any> = ({
   useEffect(() => {
     getComments(setError, setComments, setLoading, postItem);
     getPost();
-  }, []);
+  }, [toUpdateComments]);
 
   return (
     <>
@@ -63,121 +64,124 @@ const Comment: React.FC<any> = ({
           {!postItem && !location ? (
             <p className="no-comments-text">You can not access this page</p>
           ) : (
-            <Content style={{ margin: "0px 0px 0", overflow: "initial" }}>
+            <>
               <Header />
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <Divider
+              <Content style={{ margin: "0px 10px 0", overflow: "initial" }}>
+                <div
                   style={{
-                    fontSize: "22px",
-                    color: "#3087ff",
-                    fontWeight: "700",
-                  }}
-                >
-                  Post
-                </Divider>
-              </div>
-
-              {error ? (
-                <p className="no-comments-text">Error Please try Again!</p>
-              ) : null}
-
-              <SinglePost
-                postItem={mainPost}
-                likedPosts={likedPosts}
-                deleteLikePost={deleteLikePost}
-                bookmarkPost={bookmarkPost}
-                removeBookmarkPosts={removeBookmarkPosts}
-              />
-
-              <Divider>Comments</Divider>
-              {limit ? (
-                <p className="limit-text">Please enter only 100 characters</p>
-              ) : null}
-              <div className="post-div" style={{ margin: "20px 0px" }}>
-                <Space.Compact
-                  style={{
-                    height: "40px",
                     display: "flex",
-                    justifyContent: "center",
+                    justifyContent: "space-between",
+                    alignItems: "center",
                   }}
                 >
-                  <Form
-                    style={{ display: "flex", justifyContent: "center" }}
-                    onFinish={() =>
-                      handleComment(
-                        currUser,
-                        setError,
-                        comment,
-                        postItem,
-                        username,
-                        setComments,
-                        setComment,
-                        date,
-                        user
-                      )
-                    }
+                  <Divider
+                    style={{
+                      fontSize: "22px",
+                      color: "#3087ff",
+                      fontWeight: "700",
+                    }}
                   >
-                    <Form.Item>
-                      <Input
-                        className="post-input"
-                        placeholder="Comment on Post"
-                        value={comment}
-                        onChange={(e) => handleChange(e)}
-                      />
-                    </Form.Item>
-
-                    <Form.Item>
-                      <Button
-                        type="primary"
-                        htmlType="submit"
-                        style={{ height: "40px" }}
-                      >
-                        Comment
-                      </Button>
-                    </Form.Item>
-                  </Form>
-                </Space.Compact>
-              </div>
-
-              {loading ? (
-                <div className="loading-spin">
-                  <Spin tip="Loading" size="large">
-                    <div className="content" />
-                  </Spin>
+                    Post
+                  </Divider>
                 </div>
-              ) : (
-                <div>
-                  {comments?.length === 0 ? (
-                    <div style={{ marginTop: "40px" }}>
-                      <Empty />
-                      {/* <p className="no-comments-text">No Comments</p> */}
-                    </div>
-                  ) : (
-                    comments?.map((postItem: any, index: number) => {
-                      return (
-                        <SinglePost
-                          compare={location?.state.postItem.userId}
-                          deleteId={postItem?.id}
-                          postItem={postItem}
-                          key={index}
-                          postCommentDeleltId={mainPost}
-                          likedPosts={likedPosts}
-                          deleteLikePost={deleteLikePost}
-                          bookmarkPost={bookmarkPost}
-                          removeBookmarkPosts={removeBookmarkPosts}
+
+                {error ? (
+                  <p className="no-comments-text">Error Please try Again!</p>
+                ) : null}
+
+                <SinglePost
+                  postItem={mainPost}
+                  likedPosts={likedPosts}
+                  deleteLikePost={deleteLikePost}
+                  bookmarkPost={bookmarkPost}
+                  removeBookmarkPosts={removeBookmarkPosts}
+                />
+
+                <Divider>Comments</Divider>
+                {limit ? (
+                  <p className="limit-text">Please enter only 100 characters</p>
+                ) : null}
+                <div className="post-div" style={{ margin: "20px 0px" }}>
+                  <Space.Compact
+                    style={{
+                      height: "40px",
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Form
+                      style={{ display: "flex", justifyContent: "center" }}
+                      onFinish={() =>
+                        handleComment(
+                          currUser,
+                          setError,
+                          comment,
+                          postItem,
+                          username,
+                          setComments,
+                          setComment,
+                          date,
+                          user
+                        )
+                      }
+                    >
+                      <Form.Item>
+                        <Input
+                          className="post-input"
+                          placeholder="Comment on Post"
+                          value={comment}
+                          onChange={(e) => handleChange(e)}
                         />
-                      );
-                    })
-                  )}
+                      </Form.Item>
+
+                      <Form.Item>
+                        <Button
+                          type="primary"
+                          htmlType="submit"
+                          style={{ height: "40px" }}
+                        >
+                          Comment
+                        </Button>
+                      </Form.Item>
+                    </Form>
+                  </Space.Compact>
                 </div>
-              )}
-            </Content>
+
+                {loading ? (
+                  <div className="loading-spin">
+                    <Spin tip="Loading" size="large">
+                      <div className="content" />
+                    </Spin>
+                  </div>
+                ) : (
+                  <div>
+                    {comments?.length === 0 ? (
+                      <div style={{ marginTop: "40px" }}>
+                        <Empty />
+                      </div>
+                    ) : (
+                      comments?.map((postItem: any, index: number) => {
+                        return (
+                          <SinglePost
+                            compare={location?.state.postItem.userId}
+                            deleteId={postItem?.id}
+                            postItem={postItem}
+                            key={index}
+                            postCommentDeleltId={mainPost}
+                            likedPosts={likedPosts}
+                            deleteLikePost={deleteLikePost}
+                            bookmarkPost={bookmarkPost}
+                            removeBookmarkPosts={removeBookmarkPosts}
+                            setToUpdateComments={setToUpdateComments}
+                            toUpdateComments={toUpdateComments}
+                          />
+                        );
+                      })
+                    )}
+                  </div>
+                )}
+              </Content>
+            </>
           )}
         </Layout>
       </Layout>

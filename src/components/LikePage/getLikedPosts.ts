@@ -8,6 +8,10 @@ export const getLikedPosts = async (
   likedPosts: any,
   currUser: any
 ) => {
+  if (!currUser?.userId) {
+    setLoading(false);
+    return;
+  }
   const colRef = collection(db, "posts");
   await getDocs(colRef)
     .then((snapshot) => {
