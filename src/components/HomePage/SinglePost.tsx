@@ -37,7 +37,6 @@ const SinglePost: React.FC<any> = ({
   bookmarkedPostId,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState<any>(false);
-  const [openPop, setOpenPop] = useState<any>(false);
   const [isDeleteModalOpen, setDeleteIsModalOpen] = useState<any>(false);
   const { currUser }: any = useUserAuth();
   const [likedPostId, setLikedPostId] = useState<any>();
@@ -123,11 +122,13 @@ const SinglePost: React.FC<any> = ({
                     </p>
                   </div>
                 ) : (
-                  <img
-                    className="image-container"
-                    src={postItem?.profile}
-                    alt="profile"
-                  />
+                  <div>
+                    <img
+                      className="image-container"
+                      src={postItem?.profile}
+                      alt="profile"
+                    />
+                  </div>
                 )}
               </div>
               <div className="post-section">
@@ -140,12 +141,15 @@ const SinglePost: React.FC<any> = ({
                 {location.pathname !== "/like" &&
                 location.pathname !== "/bookmark" &&
                 currUser ? (
-                  <Popover placement="leftTop" content={content}>
+                  <Popover
+                    placement="leftTop"
+                    content={content}
+                    trigger="hover"
+                  >
                     <div style={{ display: "flex", justifyContent: "end" }}>
                       {currUser?.userId === postItem?.userId ||
                       currUser?.userId === compare ? (
                         <MoreOutlined
-                          onClick={() => setOpenPop(!openPop)}
                           style={{ fontSize: "20px", color: "#000" }}
                         />
                       ) : null}
@@ -164,7 +168,6 @@ const SinglePost: React.FC<any> = ({
             isDeleteOpenModal={isDeleteModalOpen}
             setDeleteIsModalOpen={setDeleteIsModalOpen}
             postId={postItem?.id}
-            setOpenPop={setOpenPop}
             postCommentDeleltId={postCommentDeleltId}
           />
 
@@ -172,7 +175,6 @@ const SinglePost: React.FC<any> = ({
             isModalOpen={isModalOpen}
             handleCancel={handleCancel}
             post={postItem}
-            setOpenPop={setOpenPop}
           />
           <p className="post-text">{postItem?.post}</p>
 

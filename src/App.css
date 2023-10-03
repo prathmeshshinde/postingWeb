@@ -60,21 +60,20 @@
 /* --------------------------------HOME PAGE---------------------------------- */
 
 .logo {
-  font-size: 36px;
-  font-weight: 600;
-  color: #3087ff;
+  font-size: 32px;
+  color: #fff;
   margin: 0px 0px 0px 30px;
-  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px 10px 0px;
-  background-color: #bed9ff;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding: 12px 5px 12px 5px;
+  background-color: #001529;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }
 
 .post-div {
@@ -82,6 +81,15 @@
   justify-content: center;
   position: relative;
   margin: 20px 0px 0px 0px;
+}
+
+:where(.css-dev-only-do-not-override-1ck3jst).ant-menu-light
+  .ant-menu-item-selected {
+  background-color: transparent;
+}
+
+.button-logout {
+  margin-right: 30px;
 }
 
 .loading {
@@ -106,12 +114,36 @@
   border-radius: 4px;
 }
 
+.active {
+  background-color: #1677ff;
+  padding: 10px 100px 10px 20px;
+  border-radius: 8px;
+  margin: 8px;
+}
+
+.active label,
+.active .sidebar-icon {
+  color: white;
+}
+
+.inactive {
+  background-color: transparent;
+  color: #bebebe;
+  padding: 10px 100px 10px 20px;
+  margin: 8px;
+}
+
+.inactive label,
+.inactive .sidebar-icon {
+  color: #bebebe;
+}
+
 .label-sidebar {
   margin: 0px 0px 0px 10px;
   font-size: 16px;
 }
 .sidebar-icon {
-  font-size: 24px;
+  font-size: 20px;
   margin: 0px 0px 0px 10px;
 }
 
@@ -266,7 +298,8 @@
   position: relative;
 }
 .nav-icon-main {
-  font-size: 24px;
+  font-size: 32px;
+  color: #ffffff;
 }
 
 .responsive-nav {
@@ -465,6 +498,11 @@
   }
   .sign-box {
     width: 30%;
+  }
+  .post-input {
+    height: 40px;
+    width: 300px;
+    margin: 0px 10px 0px 0px;
   }
 }
 

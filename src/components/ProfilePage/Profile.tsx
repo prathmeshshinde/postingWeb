@@ -19,10 +19,11 @@ const Profile: React.FC<any> = ({
   bookmarkPost,
   removeBookmarkPosts,
 }) => {
-  const { user, currUser, userDoc }: any = useUserAuth();
+  const { user, currUser, userDoc, setUpdateCurrUser, updateCurrUser }: any =
+    useUserAuth();
   const [isModalOpen, setIsModalOpen] = useState<any>(false);
-  const [userPost, setUserPost] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [userPost, setUserPost] = useState<any>([]);
+  const [loading, setLoading] = useState(true);
   const [userProfile, setUserProfile] = useState<any>(currUser);
   const [api, contextHolder] = notification.useNotification();
 
@@ -43,6 +44,15 @@ const Profile: React.FC<any> = ({
     setIsModalOpen(false);
   };
 
+  const updateAllPosts = async (values: any, obj: any) => {
+    for (let i = 0; i < userPost?.length; i++) {
+      const updateAllPosts = doc(db, "posts", userPost[i].postId);
+      await updateDoc(updateAllPosts, obj);
+    }
+    setUserPost(userPost);
+    setUserProfile(obj);
+  };
+
   const onFinish = async (values: any) => {
     try {
       const updateProfile = doc(db, "users", userDoc);
@@ -51,8 +61,9 @@ const Profile: React.FC<any> = ({
         profile: values.profile.profile,
         bio: values.bio.bio,
       };
+      setUpdateCurrUser(!updateCurrUser);
       await updateDoc(updateProfile, obj);
-      setUserProfile(obj);
+      updateAllPosts(values, obj);
       setIsModalOpen(false);
       openNotificationWithIcon("success", "Successfully updated profile");
     } catch (err) {
@@ -64,118 +75,122 @@ const Profile: React.FC<any> = ({
   };
 
   useEffect(() => {
-    getPosts(currUser, setUserPost, setLoading);
     setUserProfile(currUser);
-  }, [currUser, posts]);
+  }, [currUser]);
+
+  useEffect(() => {
+    getPosts(currUser, setUserPost, setLoading);
+  }, [posts, currUser, userProfile]);
 
   return (
     <>
       {contextHolder}
-      {!userProfile || currUser === undefined ? (
-        <>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "250px",
-              height: "100vh",
-              width: "100vw",
-            }}
-          >
-            <Link
-              to="/login"
-              style={{
-                textDecoration: "underline",
-                textAlign: "center",
-                fontSize: "25px",
-                marginTop: "30px",
-                fontWeight: "600",
-              }}
-            >
-              Login here
-            </Link>
-          </div>
-        </>
-      ) : (
-        <>
-          {loading ? (
+      {loading ? (
+        <Layout className="profile-payout-div">
+          <Layout className="site-layout scroll-app profile-layout">
             <div className="loading-spin">
               <Spin tip="Loading" size="large">
                 <div className="content" />
               </Spin>
             </div>
-          ) : (
+          </Layout>
+        </Layout>
+      ) : (
+        <>
+          {currUser === undefined ? (
             <Layout className="profile-payout-div">
               <Layout className="site-layout scroll-app profile-layout">
-                <Header />
-                <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
-                  <div className="profile-main">
-                    <div className="profile-head">
-                      <div>
-                        {currUser?.profile === "" ? (
-                          <div className="profile-image-conatainer">
-                            <p className="profile-image-circle">
-                              {userProfile.username.charAt(0)}
-                            </p>
-                          </div>
-                        ) : (
-                          <div>
-                            <div className="image-circle">
-                              <Image
-                                className="image-circle"
-                                src={userProfile?.profile}
-                                alt="profile"
-                              />
-                            </div>
-                            <div>
-                              <p className="username-profile">
-                                {userProfile?.username}{" "}
-                              </p>
-                              <p className="email-profile">{user?.email}</p>
-                              <p className="bio-profile">{userProfile?.bio}</p>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                      <div>
-                        <Button type="primary" onClick={showModal}>
-                          Edit Profile
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <ProfileUpdateModal
-                    isModalOpen={isModalOpen}
-                    handleCancel={handleCancel}
-                    onFinish={onFinish}
-                    currUser={userProfile}
-                  />
-
-                  {userPost.length === 0 ? (
-                    <div style={{ marginTop: "100px" }}>
-                      <Empty />
-                      <p className="user-posts">User not posted Anything</p>
-                    </div>
-                  ) : (
-                    <div style={{ marginTop: "20px" }}>
-                      {userPost?.map((postItem: any, index: number) => {
-                        return (
-                          <SinglePost
-                            key={index}
-                            postItem={postItem}
-                            likedPosts={likedPosts}
-                            deleteLikePost={deleteLikePost}
-                            bookmarkPost={bookmarkPost}
-                            removeBookmarkPosts={removeBookmarkPosts}
-                          />
-                        );
-                      })}
-                    </div>
-                  )}
-                </Content>
+                <Link
+                  to="/login"
+                  style={{
+                    textDecoration: "underline",
+                    textAlign: "center",
+                    fontSize: "25px",
+                    marginTop: "30px",
+                    fontWeight: "600",
+                  }}
+                >
+                  Login here
+                </Link>
               </Layout>
             </Layout>
+          ) : (
+            <>
+              <Layout className="profile-payout-div">
+                <Layout className="site-layout scroll-app profile-layout">
+                  <Header />
+                  <Content
+                    style={{ margin: "24px 16px 0", overflow: "initial" }}
+                  >
+                    <div className="profile-main">
+                      <div className="profile-head">
+                        <div>
+                          {currUser?.profile === "" ? (
+                            <div className="profile-image-conatainer">
+                              <p className="profile-image-circle">
+                                {userProfile.username.charAt(0)}
+                              </p>
+                            </div>
+                          ) : (
+                            <div>
+                              <div className="image-circle">
+                                <Image
+                                  className="image-circle"
+                                  src={userProfile?.profile}
+                                  alt="profile"
+                                />
+                              </div>
+                              <div>
+                                <p className="username-profile">
+                                  {userProfile?.username}
+                                </p>
+                                <p className="email-profile">{user?.email}</p>
+                                <p className="bio-profile">
+                                  {userProfile?.bio}
+                                </p>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        <div>
+                          <Button type="primary" onClick={showModal}>
+                            Edit Profile
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <ProfileUpdateModal
+                      isModalOpen={isModalOpen}
+                      handleCancel={handleCancel}
+                      onFinish={onFinish}
+                      currUser={userProfile}
+                    />
+
+                    {userPost.length === 0 ? (
+                      <div style={{ marginTop: "100px" }}>
+                        <Empty />
+                      </div>
+                    ) : (
+                      <div style={{ marginTop: "20px" }}>
+                        {userPost?.map((postItem: any, index: number) => {
+                          return (
+                            <SinglePost
+                              key={index}
+                              postItem={postItem}
+                              likedPosts={likedPosts}
+                              deleteLikePost={deleteLikePost}
+                              bookmarkPost={bookmarkPost}
+                              removeBookmarkPosts={removeBookmarkPosts}
+                            />
+                          );
+                        })}
+                      </div>
+                    )}
+                  </Content>
+                </Layout>
+              </Layout>
+            </>
           )}
         </>
       )}

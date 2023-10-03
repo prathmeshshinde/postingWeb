@@ -27,6 +27,7 @@ const AuthContext: React.FC<IAuthContextProps> = (props) => {
   const [username, setUsername] = useState("");
   const [currUser, setCurrUser] = useState<any>();
   const [userDoc, setUserDoc] = useState("");
+  const [updateCurrUser, setUpdateCurrUser] = useState<any>(false);
 
   function signup(email: string, password: string) {
     return createUserWithEmailAndPassword(auth, email, password);
@@ -65,7 +66,7 @@ const AuthContext: React.FC<IAuthContextProps> = (props) => {
     if (!!user?.uid.length) {
       getUsername(user.uid);
     }
-  }, [user]);
+  }, [user, updateCurrUser]);
 
   if (loading) return <p>Loading....</p>;
 
@@ -80,6 +81,8 @@ const AuthContext: React.FC<IAuthContextProps> = (props) => {
         username,
         currUser,
         userDoc,
+        setUpdateCurrUser,
+        updateCurrUser,
       }}
     >
       {children}

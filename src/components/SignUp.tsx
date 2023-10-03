@@ -3,7 +3,13 @@ import { useUserAuth } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Form, Input, Layout, Typography } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { addDoc, collection, getFirestore } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getFirestore,
+  updateDoc,
+} from "firebase/firestore";
 
 const SignUp: React.FC = () => {
   const [error, setError] = useState<any>("");
@@ -16,11 +22,16 @@ const SignUp: React.FC = () => {
     try {
       setError("");
       const signedUpUser = await signup(values.email, values.password);
-      await addDoc(collection(db, "users"), {
+      addDoc(collection(db, "users"), {
         username: values.username,
         userId: signedUpUser.user.uid,
         bio: "Add Bio",
         profile: "",
+        docId: "",
+      }).then((res) => {
+        updateDoc(doc(db, "users", res.id), {
+          docId: res.id,
+        });
       });
       navigate("/");
     } catch (err: any) {

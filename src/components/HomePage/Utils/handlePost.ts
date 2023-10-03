@@ -33,6 +33,6 @@ export const handlePost = async (
       });
     setPost("");
   } else {
-    openNotificationWithIcon("error", "Please try again!");
+    openNotificationWithIcon("error", "Please enter something!");
   }
 };

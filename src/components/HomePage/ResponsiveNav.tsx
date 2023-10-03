@@ -62,7 +62,10 @@ const ResponsiveNav: React.FC = () => {
     <div className="responsive-nav-container">
       <Dropdown menu={{ items }} trigger={["click"]}>
         <Space>
-          <MenuOutlined className="nav-icon-main" />
+          <MenuOutlined
+            className="nav-icon-main"
+            style={{ fontSize: "20px", marginTop: "10px" }}
+          />
         </Space>
       </Dropdown>
     </div>

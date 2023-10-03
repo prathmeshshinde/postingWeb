@@ -13,6 +13,7 @@ export const getPosts = (currUser: any, setUserPost: any, setLoading: any) => {
       const newposts = postDocs.filter((ele: any) => {
         return ele?.userId === currUser?.userId;
       });
+
       setUserPost(newposts);
       setLoading(false);
     })

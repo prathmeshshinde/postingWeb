@@ -1,4 +1,4 @@
-import { Button, Form, Input, Layout, Space, Spin } from "antd";
+import { Button, Divider, Empty, Form, Input, Layout, Space, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import { Content } from "antd/es/layout/layout";
 import { useLocation } from "react-router-dom";
@@ -72,7 +72,15 @@ const Comment: React.FC<any> = ({
                   alignItems: "center",
                 }}
               >
-                <p className="comment-post-title">Post</p>
+                <Divider
+                  style={{
+                    fontSize: "22px",
+                    color: "#3087ff",
+                    fontWeight: "700",
+                  }}
+                >
+                  Post
+                </Divider>
               </div>
 
               {error ? (
@@ -87,7 +95,11 @@ const Comment: React.FC<any> = ({
                 removeBookmarkPosts={removeBookmarkPosts}
               />
 
-              <div className="post-div" style={{ marginTop: "20px" }}>
+              <Divider>Comments</Divider>
+              {limit ? (
+                <p className="limit-text">Please enter only 100 characters</p>
+              ) : null}
+              <div className="post-div" style={{ margin: "20px 0px" }}>
                 <Space.Compact
                   style={{
                     height: "40px",
@@ -119,11 +131,7 @@ const Comment: React.FC<any> = ({
                         onChange={(e) => handleChange(e)}
                       />
                     </Form.Item>
-                    {limit ? (
-                      <p className="limit-text">
-                        Please enter only 100 characters
-                      </p>
-                    ) : null}
+
                     <Form.Item>
                       <Button
                         type="primary"
@@ -137,10 +145,6 @@ const Comment: React.FC<any> = ({
                 </Space.Compact>
               </div>
 
-              <p className="comment-post-title" style={{ marginTop: "20px" }}>
-                Comments
-              </p>
-
               {loading ? (
                 <div className="loading-spin">
                   <Spin tip="Loading" size="large">
@@ -150,7 +154,10 @@ const Comment: React.FC<any> = ({
               ) : (
                 <div>
                   {comments?.length === 0 ? (
-                    <p className="no-comments-text">No Comments</p>
+                    <div style={{ marginTop: "40px" }}>
+                      <Empty />
+                      {/* <p className="no-comments-text">No Comments</p> */}
+                    </div>
                   ) : (
                     comments?.map((postItem: any, index: number) => {
                       return (

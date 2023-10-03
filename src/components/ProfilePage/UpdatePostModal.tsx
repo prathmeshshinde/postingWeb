@@ -7,7 +7,6 @@ const UpdatePostModal: React.FC<any> = ({
   isModalOpen,
   handleCancel,
   post,
-  setOpenPop,
 }) => {
   const [date, setDate] = useState("");
   const layout = {
@@ -24,8 +23,6 @@ const UpdatePostModal: React.FC<any> = ({
         edited: "Edited",
       });
       handleCancel();
-
-      setOpenPop(false);
     } catch (err) {}
   };
 
