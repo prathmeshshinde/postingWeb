@@ -1,16 +1,18 @@
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../../App";
 import { message } from "antd";
+import { ICurrUser } from "../../../Interface/ICurrUser";
+import { IComment } from "../../../Interface/IComment";
 
 export const handleComment = async (
-  currUser: any,
+  currUser: ICurrUser,
   setError: any,
-  comment: any,
+  comment: string,
   postItem: any,
-  username: any,
-  setComments: any,
-  setComment: any,
-  date: any,
+  username: string,
+  setComments: React.Dispatch<React.SetStateAction<IComment[]>>,
+  setComment: React.Dispatch<React.SetStateAction<string>>,
+  date: string,
   user: any
 ) => {
   if (!currUser) {
@@ -38,6 +40,7 @@ export const handleComment = async (
       message.error("Please enter valid comment");
     }
   } catch (err: any) {
+    message.error("Something went wrong!");
     setError("Please Try Again!");
   }
 };

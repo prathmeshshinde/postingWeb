@@ -8,6 +8,7 @@ import {
 } from "firebase/auth";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../App";
+import { ICurrUser } from "../Interface/ICurrUser";
 
 interface IAuthContextProps {
   children: React.ReactNode;
@@ -22,12 +23,12 @@ export function useUserAuth() {
 const AuthContext: React.FC<IAuthContextProps> = (props) => {
   const { children } = props;
   const auth = getAuth();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [user, setUser] = useState<any>(null);
-  const [username, setUsername] = useState("");
-  const [currUser, setCurrUser] = useState<any>();
-  const [userDoc, setUserDoc] = useState("");
-  const [updateCurrUser, setUpdateCurrUser] = useState<any>(false);
+  const [username, setUsername] = useState<string>("");
+  const [currUser, setCurrUser] = useState<ICurrUser>();
+  const [userDoc, setUserDoc] = useState<string>("");
+  const [updateCurrUser, setUpdateCurrUser] = useState<boolean>(false);
 
   function signup(email: string, password: string) {
     return createUserWithEmailAndPassword(auth, email, password);

@@ -9,10 +9,25 @@ import ProfileUpdateModal from "./ProfileUpdateModal";
 import { Link } from "react-router-dom";
 import SinglePost from "../HomePage/SinglePost";
 import { getPosts } from "./Utils/getPosts";
+import { IPost } from "../../Interface/IPost";
+import {
+  IBookmarkPosts,
+  IDeleteLikedPosts,
+  ILikedPosts,
+  IRemoveBookmarkPosts,
+} from "../../Interface/ILikedAndBookmarkPosts";
 
 type NotificationType = "success" | "info" | "warning" | "error";
 
-const Profile: React.FC<any> = ({
+interface IProps {
+  posts: IPost[];
+  likedPosts: ILikedPosts[];
+  deleteLikePost: IDeleteLikedPosts[];
+  bookmarkPost: IBookmarkPosts[];
+  removeBookmarkPosts: IRemoveBookmarkPosts[];
+}
+
+const Profile: React.FC<IProps> = ({
   posts,
   likedPosts,
   deleteLikePost,

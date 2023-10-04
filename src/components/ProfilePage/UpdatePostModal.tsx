@@ -7,6 +7,10 @@ const UpdatePostModal: React.FC<any> = ({
   isModalOpen,
   handleCancel,
   post,
+  toUpdateComments,
+  setToUpdateComments,
+  parentPost,
+  setIsModalOpen,
 }) => {
   const [date, setDate] = useState("");
   const layout = {
@@ -16,6 +20,19 @@ const UpdatePostModal: React.FC<any> = ({
 
   const onFinish = async (values: any) => {
     try {
+      const updateProfile = doc(db, "posts", parentPost, "comments", post?.id);
+      await updateDoc(updateProfile, {
+        post: values.post.post,
+        date: date,
+        edited: "Edited",
+      });
+      message.success("Post updated");
+      setToUpdateComments(!toUpdateComments);
+      setIsModalOpen(false);
+      handleCancel();
+    } catch (err) {}
+
+    try {
       const updateProfile = doc(db, "posts", post?.id);
       await updateDoc(updateProfile, {
         post: values.post.post,
@@ -23,6 +40,8 @@ const UpdatePostModal: React.FC<any> = ({
         edited: "Edited",
       });
       message.success("Post updated");
+      setIsModalOpen(false);
+      setToUpdateComments(!toUpdateComments);
       handleCancel();
     } catch (err) {}
   };

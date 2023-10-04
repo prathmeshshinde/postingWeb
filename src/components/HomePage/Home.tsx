@@ -13,6 +13,13 @@ import {
 import Header from "./Header";
 import SinglePost from "./SinglePost";
 import { handlePost } from "./Utils/handlePost";
+import { IPost } from "../../Interface/IPost";
+import {
+  IBookmarkPosts,
+  IDeleteLikedPosts,
+  ILikedPosts,
+  IRemoveBookmarkPosts,
+} from "../../Interface/ILikedAndBookmarkPosts";
 
 type NotificationType = "success" | "info" | "warning" | "error";
 
@@ -20,7 +27,20 @@ const { Content } = Layout;
 
 const Context = React.createContext({ name: "Default" });
 
-const Home: React.FC<any> = ({
+interface IHomeProps {
+  posts: IPost[];
+  loading: boolean;
+  forInfiniteScroll: any;
+  likedPosts: ILikedPosts[];
+  deleteLikePost: IDeleteLikedPosts[];
+  bookmarkPost: IBookmarkPosts[];
+  removeBookmarkPosts: IRemoveBookmarkPosts[];
+  infinteLoader: boolean;
+  likedPostsId: any;
+  bookmarkedPostId: any;
+}
+
+const Home: React.FC<IHomeProps> = ({
   posts,
   loading,
   forInfiniteScroll,
@@ -32,9 +52,9 @@ const Home: React.FC<any> = ({
   likedPostsId,
   bookmarkedPostId,
 }) => {
-  const [post, setPost] = useState("");
-  const [date, setDate] = useState("");
-  const [limit, setLimit] = useState(false);
+  const [post, setPost] = useState<string>("");
+  const [date, setDate] = useState<string>("");
+  const [limit, setLimit] = useState<boolean>(false);
   const { user, username, currUser }: any = useUserAuth();
 
   const [api, contextHolder] = notification.useNotification();
@@ -140,7 +160,7 @@ const Home: React.FC<any> = ({
                   </div>
                 ) : (
                   <div style={{ marginTop: "20px" }}>
-                    {posts?.map((postItem: any, index: number) => {
+                    {posts?.map((postItem: IPost, index: number) => {
                       return (
                         <SinglePost
                           postItem={postItem}

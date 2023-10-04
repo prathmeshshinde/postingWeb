@@ -5,7 +5,7 @@ import { Button, Form, Input, Layout, Typography } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 
 const Login: React.FC = () => {
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string>("");
   const { login }: any = useUserAuth();
   const navigate = useNavigate();
   const { Title } = Typography;

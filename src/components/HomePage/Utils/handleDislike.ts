@@ -1,10 +1,13 @@
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../../App";
+import { ICurrUser } from "../../../Interface/ICurrUser";
+import { IDeleteLikedPosts } from "../../../Interface/ILikedAndBookmarkPosts";
+import { IPost } from "../../../Interface/IPost";
 
 export const handleDislike = async (
-  currUser: any,
-  deleteLikePost: any,
-  postItem: any,
+  currUser: ICurrUser,
+  deleteLikePost: IDeleteLikedPosts[],
+  postItem: IPost,
   handleRemoveLike: any,
   location: any
 ) => {

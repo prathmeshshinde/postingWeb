@@ -5,8 +5,24 @@ import { Content } from "antd/es/layout/layout";
 import SinglePost from "../HomePage/SinglePost";
 import { useUserAuth } from "../../context/AuthContext";
 import { getLikedPosts } from "./getLikedPosts";
+import {
+  IBookmarkPosts,
+  IDeleteLikedPosts,
+  ILikedPosts,
+  IRemoveBookmarkPosts,
+} from "../../Interface/ILikedAndBookmarkPosts";
+import { IPost } from "../../Interface/IPost";
 
-const Like: React.FC<any> = ({
+interface IProps {
+  likedPosts: ILikedPosts[];
+  deleteLikePost: IDeleteLikedPosts[];
+  bookmarkPost: IBookmarkPosts[];
+  removeBookmarkPosts: IRemoveBookmarkPosts[];
+  likedPostsId: string[];
+  bookmarkedPostId: string[];
+}
+
+const Like: React.FC<IProps> = ({
   likedPosts,
   deleteLikePost,
   bookmarkPost,
@@ -14,15 +30,15 @@ const Like: React.FC<any> = ({
   likedPostsId,
   bookmarkedPostId,
 }) => {
-  const [userPost, setUserPost] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [userPost, setUserPost] = useState<IPost[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<any>();
   const { currUser }: any = useUserAuth();
   const localStore = localStorage.getItem("userId");
 
-  const handleRemoveLike = (id: any) => {
+  const handleRemoveLike = (id: string) => {
     setUserPost((prevState) =>
-      prevState.filter((post: any) => post.postId !== id)
+      prevState.filter((post: IPost) => post.postId !== id)
     );
   };
 
@@ -58,9 +74,9 @@ const Like: React.FC<any> = ({
           ) : (
             <div>
               <div>
-                {userPost?.length !== 0 ? (
+                {userPost?.length !== 0 && !loading ? (
                   <div>
-                    {userPost.map((newPost: any, index: number) => {
+                    {userPost.map((newPost: IPost, index: number) => {
                       return (
                         <SinglePost
                           key={index}

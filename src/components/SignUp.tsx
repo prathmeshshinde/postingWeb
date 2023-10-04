@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore";
 
 const SignUp: React.FC = () => {
-  const [error, setError] = useState<any>("");
+  const [error, setError] = useState<string>("");
   const navigate = useNavigate();
   const { Title } = Typography;
   const { signup }: any = useUserAuth();

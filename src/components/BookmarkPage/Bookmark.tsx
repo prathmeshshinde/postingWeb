@@ -5,8 +5,24 @@ import { Content } from "antd/es/layout/layout";
 import SinglePost from "../HomePage/SinglePost";
 import { useUserAuth } from "../../context/AuthContext";
 import { getBookmarkPosts } from "./getBookmarkPosts";
+import {
+  IBookmarkPosts,
+  IDeleteLikedPosts,
+  ILikedPosts,
+  IRemoveBookmarkPosts,
+} from "../../Interface/ILikedAndBookmarkPosts";
+import { IPost } from "../../Interface/IPost";
 
-const Bookmark: React.FC<any> = ({
+interface IProps {
+  likedPosts: ILikedPosts[];
+  deleteLikePost: IDeleteLikedPosts[];
+  bookmarkPost: IBookmarkPosts[];
+  removeBookmarkPosts: IRemoveBookmarkPosts[];
+  likedPostsId: string[];
+  bookmarkedPostId: string[];
+}
+
+const Bookmark: React.FC<IProps> = ({
   likedPosts,
   deleteLikePost,
   bookmarkPost,
@@ -20,14 +36,14 @@ const Bookmark: React.FC<any> = ({
   const { currUser }: any = useUserAuth();
   const localStore = localStorage.getItem("userId");
 
-  const handleRemoveBookmarkPosts = (id: any) => {
+  const handleRemoveBookmarkPosts = (id: string) => {
     setUserPost((prevState) =>
-      prevState.filter((post: any) => post.postId !== id)
+      prevState.filter((post: IPost) => post.postId !== id)
     );
   };
 
   useEffect(() => {
-    getBookmarkPosts(bookmarkPost, currUser, setError, setLoading, setUserPost);
+    getBookmarkPosts(bookmarkPost, setError, setLoading, setUserPost);
   }, [currUser]);
 
   return (
@@ -57,7 +73,7 @@ const Bookmark: React.FC<any> = ({
             </div>
           ) : (
             <div>
-              {userPost?.length === 0 ? (
+              {userPost?.length === 0 && !loading ? (
                 <div style={{ marginTop: "100px" }}>
                   <Empty />
                 </div>

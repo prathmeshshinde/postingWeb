@@ -17,20 +17,29 @@ import { Layout } from "antd";
 import { getPosts } from "./Utils/getPosts";
 import { getLikedPosts } from "./Utils/getLikedPosts";
 import { getBookmarkedPosts } from "./Utils/getBookmarkedPosts";
+import { IPost } from "./Interface/IPost";
+import {
+  IBookmarkPosts,
+  IDeleteLikedPosts,
+  ILikedPosts,
+  IRemoveBookmarkPosts,
+} from "./Interface/ILikedAndBookmarkPosts";
 
 initializeApp(config.firebaseConfig);
 export const db = getFirestore();
 
 function App() {
-  const [posts, setPosts] = useState<any>([]);
+  const [posts, setPosts] = useState<IPost[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [scroll, setScroll] = useState(10);
-  const [likedPosts, setLikedPosts] = useState<any>([]);
-  const [deleteLikePost, SetDeleteLikePost] = useState<any>([]);
-  const [bookmarkPost, setBookmarkPost] = useState<any>();
-  const [removeBookmarkPosts, setRemoveBookmarkPosts] = useState<any>();
+  const [scroll, setScroll] = useState<number>(10);
+  const [likedPosts, setLikedPosts] = useState<ILikedPosts[]>([]);
+  const [deleteLikePost, SetDeleteLikePost] = useState<IDeleteLikedPosts[]>([]);
+  const [bookmarkPost, setBookmarkPost] = useState<IBookmarkPosts[]>([]);
+  const [removeBookmarkPosts, setRemoveBookmarkPosts] = useState<
+    IRemoveBookmarkPosts[]
+  >([]);
   const location = useLocation();
-  const [infinteLoader, setInfinteLoader] = useState(true);
+  const [infinteLoader, setInfinteLoader] = useState<boolean>(true);
   const [likedPostId, setLikedPostId] = useState<any>();
   const [bookmarkPostId, setBookmarkPostId] = useState<any>();
 
@@ -87,7 +96,6 @@ function App() {
               path="/comment"
               element={
                 <Comment
-                  posts={posts}
                   likedPosts={likedPosts}
                   deleteLikePost={deleteLikePost}
                   bookmarkPost={bookmarkPost}

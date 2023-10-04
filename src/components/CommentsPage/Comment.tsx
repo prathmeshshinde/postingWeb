@@ -9,8 +9,23 @@ import { useUserAuth } from "../../context/AuthContext";
 import Header from "../HomePage/Header";
 import { getComments } from "./Utils/getComments";
 import { handleComment } from "./Utils/handleComment";
+import { IPost } from "../../Interface/IPost";
+import {
+  IBookmarkPosts,
+  IDeleteLikedPosts,
+  ILikedPosts,
+  IRemoveBookmarkPosts,
+} from "../../Interface/ILikedAndBookmarkPosts";
+import { IComment } from "../../Interface/IComment";
 
-const Comment: React.FC<any> = ({
+interface IProps {
+  likedPosts: ILikedPosts[];
+  deleteLikePost: IDeleteLikedPosts[];
+  bookmarkPost: IBookmarkPosts[];
+  removeBookmarkPosts: IRemoveBookmarkPosts[];
+}
+
+const Comment: React.FC<IProps> = ({
   likedPosts,
   deleteLikePost,
   bookmarkPost,
@@ -18,21 +33,23 @@ const Comment: React.FC<any> = ({
 }) => {
   const location = useLocation();
   const { postItem } = location?.state;
-  const [comment, setComment] = useState("");
-  const [date, setDate] = useState("");
-  const [limit, setLimit] = useState(false);
+  const [comment, setComment] = useState<string>("");
+  const [date, setDate] = useState<string>("");
+  const [limit, setLimit] = useState<boolean>(false);
   const { user, username, currUser }: any = useUserAuth();
-  const [comments, setComments] = useState<any>([]);
+  const [comments, setComments] = useState<IComment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [mainPost, setMainPost] = useState<any>();
+  const [mainPost, setMainPost] = useState<IPost>();
   const [error, setError] = useState<any>();
   const [toUpdateComments, setToUpdateComments] = useState<boolean>(false);
+  const [parentPost, setParentPost] = useState<string>();
 
   const getPost = async () => {
     const docRef = doc(db, "posts", postItem?.id);
     const document = await getDoc(docRef);
     const post = { ...document.data(), id: postItem?.id };
     setMainPost(post);
+    setParentPost(post?.id);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,7 +70,7 @@ const Comment: React.FC<any> = ({
   };
 
   useEffect(() => {
-    getComments(setError, setComments, setLoading, postItem);
+    getComments(setError, setComments, setLoading, postItem?.id);
     getPost();
   }, [toUpdateComments]);
 
@@ -95,6 +112,8 @@ const Comment: React.FC<any> = ({
                   deleteLikePost={deleteLikePost}
                   bookmarkPost={bookmarkPost}
                   removeBookmarkPosts={removeBookmarkPosts}
+                  setToUpdateComments={setToUpdateComments}
+                  toUpdateComments={toUpdateComments}
                 />
 
                 <Divider>Comments</Divider>
@@ -160,7 +179,7 @@ const Comment: React.FC<any> = ({
                         <Empty />
                       </div>
                     ) : (
-                      comments?.map((postItem: any, index: number) => {
+                      comments?.map((postItem: IPost, index: number) => {
                         return (
                           <SinglePost
                             compare={location?.state.postItem.userId}
@@ -174,6 +193,7 @@ const Comment: React.FC<any> = ({
                             removeBookmarkPosts={removeBookmarkPosts}
                             setToUpdateComments={setToUpdateComments}
                             toUpdateComments={toUpdateComments}
+                            parentPost={parentPost}
                           />
                         );
                       })

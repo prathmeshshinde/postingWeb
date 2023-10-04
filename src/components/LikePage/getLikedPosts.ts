@@ -1,17 +1,23 @@
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../App";
+import { IPost } from "../../Interface/IPost";
+import { ILikedPosts } from "../../Interface/ILikedAndBookmarkPosts";
+import { ICurrUser } from "../../Interface/ICurrUser";
+import { message } from "antd";
 
 export const getLikedPosts = async (
-  setUserPost: any,
+  setUserPost: React.Dispatch<React.SetStateAction<IPost[]>>,
   setError: any,
-  setLoading: any,
-  likedPosts: any,
-  currUser: any
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  likedPosts: ILikedPosts[],
+  currUser: ICurrUser
 ) => {
-  if (!currUser?.userId) {
+  const localStore = localStorage.getItem("userId");
+  if (!localStore) {
     setLoading(false);
     return;
   }
+
   const colRef = collection(db, "posts");
   await getDocs(colRef)
     .then((snapshot) => {
@@ -21,11 +27,11 @@ export const getLikedPosts = async (
       });
 
       let newLikedPosts: any = [];
-      postDocs.map((post: any) => {
-        likedPosts.map((postDetail: any) => {
+      postDocs.map((post: IPost) => {
+        likedPosts.map((postDetail: ILikedPosts) => {
           if (
             post.postId === postDetail.postId &&
-            postDetail.userId === currUser.userId
+            postDetail.userId === localStore
           ) {
             newLikedPosts.push(post);
           }
@@ -36,6 +42,7 @@ export const getLikedPosts = async (
       setLoading(false);
     })
     .catch((err) => {
+      message.error("Something went wrong!");
       setError(err.message);
     });
 };

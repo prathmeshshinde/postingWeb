@@ -1,12 +1,15 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../App";
+import { ILikedPosts } from "../../../Interface/ILikedAndBookmarkPosts";
+import { IPost } from "../../../Interface/IPost";
+import { ICurrUser } from "../../../Interface/ICurrUser";
 
 export const showLikedPosts = (
-  likedPosts: any,
+  likedPosts: ILikedPosts[],
   location: any,
-  postItem: any,
+  postItem: IPost,
   likedPostsId: any,
-  currUser: any,
+  currUser: ICurrUser,
   setLikedPostId: any
 ) => {
   if (
@@ -43,7 +46,7 @@ export const showLikedPosts = (
         setLikedPostId(newLikedPosts);
       })
       .catch((err) => {
-        console.log(err.message, "Please Try Again later!");
+        console.log(err.message);
       });
   }
 };

@@ -1,9 +1,16 @@
 import { collection, getDocs, query } from "firebase/firestore";
 import { db } from "../App";
+import {
+  IBookmarkPosts,
+  IRemoveBookmarkPosts,
+} from "../Interface/ILikedAndBookmarkPosts";
+import { message } from "antd";
 
 export const getBookmarkedPosts = (
-  setRemoveBookmarkPosts: any,
-  setBookmarkPost: any,
+  setRemoveBookmarkPosts: React.Dispatch<
+    React.SetStateAction<IRemoveBookmarkPosts[]>
+  >,
+  setBookmarkPost: React.Dispatch<React.SetStateAction<IBookmarkPosts[]>>,
   setBookmarkPostId: any
 ) => {
   const bookmarkposts = query(collection(db, "bookmarks"));
@@ -22,6 +29,6 @@ export const getBookmarkedPosts = (
       setBookmarkPostId(bookmarkPostId);
     })
     .catch((err) => {
-      console.log(err.message, "app");
+      message.error(err.message);
     });
 };

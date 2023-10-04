@@ -1,12 +1,16 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../App";
+import { IBookmarkPosts } from "../../../Interface/ILikedAndBookmarkPosts";
+import { IPost } from "../../../Interface/IPost";
+import { ICurrUser } from "../../../Interface/ICurrUser";
+import { message } from "antd";
 
 export const showBookmarkedPosts = (
   bookmarkedPostId: any,
-  bookmarkPost: any,
+  bookmarkPost: IBookmarkPosts[],
   location: any,
-  postItem: any,
-  currUser: any,
+  postItem: IPost,
+  currUser: ICurrUser,
   setBookmarkPostId: any
 ) => {
   if (
@@ -42,7 +46,7 @@ export const showBookmarkedPosts = (
         setBookmarkPostId(newBookmarkPosts);
       })
       .catch((err) => {
-        console.log(err.message, "Please Try Again later!");
+        message.error("Please Try Again");
       });
   }
 };

@@ -1,7 +1,12 @@
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../App";
+import { ICurrUser } from "../../../Interface/ICurrUser";
 
-export const getPosts = (currUser: any, setUserPost: any, setLoading: any) => {
+export const getPosts = (
+  currUser: ICurrUser,
+  setUserPost: any,
+  setLoading: any
+) => {
   const colRef = collection(db, "posts");
   getDocs(colRef)
     .then((snapshot) => {
@@ -18,6 +23,6 @@ export const getPosts = (currUser: any, setUserPost: any, setLoading: any) => {
       setLoading(false);
     })
     .catch((err) => {
-      console.log("error", err.message);
+      console.log(err.message);
     });
 };

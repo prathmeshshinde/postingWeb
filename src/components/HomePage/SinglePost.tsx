@@ -27,6 +27,7 @@ import { handleBookmark } from "./Utils/handleBookmark";
 import { handleRemoveBookmark } from "./Utils/removeBookmarkPosts";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../App";
+import { IPost } from "../../Interface/IPost";
 
 type NotificationType = "success" | "info" | "warning" | "error";
 
@@ -46,8 +47,9 @@ const SinglePost: React.FC<any> = ({
   bookmarkedPostId,
   setToUpdateComments,
   toUpdateComments,
+  parentPost,
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState<any>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { currUser }: any = useUserAuth();
   const [likedPostId, setLikedPostId] = useState<any>();
   const [bookmarkPostId, setBookmarkPostId] = useState<any>();
@@ -99,7 +101,8 @@ const SinglePost: React.FC<any> = ({
   const content = (
     <div>
       <div>
-        {currUser?.userId === compare ? null : (
+        {currUser?.userId === compare &&
+        currUser?.userId !== postItem?.userId ? null : (
           <p className="update-button" onClick={() => updatePost()}>
             Update the post
           </p>
@@ -205,6 +208,9 @@ const SinglePost: React.FC<any> = ({
             isModalOpen={isModalOpen}
             handleCancel={handleCancel}
             post={postItem}
+            setToUpdateComments={setToUpdateComments}
+            parentPost={parentPost}
+            setIsModalOpen={setIsModalOpen}
           />
           <p className="post-text">{postItem?.post}</p>
 
@@ -231,84 +237,92 @@ const SinglePost: React.FC<any> = ({
                 </Link>
               ) : null}
 
-              {location.pathname !== "/profile" ? (
+              {location.pathname !== "/bookmark" ? (
                 <div>
-                  {likedPostId?.includes(postItem?.postId) ? (
-                    <Tooltip title="Dislike">
-                      <HeartFilled
-                        onClick={() =>
-                          handleDislike(
-                            currUser,
-                            deleteLikePost,
-                            postItem,
-                            handleRemoveLike,
-                            location
-                          )
-                        }
-                        style={{
-                          fontSize: "20px",
-                          cursor: "pointer",
-                          color: "#1677ff",
-                        }}
-                      />
-                    </Tooltip>
-                  ) : (
-                    <Tooltip title="Like">
-                      <HeartOutlined
-                        onClick={() =>
-                          handleLike(
-                            postItem?.id,
-                            currUser,
-                            openNotificationWithIcon
-                          )
-                        }
-                        style={{ fontSize: "20px", cursor: "pointer" }}
-                      />
-                    </Tooltip>
-                  )}
+                  {location.pathname !== "/profile" ? (
+                    <div>
+                      {likedPostId?.includes(postItem?.postId) ? (
+                        <Tooltip title="Dislike">
+                          <HeartFilled
+                            onClick={() =>
+                              handleDislike(
+                                currUser,
+                                deleteLikePost,
+                                postItem,
+                                handleRemoveLike,
+                                location
+                              )
+                            }
+                            style={{
+                              fontSize: "20px",
+                              cursor: "pointer",
+                              color: "#1677ff",
+                            }}
+                          />
+                        </Tooltip>
+                      ) : (
+                        <Tooltip title="Like">
+                          <HeartOutlined
+                            onClick={() =>
+                              handleLike(
+                                postItem?.id,
+                                currUser,
+                                openNotificationWithIcon
+                              )
+                            }
+                            style={{ fontSize: "20px", cursor: "pointer" }}
+                          />
+                        </Tooltip>
+                      )}
+                    </div>
+                  ) : null}
                 </div>
               ) : null}
 
-              {location.pathname !== "/profile" ? (
+              {location.pathname !== "/like" ? (
                 <div>
-                  {bookmarkPostId?.includes(postItem?.postId) ? (
-                    <Tooltip title="Remove Bookmark">
-                      <ReadFilled
-                        onClick={() =>
-                          handleRemoveBookmark(
-                            currUser,
-                            removeBookmarkPosts,
-                            postItem,
-                            location,
-                            handleRemoveBookmarkPosts
-                          )
-                        }
-                        style={{
-                          fontSize: "20px",
-                          marginRight: "20px",
-                          cursor: "pointer",
-                          color: "#1677ff",
-                        }}
-                      />
-                    </Tooltip>
-                  ) : (
-                    <Tooltip title="Bookmark">
-                      <ReadOutlined
-                        onClick={() =>
-                          handleBookmark(
-                            postItem?.id,
-                            currUser,
-                            openNotificationWithIcon
-                          )
-                        }
-                        style={{
-                          fontSize: "20px",
-                          marginRight: "20px",
-                          cursor: "pointer",
-                        }}
-                      />
-                    </Tooltip>
-                  )}
+                  {location.pathname !== "/profile" ? (
+                    <div>
+                      {bookmarkPostId?.includes(postItem?.postId) ? (
+                        <Tooltip title="Remove Bookmark">
+                          <ReadFilled
+                            onClick={() =>
+                              handleRemoveBookmark(
+                                currUser,
+                                removeBookmarkPosts,
+                                postItem,
+                                location,
+                                handleRemoveBookmarkPosts
+                              )
+                            }
+                            style={{
+                              fontSize: "20px",
+                              marginRight: "20px",
+                              cursor: "pointer",
+                              color: "#1677ff",
+                            }}
+                          />
+                        </Tooltip>
+                      ) : (
+                        <Tooltip title="Bookmark">
+                          <ReadOutlined
+                            onClick={() =>
+                              handleBookmark(
+                                postItem?.id,
+                                currUser,
+                                openNotificationWithIcon
+                              )
+                            }
+                            style={{
+                              fontSize: "20px",
+                              marginRight: "20px",
+                              cursor: "pointer",
+                            }}
+                          />
+                        </Tooltip>
+                      )}
+                    </div>
+                  ) : null}
                 </div>
               ) : null}
             </div>

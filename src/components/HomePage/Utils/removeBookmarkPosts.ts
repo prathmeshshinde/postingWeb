@@ -1,10 +1,13 @@
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../../App";
+import { ICurrUser } from "../../../Interface/ICurrUser";
+import { IRemoveBookmarkPosts } from "../../../Interface/ILikedAndBookmarkPosts";
+import { IPost } from "../../../Interface/IPost";
 
 export const handleRemoveBookmark = async (
-  currUser: any,
-  removeBookmarkPosts: any,
-  postItem: any,
+  currUser: ICurrUser,
+  removeBookmarkPosts: IRemoveBookmarkPosts[],
+  postItem: IPost,
   location: any,
   handleRemoveBookmarkPosts: any
 ) => {

@@ -10,7 +10,7 @@ import {
 } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserAuth } from "../../context/AuthContext";
-import { Dropdown, MenuProps, Space } from "antd";
+import { Dropdown, MenuProps, Space, message } from "antd";
 
 const ResponsiveNav: React.FC = () => {
   const { signout, currUser }: any = useUserAuth();
@@ -21,7 +21,7 @@ const ResponsiveNav: React.FC = () => {
       await signout();
       navigate("/login");
     } catch (err: any) {
-      console.log(err.message, "Responsive Nav page");
+      message.error("Something went wrong");
     }
   };
 

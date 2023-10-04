@@ -1,18 +1,19 @@
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../App";
+import { ICurrUser } from "../../../Interface/ICurrUser";
 
 export const handlePost = async (
-  currUser: any,
+  currUser: ICurrUser,
   user: any,
   openNotificationWithIcon: any,
-  setPost: any,
-  post: any,
-  date: any,
-  limit: any,
-  username: any
+  setPost: React.Dispatch<React.SetStateAction<string>>,
+  post: string,
+  date: string,
+  limit: boolean,
+  username: string
 ) => {
   if (!currUser) {
-    return openNotificationWithIcon("error", "Please Login First");
+    return openNotificationWithIcon("error", "Please Login to Post");
   }
   if (post.trim().length !== 0 && !limit) {
     addDoc(collection(db, "posts"), {
@@ -29,7 +30,7 @@ export const handlePost = async (
         openNotificationWithIcon("success", "Post Successful");
       })
       .catch((err: any) => {
-        console.log(err.message, "home Page");
+        openNotificationWithIcon("error", "Failed! Something went wrong.");
       });
     setPost("");
   } else {

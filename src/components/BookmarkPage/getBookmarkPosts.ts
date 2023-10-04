@@ -1,14 +1,17 @@
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../App";
+import { IBookmarkPosts } from "../../Interface/ILikedAndBookmarkPosts";
+import { ICurrUser } from "../../Interface/ICurrUser";
 
 export const getBookmarkPosts = (
-  bookmarkPost: any,
-  currUser: any,
+  bookmarkPost: IBookmarkPosts[],
   setError: any,
   setLoading: any,
   setUserPost: any
 ) => {
-  if (!currUser?.userId) {
+  const localStore = localStorage.getItem("userId");
+
+  if (!localStore) {
     setLoading(false);
     return;
   }
@@ -26,14 +29,14 @@ export const getBookmarkPosts = (
         bookmarkPost.map((postDetail: any) => {
           if (
             post.postId === postDetail.postId &&
-            postDetail.userId === currUser.userId
+            postDetail.userId === localStore
           ) {
             newBookmarkedPosts.push(post);
           }
         });
       });
-
       setUserPost(newBookmarkedPosts);
+
       setLoading(false);
     })
     .catch((err) => {

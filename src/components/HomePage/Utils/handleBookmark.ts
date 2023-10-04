@@ -1,10 +1,11 @@
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../../App";
 import { message } from "antd";
+import { ICurrUser } from "../../../Interface/ICurrUser";
 
 export const handleBookmark = async (
   post_id: string,
-  currUser: any,
+  currUser: ICurrUser,
   openNotificationWithIcon: any
 ) => {
   if (!currUser) {

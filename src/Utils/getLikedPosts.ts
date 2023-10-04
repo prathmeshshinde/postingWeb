@@ -1,10 +1,15 @@
 import { collection, getDocs, query } from "firebase/firestore";
 import { db } from "../App";
+import {
+  IDeleteLikedPosts,
+  ILikedPosts,
+} from "../Interface/ILikedAndBookmarkPosts";
+import { message } from "antd";
 
 export const getLikedPosts = (
-  SetDeleteLikePost: any,
+  SetDeleteLikePost: React.Dispatch<React.SetStateAction<IDeleteLikedPosts[]>>,
   setLikedPostId: any,
-  setLikedPosts: any
+  setLikedPosts: React.Dispatch<React.SetStateAction<ILikedPosts[]>>
 ) => {
   const likedposts = query(collection(db, "likes"));
   getDocs(likedposts)
@@ -22,6 +27,6 @@ export const getLikedPosts = (
       setLikedPostId(likedPostsId);
     })
     .catch((err) => {
-      console.log(err.message, "app");
+      message.error(err.message);
     });
 };
