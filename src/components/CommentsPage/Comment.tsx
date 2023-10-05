@@ -88,7 +88,7 @@ const Comment: React.FC<IProps> = ({
 
   return (
     <>
-      <Layout className="profile-payout-div">
+      <Layout className="profile-payout-div margin-top">
         <Layout className="site-layout scroll-app ">
           {!postItem && !location ? (
             <p className="no-comments-text">You can not access this page</p>

@@ -1,4 +1,4 @@
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../App";
 import { message } from "antd";
 import { ICurrUser } from "../../../Interface/ICurrUser";
@@ -33,6 +33,10 @@ export const handleComment = async (
         collection(db, "posts", postItem?.id, "comments"),
         obj
       );
+
+      const obj2: any = { postId: res.id };
+      const getDoc = doc(db, "posts", postItem?.id, "comments", res.id);
+      await updateDoc(getDoc, obj2);
 
       setComments((prevState: any) => [{ ...obj, id: res.id }, ...prevState]);
       setComment("");

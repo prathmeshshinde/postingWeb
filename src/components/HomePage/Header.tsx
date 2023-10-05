@@ -19,21 +19,23 @@ const Header: React.FC = () => {
   };
 
   return (
-    <div className="header">
-      <div>
-        <p className="logo">Posting</p>
-      </div>
-      <ResponsiveNav />
-      <div className="button-logout">
-        {localStore ? (
-          <Button type="primary" onClick={handleSignOut}>
-            Log out
-          </Button>
-        ) : (
-          <Button type="primary">
-            <Link to="/login">Log In</Link>
-          </Button>
-        )}
+    <div className="header-main">
+      <div className="header">
+        <div>
+          <p className="logo">Posting</p>
+        </div>
+        <ResponsiveNav />
+        <div className="button-logout">
+          {localStore ? (
+            <Button type="primary" onClick={handleSignOut}>
+              Log out
+            </Button>
+          ) : (
+            <Button type="primary">
+              <Link to="/login">Log In</Link>
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );

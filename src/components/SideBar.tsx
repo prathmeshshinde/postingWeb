@@ -26,7 +26,7 @@ const SideBar: React.FC<any> = () => {
         <div>
           <div
             style={{
-              marginTop: "50px",
+              marginTop: "60px",
               display: "flex",
               flexDirection: "column",
             }}

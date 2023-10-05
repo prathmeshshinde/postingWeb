@@ -90,7 +90,7 @@ const Home: React.FC<IHomeProps> = ({
   return (
     <Context.Provider value={contextValue}>
       {contextHolder}
-      <Layout>
+      <Layout className="margin-top">
         <Layout
           className="site-layout scroll-app"
           onScroll={(e) => forInfiniteScroll(e)}
@@ -179,7 +179,7 @@ const Home: React.FC<IHomeProps> = ({
               </div>
             )}
 
-            {infinteLoader && !loading ? (
+            {infinteLoader && !loading && posts.length > 10 ? (
               <div className="loading-spin-infinte">
                 <Spin tip="Loading" size="large">
                   <div className="content" />

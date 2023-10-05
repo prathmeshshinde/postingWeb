@@ -47,7 +47,7 @@ const Like: React.FC<IProps> = ({
   }, [currUser]);
 
   return (
-    <Layout>
+    <Layout className="margin-top">
       <Layout className="site-layout scroll-app">
         <Header />
         <Divider

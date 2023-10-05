@@ -3,13 +3,12 @@ import React, { useEffect, useState } from "react";
 import Header from "../HomePage/Header";
 import { Content } from "antd/es/layout/layout";
 import { useUserAuth } from "../../context/AuthContext";
-import { doc, updateDoc } from "firebase/firestore";
+import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "../../App";
 import ProfileUpdateModal from "./ProfileUpdateModal";
 import { Link } from "react-router-dom";
 import SinglePost from "../HomePage/SinglePost";
 import { getPosts } from "./Utils/getPosts";
-import { IPost } from "../../Interface/IPost";
 import {
   IBookmarkPosts,
   IDeleteLikedPosts,
@@ -20,7 +19,7 @@ import {
 type NotificationType = "success" | "info" | "warning" | "error";
 
 interface IProps {
-  posts: IPost[];
+  posts: any;
   likedPosts: ILikedPosts[];
   deleteLikePost: IDeleteLikedPosts[];
   bookmarkPost: IBookmarkPosts[];
@@ -41,6 +40,7 @@ const Profile: React.FC<IProps> = ({
   const [loading, setLoading] = useState(true);
   const [userProfile, setUserProfile] = useState<any>(currUser);
   const [api, contextHolder] = notification.useNotification();
+  const localStore = localStorage.getItem("userId");
 
   const openNotificationWithIcon = (
     type: NotificationType,
@@ -57,6 +57,28 @@ const Profile: React.FC<IProps> = ({
 
   const handleCancel = () => {
     setIsModalOpen(false);
+  };
+
+  const getAllComments = async (obj: any) => {
+    for (let i = 0; i < posts.length; i++) {
+      const colRef = collection(db, "posts", posts[i]?.postId, "comments");
+
+      await getDocs(colRef).then((snapshot) => {
+        snapshot.docs.forEach(async (docs) => {
+          if (docs.data().userId === localStore) {
+            const updateComments = doc(
+              db,
+              "posts",
+              posts[i].postId,
+              "comments",
+              docs.data().postId
+            );
+
+            await updateDoc(updateComments, obj);
+          }
+        });
+      });
+    }
   };
 
   const updateAllPosts = async (obj: any) => {
@@ -79,6 +101,7 @@ const Profile: React.FC<IProps> = ({
       setUpdateCurrUser(!updateCurrUser);
       await updateDoc(updateProfile, obj);
       updateAllPosts(obj);
+      getAllComments(obj);
       setIsModalOpen(false);
       openNotificationWithIcon("success", "Successfully updated profile");
     } catch (err) {
@@ -101,7 +124,7 @@ const Profile: React.FC<IProps> = ({
     <>
       {contextHolder}
       {loading ? (
-        <Layout className="profile-payout-div">
+        <Layout className="profile-payout-div ">
           <Layout className="site-layout scroll-app profile-layout">
             <div className="loading-spin">
               <Spin tip="Loading" size="large">
@@ -131,7 +154,7 @@ const Profile: React.FC<IProps> = ({
             </Layout>
           ) : (
             <>
-              <Layout className="profile-payout-div">
+              <Layout className="profile-payout-div margin-top">
                 <Layout className="site-layout scroll-app profile-layout">
                   <Header />
                   <Content
