@@ -11,7 +11,8 @@ export const handleRemoveBookmark = async (
   location: any,
   handleRemoveBookmarkPosts: any
 ) => {
-  if (!currUser) {
+  const localStore = localStorage.getItem("userId");
+  if (!localStore) {
     return alert("Login First");
   }
   removeBookmarkPosts?.map(async (items: any) => {

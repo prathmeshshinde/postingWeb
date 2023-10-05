@@ -12,6 +12,7 @@ export const showLikedPosts = (
   currUser: ICurrUser,
   setLikedPostId: any
 ) => {
+  const localStore = localStorage.getItem("userId");
   if (
     likedPosts?.length !== 0 &&
     location.pathname !== "/comment" &&
@@ -37,7 +38,7 @@ export const showLikedPosts = (
           likedPosts.map((postDetail: any) => {
             if (
               post.postId === postDetail.postId &&
-              postDetail.userId === currUser.userId
+              postDetail.userId === localStore
             ) {
               newLikedPosts.push(post.postId);
             }

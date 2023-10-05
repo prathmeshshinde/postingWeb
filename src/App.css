@@ -131,6 +131,7 @@
   color: #bebebe;
   padding: 10px 100px 10px 20px;
   margin: 8px;
+  cursor: pointer;
 }
 
 .inactive label,
@@ -141,6 +142,7 @@
 .label-sidebar {
   margin: 0px 0px 0px 10px;
   font-size: 16px;
+  cursor: pointer;
 }
 .sidebar-icon {
   font-size: 20px;
@@ -288,6 +290,11 @@
   margin: 0px;
   display: flex;
   justify-content: space-between;
+}
+
+.skeleton-div {
+  width: 70%;
+  margin: 0 auto;
 }
 
 /* --------------------------------RESPONSIVE NAV---------------------------------- */
@@ -516,5 +523,9 @@
   }
   .card-div {
     width: 100%;
+  }
+  .skeleton-div {
+    width: 90%;
+    margin: 0 auto;
   }
 }

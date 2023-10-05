@@ -8,13 +8,14 @@ export const handleBookmark = async (
   currUser: ICurrUser,
   openNotificationWithIcon: any
 ) => {
-  if (!currUser) {
+  const localStore = localStorage.getItem("userId");
+  if (!localStore) {
     return message.error("Please Login to Bookmark");
   }
   try {
     await addDoc(collection(db, "bookmarks"), {
       postId: post_id,
-      userId: currUser?.userId,
+      userId: localStore,
     });
   } catch (err) {
     openNotificationWithIcon("error", "Something went wrong please try again!");

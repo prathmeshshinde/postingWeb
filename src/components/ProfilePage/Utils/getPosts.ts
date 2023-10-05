@@ -7,6 +7,7 @@ export const getPosts = (
   setUserPost: any,
   setLoading: any
 ) => {
+  const localStore = localStorage.getItem("userId");
   const colRef = collection(db, "posts");
   getDocs(colRef)
     .then((snapshot) => {
@@ -16,7 +17,7 @@ export const getPosts = (
       });
 
       const newposts = postDocs.filter((ele: any) => {
-        return ele?.userId === currUser?.userId;
+        return ele?.userId === localStore;
       });
 
       setUserPost(newposts);

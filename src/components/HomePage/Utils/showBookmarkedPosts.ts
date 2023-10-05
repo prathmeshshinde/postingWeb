@@ -13,6 +13,7 @@ export const showBookmarkedPosts = (
   currUser: ICurrUser,
   setBookmarkPostId: any
 ) => {
+  const localStore = localStorage.getItem("userId");
   if (
     bookmarkPost?.length !== 0 &&
     location.pathname !== "/comment" &&
@@ -36,7 +37,7 @@ export const showBookmarkedPosts = (
           bookmarkPost.map((postDetail: any) => {
             if (
               post.postId === postDetail.postId &&
-              postDetail.userId === currUser?.userId
+              postDetail.userId === localStore
             ) {
               newBookmarkPosts.push(post.postId);
             }

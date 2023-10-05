@@ -36,7 +36,7 @@ const SideBar: React.FC<any> = () => {
               className={({ isActive }) => (isActive ? "active" : "inactive")}
             >
               <HomeOutlined className="sidebar-icon" />
-              <label className="label-sidebar"> Home</label>
+              <label className="label-sidebar">Home</label>
             </NavLink>
             <NavLink
               to="/like"

@@ -1,7 +1,6 @@
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../App";
 import { IBookmarkPosts } from "../../Interface/ILikedAndBookmarkPosts";
-import { ICurrUser } from "../../Interface/ICurrUser";
 
 export const getBookmarkPosts = (
   bookmarkPost: IBookmarkPosts[],

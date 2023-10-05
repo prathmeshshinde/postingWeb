@@ -59,7 +59,7 @@ const UpdatePostModal: React.FC<any> = ({
   return (
     <div>
       <Modal
-        title="Update Profile"
+        title="Update Post"
         open={isModalOpen}
         onCancel={handleCancel}
         footer={null}

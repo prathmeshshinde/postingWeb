@@ -1,4 +1,14 @@
-import { Button, Divider, Empty, Form, Input, Layout, Space, Spin } from "antd";
+import {
+  Button,
+  Divider,
+  Empty,
+  Form,
+  Input,
+  Layout,
+  Skeleton,
+  Space,
+  Spin,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import { Content } from "antd/es/layout/layout";
 import { useLocation } from "react-router-dom";
@@ -43,12 +53,14 @@ const Comment: React.FC<IProps> = ({
   const [error, setError] = useState<any>();
   const [toUpdateComments, setToUpdateComments] = useState<boolean>(false);
   const [parentPost, setParentPost] = useState<string>();
+  const [postLoading, setPostLoading] = useState<boolean>(true);
 
   const getPost = async () => {
     const docRef = doc(db, "posts", postItem?.id);
     const document = await getDoc(docRef);
     const post = { ...document.data(), id: postItem?.id };
     setMainPost(post);
+    setPostLoading(false);
     setParentPost(post?.id);
   };
 
@@ -106,15 +118,21 @@ const Comment: React.FC<IProps> = ({
                   <p className="no-comments-text">Error Please try Again!</p>
                 ) : null}
 
-                <SinglePost
-                  postItem={mainPost}
-                  likedPosts={likedPosts}
-                  deleteLikePost={deleteLikePost}
-                  bookmarkPost={bookmarkPost}
-                  removeBookmarkPosts={removeBookmarkPosts}
-                  setToUpdateComments={setToUpdateComments}
-                  toUpdateComments={toUpdateComments}
-                />
+                {postLoading ? (
+                  <div className="skeleton-div">
+                    <Skeleton avatar active />
+                  </div>
+                ) : (
+                  <SinglePost
+                    postItem={mainPost}
+                    likedPosts={likedPosts}
+                    deleteLikePost={deleteLikePost}
+                    bookmarkPost={bookmarkPost}
+                    removeBookmarkPosts={removeBookmarkPosts}
+                    setToUpdateComments={setToUpdateComments}
+                    toUpdateComments={toUpdateComments}
+                  />
+                )}
 
                 <Divider>Comments</Divider>
                 {limit ? (

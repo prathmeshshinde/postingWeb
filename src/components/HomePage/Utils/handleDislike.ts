@@ -11,7 +11,8 @@ export const handleDislike = async (
   handleRemoveLike: any,
   location: any
 ) => {
-  if (!currUser) {
+  const localStore = localStorage.getItem("userId");
+  if (!localStore) {
     return alert("Login First");
   }
   deleteLikePost?.map(async (items: any) => {

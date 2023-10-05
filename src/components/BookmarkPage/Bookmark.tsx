@@ -73,7 +73,7 @@ const Bookmark: React.FC<IProps> = ({
             </div>
           ) : (
             <div>
-              {userPost?.length === 0 && !loading ? (
+              {userPost?.length === 0 ? (
                 <div style={{ marginTop: "100px" }}>
                   <Empty />
                 </div>

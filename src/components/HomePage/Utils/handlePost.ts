@@ -12,7 +12,8 @@ export const handlePost = async (
   limit: boolean,
   username: string
 ) => {
-  if (!currUser) {
+  const localStore = localStorage.getItem("userId");
+  if (!localStore) {
     return openNotificationWithIcon("error", "Please Login to Post");
   }
   if (post.trim().length !== 0 && !limit) {
