@@ -59,7 +59,7 @@ const Profile: React.FC<IProps> = ({
     setIsModalOpen(false);
   };
 
-  const updateAllPosts = async (values: any, obj: any) => {
+  const updateAllPosts = async (obj: any) => {
     for (let i = 0; i < userPost?.length; i++) {
       const updateAllPosts = doc(db, "posts", userPost[i].postId);
       await updateDoc(updateAllPosts, obj);
@@ -78,7 +78,7 @@ const Profile: React.FC<IProps> = ({
       };
       setUpdateCurrUser(!updateCurrUser);
       await updateDoc(updateProfile, obj);
-      updateAllPosts(values, obj);
+      updateAllPosts(obj);
       setIsModalOpen(false);
       openNotificationWithIcon("success", "Successfully updated profile");
     } catch (err) {
