@@ -135,7 +135,7 @@ const Profile: React.FC<IProps> = ({
         </Layout>
       ) : (
         <>
-          {currUser === undefined ? (
+          {localStore === null ? (
             <Layout className="profile-payout-div">
               <Layout className="site-layout scroll-app profile-layout">
                 <Link

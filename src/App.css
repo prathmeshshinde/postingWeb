@@ -17,6 +17,10 @@
   overflow-y: scroll;
 }
 
+.scroll-app::-webkit-scrollbar {
+  display: none;
+}
+
 .loading-spin-infinte {
   margin: 0px 0px 40px 0px;
 }
