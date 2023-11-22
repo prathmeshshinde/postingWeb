@@ -1,7 +1,6 @@
 import { Divider, Empty, Layout, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import Header from "../HomePage/Header";
-import { Content } from "antd/es/layout/layout";
 import SinglePost from "../HomePage/SinglePost";
 import { useUserAuth } from "../../context/AuthContext";
 import { getBookmarkPosts } from "./getBookmarkPosts";
@@ -12,6 +11,7 @@ import {
   IRemoveBookmarkPosts,
 } from "../../Interface/ILikedAndBookmarkPosts";
 import { IPost } from "../../Interface/IPost";
+const { Content } = Layout;
 
 interface IProps {
   likedPosts: ILikedPosts[];

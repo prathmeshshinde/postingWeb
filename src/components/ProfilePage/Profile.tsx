@@ -1,7 +1,6 @@
 import { Button, Empty, Image, Layout, Spin, notification } from "antd";
 import React, { useEffect, useState } from "react";
 import Header from "../HomePage/Header";
-import { Content } from "antd/es/layout/layout";
 import { useUserAuth } from "../../context/AuthContext";
 import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "../../App";
@@ -15,6 +14,7 @@ import {
   ILikedPosts,
   IRemoveBookmarkPosts,
 } from "../../Interface/ILikedAndBookmarkPosts";
+const { Content } = Layout;
 
 type NotificationType = "success" | "info" | "warning" | "error";
 

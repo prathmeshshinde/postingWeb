@@ -1,4 +1,3 @@
-import Sider from "antd/es/layout/Sider";
 import React from "react";
 import {
   UserOutlined,
@@ -7,7 +6,8 @@ import {
   ReadOutlined,
 } from "@ant-design/icons";
 import { NavLink } from "react-router-dom";
-
+import { Layout } from "antd";
+const { Sider } = Layout;
 const SideBar: React.FC<any> = () => {
   return (
     <>

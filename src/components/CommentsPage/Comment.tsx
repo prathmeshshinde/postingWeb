@@ -10,7 +10,6 @@ import {
   Spin,
 } from "antd";
 import React, { useEffect, useState } from "react";
-import { Content } from "antd/es/layout/layout";
 import { useLocation } from "react-router-dom";
 import SinglePost from "../HomePage/SinglePost";
 import { doc, getDoc } from "firebase/firestore";
@@ -27,6 +26,7 @@ import {
   IRemoveBookmarkPosts,
 } from "../../Interface/ILikedAndBookmarkPosts";
 import { IComment } from "../../Interface/IComment";
+const { Content } = Layout;
 
 interface IProps {
   likedPosts: ILikedPosts[];

@@ -56,7 +56,6 @@ const Home: React.FC<IHomeProps> = ({
   const [date, setDate] = useState<string>("");
   const [limit, setLimit] = useState<boolean>(false);
   const { user, username, currUser }: any = useUserAuth();
-
   const [api, contextHolder] = notification.useNotification();
 
   const openNotificationWithIcon = (
