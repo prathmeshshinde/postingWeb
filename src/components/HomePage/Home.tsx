@@ -107,7 +107,7 @@ const Home: React.FC<IHomeProps> = ({
               >
                 <Form
                   style={{ display: "flex", justifyContent: "center" }}
-                  onFinish={() =>
+                  onFinish={() => {
                     handlePost(
                       currUser,
                       user,
@@ -117,8 +117,8 @@ const Home: React.FC<IHomeProps> = ({
                       date,
                       limit,
                       username
-                    )
-                  }
+                    );
+                  }}
                 >
                   <Form.Item>
                     <Input

@@ -42,7 +42,7 @@ const Comment: React.FC<IProps> = ({
   removeBookmarkPosts,
 }) => {
   const location = useLocation();
-  const { postItem } = location?.state;
+  const postItem = location?.state?.postItem;
   const [comment, setComment] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [limit, setLimit] = useState<boolean>(false);

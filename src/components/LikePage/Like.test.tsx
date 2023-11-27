@@ -1,7 +1,10 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
-import Like from "./components/LikePage/Like";
+import { render, screen, waitFor } from "@testing-library/react";
+import Like from "./Like";
 import { BrowserRouter as Router } from "react-router-dom";
+import * as utils from "./getLikedPosts";
+
+const mockHandleLikes = jest.spyOn(utils, "getLikedPosts");
 
 window.matchMedia =
   window.matchMedia ||
@@ -14,6 +17,7 @@ window.matchMedia =
   };
 
 describe("Like Component", () => {
+  jest.mock("./getLikedPosts.ts");
   test("renders Like component", () => {
     render(
       <Router>
@@ -31,7 +35,7 @@ describe("Like Component", () => {
     expect(screen.getByText("Liked Posts")).toBeInTheDocument();
   });
 
-  test("renders loading spinner when loading", () => {
+  test("renders loading spin while fetching liked posts", async () => {
     render(
       <Router>
         <Like
@@ -44,5 +48,26 @@ describe("Like Component", () => {
         />
       </Router>
     );
+
+    await waitFor(() =>
+      expect(screen.queryByTestId("loading-spin")).toBeNull()
+    );
+  });
+
+  test("renders liked posts", () => {
+    render(
+      <Router>
+        <Like
+          likedPosts={[]}
+          deleteLikePost={[]}
+          bookmarkPost={[]}
+          removeBookmarkPosts={[]}
+          likedPostsId={[]}
+          bookmarkedPostId={[]}
+        />
+      </Router>
+    );
+
+    expect(mockHandleLikes).toBeCalled();
   });
 });
