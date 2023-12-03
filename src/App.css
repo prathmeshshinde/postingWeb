@@ -39,7 +39,7 @@
   padding: 40px 20px 50px;
   border-radius: 8px;
   width: 30%;
-  height: 40vh;
+  height: auto;
 }
 
 .sign-box {
@@ -510,7 +510,7 @@
 
   .form-box {
     width: 70% !important;
-    height: 33vh;
+    height: auto;
   }
 
   .sign-box {
@@ -582,7 +582,7 @@
 
   .form-box {
     width: 40%;
-    height: 40vh;
+    height: auto;
   }
 
   .card-div {

@@ -1,4 +1,4 @@
-import { Layout, Spin, Typography } from "antd";
+import { Layout, Popconfirm, Spin, Typography } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import Header from "../HomePage/Header";
 import type {
@@ -11,7 +11,7 @@ import { EditableProTable, ProForm } from "@ant-design/pro-components";
 import { getComments } from "../CommentsPage/Utils/getComments";
 import { getPostsForTable } from "../../Utils/getPostsForTable";
 import { updateTable } from "../../Utils/updateTable";
-import { deleteDoc, doc } from "firebase/firestore";
+import { deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../App";
 import { IPost } from "../../Interface/IPost";
 
@@ -59,6 +59,17 @@ const Myposts = () => {
     await deleteDoc(
       doc(db, "posts", data.parentPostId, "comments", data.postId)
     );
+
+    const parentComment = doc(db, "posts", data.parentPostId);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    getDoc(parentComment).then((res: any) => {
+      const obj = { comment: res?.data().comment - 1 };
+      if (data.parentPostId === res.data().postId) {
+        const updateLikeCount = doc(db, "posts", data.parentPostId);
+        updateDoc(updateLikeCount, obj);
+        actionRef.current?.reload();
+      }
+    });
   };
 
   const columns: ProColumns<GithubIssueItem>[] = [
@@ -94,7 +105,9 @@ const Myposts = () => {
           type="success"
           key="edit"
           onClick={() => {
-            actionRef.current?.startEditable(Number(row.id));
+            if (row.id !== undefined) {
+              actionRef.current?.startEditable(row.id);
+            }
           }}
           className={
             localStore === row.userId ? "display-edit" : "display-none"
@@ -110,10 +123,12 @@ const Myposts = () => {
         >
           Edit
         </Text>,
-        <Text
+        <Popconfirm
+          title="Delete this post?"
           key="delete"
-          type="danger"
-          onClick={() => {
+          placement="leftTop"
+          trigger="click"
+          onConfirm={() => {
             const tableDataSource = formRef.current?.getFieldValue(
               "table"
             ) as GithubIssueItem[];
@@ -123,20 +138,25 @@ const Myposts = () => {
             });
             deletePost(row);
           }}
-          style={{
-            cursor: "pointer",
-            border: "1px solid red",
-            borderRadius: "8px",
-            padding: "0px 5px",
-            width: "60px",
-            textAlign: "center",
-          }}
           className={
             localStore === row.userId ? "display-edit" : "display-none"
           }
         >
-          Delete
-        </Text>,
+          <Text
+            key="delete"
+            type="danger"
+            style={{
+              cursor: "pointer",
+              border: "1px solid red",
+              borderRadius: "8px",
+              padding: "0px 5px",
+              width: "60px",
+              textAlign: "center",
+            }}
+          >
+            Delete
+          </Text>
+        </Popconfirm>,
       ],
     },
   ];
@@ -209,10 +229,12 @@ const Myposts = () => {
                   >
                     Edit
                   </Text>,
-                  <Text
+                  <Popconfirm
+                    title="Delete this comment?"
                     key="delete"
-                    type="danger"
-                    onClick={async () => {
+                    placement="leftTop"
+                    trigger="click"
+                    onConfirm={async () => {
                       const tableDataSource = formRef.current?.getFieldValue(
                         "protable"
                       ) as GithubIssueItem[];
@@ -230,17 +252,22 @@ const Myposts = () => {
                         ? "display-edit"
                         : "display-none"
                     }
-                    style={{
-                      cursor: "pointer",
-                      border: "1px solid green",
-                      borderRadius: "8px",
-                      padding: "0px 5px",
-                      width: "60px",
-                      textAlign: "center",
-                    }}
                   >
-                    Delete
-                  </Text>,
+                    <Text
+                      key="delete"
+                      type="danger"
+                      style={{
+                        cursor: "pointer",
+                        border: "1px solid green",
+                        borderRadius: "8px",
+                        padding: "0px 5px",
+                        width: "60px",
+                        textAlign: "center",
+                      }}
+                    >
+                      Delete
+                    </Text>
+                  </Popconfirm>,
                 ],
               },
             ]}
@@ -320,6 +347,22 @@ const Myposts = () => {
                         onSave: async (rowKey, data) => {
                           updateTable(data);
                         },
+                        deletePopconfirmMessage: (
+                          <Popconfirm
+                            title="Delete the post"
+                            description="Are you sure to delete this post?"
+                            // onConfirm={handleOk}
+                            okText="Yes"
+                            cancelText="No"
+                          >
+                            <p
+                              className="delete-button"
+                              data-delete-post="delete-post"
+                            >
+                              Delete
+                            </p>
+                          </Popconfirm>
+                        ),
                       }}
                       expandable={{
                         expandedRowRender,

@@ -25,7 +25,7 @@ import { handleLike } from "./Utils/handleLike";
 import { handleDislike } from "./Utils/handleDislike";
 import { handleBookmark } from "./Utils/handleBookmark";
 import { handleRemoveBookmark } from "./Utils/removeBookmarkPosts";
-import { deleteDoc, doc } from "firebase/firestore";
+import { deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../App";
 import { Typography } from "antd";
 import { ISinglePost } from "../../Interface/ISinglePost";
@@ -88,6 +88,20 @@ const SinglePost: React.FC<ISinglePost> = ({
         );
         setToUpdateComments(!toUpdateComments);
         message.success("Comment Deleted");
+        const parentComment = doc(db, "posts", postCommentDeleltId?.id);
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        getDoc(parentComment).then((res: any) => {
+          const obj = { comment: res?.data().comment - 1 };
+          if (postCommentDeleltId?.id === res.data().postId) {
+            const updateLikeCount = doc(
+              db,
+              "posts",
+              postCommentDeleltId?.postId
+            );
+            updateDoc(updateLikeCount, obj);
+          }
+        });
       } catch (err) {
         message.error("Something went wrong please try again");
       }

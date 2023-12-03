@@ -28,7 +28,6 @@ export const handleComment = async (
     message.error("Please login first");
     return;
   }
-  console.log(postItem);
   try {
     if (comment.trim().length !== 0) {
       const obj = {

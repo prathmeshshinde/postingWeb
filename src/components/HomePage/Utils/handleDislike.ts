@@ -24,7 +24,6 @@ export const handleDislike = async (
   if (!localStore) {
     return alert("Login First");
   }
-  console.log(location, "Location");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   deleteLikePost?.map(async (items: any) => {
     if (items.postId === postItem?.postId) {
