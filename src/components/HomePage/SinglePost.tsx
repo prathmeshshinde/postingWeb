@@ -27,13 +27,16 @@ import { handleBookmark } from "./Utils/handleBookmark";
 import { handleRemoveBookmark } from "./Utils/removeBookmarkPosts";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../App";
-import { IPost } from "../../Interface/IPost";
+import { Typography } from "antd";
+import { ISinglePost } from "../../Interface/ISinglePost";
+
+const { Title } = Typography;
 
 type NotificationType = "success" | "info" | "warning" | "error";
 
 const Context = React.createContext({ name: "Default" });
 
-const SinglePost: React.FC<any> = ({
+const SinglePost: React.FC<ISinglePost> = ({
   postItem,
   compare,
   postCommentDeleltId,
@@ -50,9 +53,12 @@ const SinglePost: React.FC<any> = ({
   parentPost,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [noOfLikes, setNoOfLikes] = useState(0);
+  const [noOfBookmarks, setNoOfBookmarks] = useState(0);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { currUser }: any = useUserAuth();
-  const [likedPostId, setLikedPostId] = useState<any>();
-  const [bookmarkPostId, setBookmarkPostId] = useState<any>();
+  const [likedPostId, setLikedPostId] = useState<string[]>([]);
+  const [bookmarkPostId, setBookmarkPostId] = useState<string[]>([]);
   const location = useLocation();
   const [api, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
@@ -78,7 +84,7 @@ const SinglePost: React.FC<any> = ({
     if (location.pathname === "/comment") {
       try {
         await deleteDoc(
-          doc(db, "posts", postCommentDeleltId.id, "comments", postItem?.id)
+          doc(db, "posts", postCommentDeleltId?.id, "comments", postItem?.id)
         );
         setToUpdateComments(!toUpdateComments);
         message.success("Comment Deleted");
@@ -91,6 +97,7 @@ const SinglePost: React.FC<any> = ({
         if (location.pathname === "/comment") {
           navigate("/");
         }
+
         message.success("Post Deleted");
       } catch (err) {
         message.error("Something went wrong please try again");
@@ -103,7 +110,11 @@ const SinglePost: React.FC<any> = ({
       <div>
         {currUser?.userId === compare &&
         currUser?.userId !== postItem?.userId ? null : (
-          <p className="update-button" onClick={() => updatePost()}>
+          <p
+            className="update-button"
+            onClick={() => updatePost()}
+            data-update-post="update-post"
+          >
             Update the post
           </p>
         )}
@@ -114,7 +125,9 @@ const SinglePost: React.FC<any> = ({
           okText="Yes"
           cancelText="No"
         >
-          <p className="delete-button">Delete</p>
+          <p className="delete-button" data-delete-post="delete-post">
+            Delete
+          </p>
         </Popconfirm>
       </div>
     </div>
@@ -139,13 +152,15 @@ const SinglePost: React.FC<any> = ({
       currUser,
       setBookmarkPostId
     );
+    setNoOfLikes(postItem?.likes);
+    setNoOfBookmarks(postItem?.bookmarks);
   }, [currUser, compare, deleteLikePost, removeBookmarkPosts]);
 
   return (
     <Context.Provider value={contextValue}>
       {contextHolder}
 
-      <div className="posts-container">
+      <div className="posts-container" data-testid="posts">
         <Card
           style={{
             margin: "10px",
@@ -191,6 +206,7 @@ const SinglePost: React.FC<any> = ({
                       currUser?.userId === compare ? (
                         <MoreOutlined
                           style={{ fontSize: "20px", color: "#000" }}
+                          data-three-dot="three-dot"
                         />
                       ) : null}
                     </div>
@@ -211,6 +227,7 @@ const SinglePost: React.FC<any> = ({
             setToUpdateComments={setToUpdateComments}
             parentPost={parentPost}
             setIsModalOpen={setIsModalOpen}
+            toUpdateComments={false}
           />
           <p className="post-text">{postItem?.post}</p>
 
@@ -228,6 +245,7 @@ const SinglePost: React.FC<any> = ({
                   state={{
                     postItem: postItem,
                   }}
+                  data-comment="data-comment-test"
                 >
                   <Tooltip title="Comment">
                     <CommentOutlined
@@ -238,21 +256,30 @@ const SinglePost: React.FC<any> = ({
               ) : null}
 
               {location.pathname !== "/bookmark" ? (
-                <div>
+                <div data-like-button="like-button-like-page">
                   {location.pathname !== "/profile" ? (
-                    <div>
+                    <div style={{ display: "flex", alignItems: "center" }}>
                       {likedPostId?.includes(postItem?.postId) ? (
                         <Tooltip title="Dislike">
                           <HeartFilled
-                            onClick={() =>
-                              handleDislike(
+                            data-filled-like-icon="filled-like-icon"
+                            onClick={async () => {
+                              await handleDislike(
                                 currUser,
                                 deleteLikePost,
                                 postItem,
                                 handleRemoveLike,
-                                location
-                              )
-                            }
+                                location,
+                                () => {
+                                  setNoOfLikes((prev) => prev - 1);
+                                  setLikedPostId((prevState: string[]) =>
+                                    prevState?.filter(
+                                      (id) => postItem?.postId !== id
+                                    )
+                                  );
+                                }
+                              );
+                            }}
                             style={{
                               fontSize: "20px",
                               cursor: "pointer",
@@ -267,37 +294,53 @@ const SinglePost: React.FC<any> = ({
                               handleLike(
                                 postItem?.id,
                                 currUser,
-                                openNotificationWithIcon
+                                openNotificationWithIcon,
+                                () => setNoOfLikes((prev) => prev + 1)
                               )
                             }
                             style={{ fontSize: "20px", cursor: "pointer" }}
                           />
                         </Tooltip>
                       )}
+                      <Title
+                        level={5}
+                        type="secondary"
+                        className="like-count-text"
+                      >
+                        {noOfLikes}
+                      </Title>
                     </div>
                   ) : null}
                 </div>
               ) : null}
 
               {location.pathname !== "/like" ? (
-                <div>
+                <div data-bookmark-button="bookmark-button-bookmark-page">
                   {location.pathname !== "/profile" ? (
-                    <div>
+                    <div style={{ display: "flex", alignItems: "center" }}>
                       {bookmarkPostId?.includes(postItem?.postId) ? (
                         <Tooltip title="Remove Bookmark">
                           <ReadFilled
+                            data-filled-bookmark-icon="filled-bookmark-icon"
                             onClick={() =>
                               handleRemoveBookmark(
                                 currUser,
                                 removeBookmarkPosts,
                                 postItem,
                                 location,
-                                handleRemoveBookmarkPosts
+                                handleRemoveBookmarkPosts,
+                                () => {
+                                  setNoOfBookmarks((prev) => prev - 1);
+                                  setBookmarkPostId((prevState: string[]) =>
+                                    prevState?.filter(
+                                      (id) => postItem?.postId !== id
+                                    )
+                                  );
+                                }
                               )
                             }
                             style={{
                               fontSize: "20px",
-                              marginRight: "20px",
                               cursor: "pointer",
                               color: "#1677ff",
                             }}
@@ -310,17 +353,24 @@ const SinglePost: React.FC<any> = ({
                               handleBookmark(
                                 postItem?.id,
                                 currUser,
-                                openNotificationWithIcon
+                                openNotificationWithIcon,
+                                () => setNoOfBookmarks((prev) => prev + 1)
                               )
                             }
                             style={{
                               fontSize: "20px",
-                              marginRight: "20px",
                               cursor: "pointer",
                             }}
                           />
                         </Tooltip>
                       )}
+                      <Title
+                        level={5}
+                        type="secondary"
+                        className="like-count-text"
+                      >
+                        {noOfBookmarks}
+                      </Title>
                     </div>
                   ) : null}
                 </div>

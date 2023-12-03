@@ -32,7 +32,8 @@ const Like: React.FC<IProps> = ({
 }) => {
   const [userPost, setUserPost] = useState<IPost[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<any>();
+  const [error, setError] = useState<string>("");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { currUser }: any = useUserAuth();
   const localStore = localStorage.getItem("userId");
 
@@ -43,7 +44,7 @@ const Like: React.FC<IProps> = ({
   };
 
   useEffect(() => {
-    getLikedPosts(setUserPost, setError, setLoading, likedPosts, currUser);
+    getLikedPosts(setUserPost, setError, setLoading, likedPosts);
   }, [currUser]);
 
   return (
@@ -56,15 +57,24 @@ const Like: React.FC<IProps> = ({
             color: "#3087ff",
             fontWeight: "700",
           }}
+          data-testid="liked-posts-title"
         >
           Liked Posts
         </Divider>
 
         {error && currUser ? (
-          <p className="no-comments-text">Error Please try Again!</p>
+          <p
+            className="no-comments-text"
+            data-error-fetching-posts="error-fetching-posts"
+          >
+            Error Please try Again!
+          </p>
         ) : null}
 
-        <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
+        <Content
+          style={{ margin: "24px 16px 0", overflow: "initial" }}
+          data-testid="loading-spin"
+        >
           {loading ? (
             <div className="loading-spin">
               <Spin tip="Loading" size="large">
@@ -72,7 +82,7 @@ const Like: React.FC<IProps> = ({
               </Spin>
             </div>
           ) : (
-            <div>
+            <div data-testid="liked-posts-present">
               <div>
                 {userPost?.length !== 0 && !loading ? (
                   <div>
@@ -94,7 +104,10 @@ const Like: React.FC<IProps> = ({
                     })}
                   </div>
                 ) : (
-                  <div style={{ marginTop: "100px" }}>
+                  <div
+                    style={{ marginTop: "100px" }}
+                    data-liked-posts="empty-like-page"
+                  >
                     <Empty />
                   </div>
                 )}
@@ -104,7 +117,7 @@ const Like: React.FC<IProps> = ({
 
           {!localStore ? (
             <div>
-              <p className="no-comments-text">
+              <p className="no-comments-text" data-postid="login-text">
                 Please login to see liked posts
               </p>
             </div>

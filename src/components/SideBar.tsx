@@ -4,11 +4,12 @@ import {
   HomeOutlined,
   HeartOutlined,
   ReadOutlined,
+  UsergroupAddOutlined,
 } from "@ant-design/icons";
 import { NavLink } from "react-router-dom";
 import { Layout } from "antd";
 const { Sider } = Layout;
-const SideBar: React.FC<any> = () => {
+const SideBar: React.FC = () => {
   return (
     <>
       <Sider
@@ -51,6 +52,13 @@ const SideBar: React.FC<any> = () => {
             >
               <ReadOutlined className="sidebar-icon" />
               <label className="label-sidebar">Bookmark</label>
+            </NavLink>
+            <NavLink
+              to="/myposts"
+              className={({ isActive }) => (isActive ? "active" : "inactive")}
+            >
+              <UsergroupAddOutlined className="sidebar-icon" />
+              <label className="label-sidebar">My Posts</label>
             </NavLink>
             <NavLink
               to="/profile"

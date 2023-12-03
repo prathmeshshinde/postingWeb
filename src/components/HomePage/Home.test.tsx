@@ -19,14 +19,6 @@ window.matchMedia =
   };
 
 describe("Home Component", () => {
-  // beforeAll(() => {
-  //   // jest.mock("./Utils/handlePost.ts", () => ({
-  //   //   handlePost: jest.fn(),
-  //   // }));
-  //   utils.handlePost = jest.fn();
-  //   //   jest.mock("./Utils/handlePost", () => ({ handlePost: jest.fn() }));
-  // });
-
   test("renders Home component with form and posts", async () => {
     render(
       <Router>
@@ -41,6 +33,8 @@ describe("Home Component", () => {
           infinteLoader={false}
           likedPostsId={[]}
           bookmarkedPostId={[]}
+          setUpdatelikes={() => {}}
+          updatelikes={false}
         />
       </Router>
     );
@@ -63,6 +57,8 @@ describe("Home Component", () => {
           infinteLoader={false}
           likedPostsId={[]}
           bookmarkedPostId={[]}
+          setUpdatelikes={() => {}}
+          updatelikes={false}
         />
       </Router>
     );

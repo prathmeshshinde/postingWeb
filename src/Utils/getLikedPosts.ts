@@ -8,15 +8,15 @@ import { message } from "antd";
 
 export const getLikedPosts = (
   SetDeleteLikePost: React.Dispatch<React.SetStateAction<IDeleteLikedPosts[]>>,
-  setLikedPostId: any,
+  setLikedPostId: React.Dispatch<React.SetStateAction<string[]>>,
   setLikedPosts: React.Dispatch<React.SetStateAction<ILikedPosts[]>>
 ) => {
   const likedposts = query(collection(db, "likes"));
   getDocs(likedposts)
     .then((snapshot) => {
-      let likedPosts: any = [];
-      let toDeleteLike: any = [];
-      let likedPostsId: any = [];
+      const likedPosts: ILikedPosts[] = [];
+      const toDeleteLike: IDeleteLikedPosts[] = [];
+      const likedPostsId: string[] = [];
       snapshot?.docs.forEach((doc) => {
         likedPosts.push(doc.data());
         toDeleteLike.push({ ...doc.data(), likedId: doc.id });

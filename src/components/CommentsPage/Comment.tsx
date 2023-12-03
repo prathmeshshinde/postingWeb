@@ -25,7 +25,6 @@ import {
   ILikedPosts,
   IRemoveBookmarkPosts,
 } from "../../Interface/ILikedAndBookmarkPosts";
-import { IComment } from "../../Interface/IComment";
 const { Content } = Layout;
 
 interface IProps {
@@ -46,11 +45,13 @@ const Comment: React.FC<IProps> = ({
   const [comment, setComment] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [limit, setLimit] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { user, username, currUser }: any = useUserAuth();
-  const [comments, setComments] = useState<IComment[]>([]);
+  const [comments, setComments] = useState<IPost[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [mainPost, setMainPost] = useState<IPost>();
-  const [error, setError] = useState<any>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [mainPost, setMainPost] = useState<any>([]);
+  const [error, setError] = useState<string>("");
   const [toUpdateComments, setToUpdateComments] = useState<boolean>(false);
   const [parentPost, setParentPost] = useState<string>();
   const [postLoading, setPostLoading] = useState<boolean>(true);
@@ -66,7 +67,7 @@ const Comment: React.FC<IProps> = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
-    var options: any = {
+    const options: Intl.DateTimeFormatOptions = {
       year: "numeric",
       month: "short",
       day: "numeric",

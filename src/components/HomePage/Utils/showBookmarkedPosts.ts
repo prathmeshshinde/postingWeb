@@ -6,12 +6,13 @@ import { ICurrUser } from "../../../Interface/ICurrUser";
 import { message } from "antd";
 
 export const showBookmarkedPosts = (
-  bookmarkedPostId: any,
+  bookmarkedPostId: string[] | undefined,
   bookmarkPost: IBookmarkPosts[],
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   location: any,
   postItem: IPost,
   currUser: ICurrUser,
-  setBookmarkPostId: any
+  setBookmarkPostId: React.Dispatch<React.SetStateAction<string[]>>
 ) => {
   const localStore = localStorage.getItem("userId");
   if (
@@ -27,14 +28,15 @@ export const showBookmarkedPosts = (
       )
     )
       .then((snapshot) => {
-        let postDocs: any = [];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const postDocs: any[] = [];
         snapshot?.docs?.forEach((doc) => {
           postDocs.push(doc.data());
         });
 
-        let newBookmarkPosts: any = [];
-        postDocs.map((post: any) => {
-          bookmarkPost.map((postDetail: any) => {
+        const newBookmarkPosts: string[] = [];
+        postDocs.map((post: IPost) => {
+          bookmarkPost.map((postDetail: IBookmarkPosts) => {
             if (
               post.postId === postDetail.postId &&
               postDetail.userId === localStore
@@ -46,7 +48,7 @@ export const showBookmarkedPosts = (
 
         setBookmarkPostId(newBookmarkPosts);
       })
-      .catch((err) => {
+      .catch(() => {
         message.error("Please Try Again");
       });
   }

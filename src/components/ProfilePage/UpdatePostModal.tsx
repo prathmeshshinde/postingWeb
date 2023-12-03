@@ -3,7 +3,19 @@ import React, { useEffect, useState } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../App";
 
-const UpdatePostModal: React.FC<any> = ({
+interface IProp {
+  isModalOpen: boolean;
+  handleCancel: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  post: any;
+  toUpdateComments: boolean;
+  setToUpdateComments: React.Dispatch<React.SetStateAction<boolean>>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  parentPost: any;
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const UpdatePostModal: React.FC<IProp> = ({
   isModalOpen,
   handleCancel,
   post,
@@ -18,6 +30,7 @@ const UpdatePostModal: React.FC<any> = ({
     wrapperCol: { span: 16 },
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onFinish = async (values: any) => {
     try {
       const updateProfile = doc(db, "posts", parentPost, "comments", post?.id);
@@ -30,7 +43,9 @@ const UpdatePostModal: React.FC<any> = ({
       setToUpdateComments(!toUpdateComments);
       setIsModalOpen(false);
       handleCancel();
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
 
     try {
       const updateProfile = doc(db, "posts", post?.id);
@@ -43,11 +58,13 @@ const UpdatePostModal: React.FC<any> = ({
       setIsModalOpen(false);
       setToUpdateComments(!toUpdateComments);
       handleCancel();
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
-    var options: any = {
+    const options: Intl.DateTimeFormatOptions = {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -63,12 +80,14 @@ const UpdatePostModal: React.FC<any> = ({
         open={isModalOpen}
         onCancel={handleCancel}
         footer={null}
+        data-isModalOpen="isModalOpen"
       >
         <Form
           {...layout}
           name="nest-messages"
           onFinish={onFinish}
           style={{ maxWidth: 400 }}
+          data-update-post-modal="update-post-modal"
         >
           <Form.Item
             name={["post", "post"]}

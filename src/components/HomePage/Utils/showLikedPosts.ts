@@ -6,11 +6,12 @@ import { ICurrUser } from "../../../Interface/ICurrUser";
 
 export const showLikedPosts = (
   likedPosts: ILikedPosts[],
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   location: any,
   postItem: IPost,
-  likedPostsId: any,
+  likedPostsId: string[] | undefined,
   currUser: ICurrUser,
-  setLikedPostId: any
+  setLikedPostId: React.Dispatch<React.SetStateAction<string[]>>
 ) => {
   const localStore = localStorage.getItem("userId");
   if (
@@ -26,16 +27,18 @@ export const showLikedPosts = (
       )
     )
       .then((snapshot) => {
-        let postDocs: any = [];
-        let postUserId: any = [];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const postDocs: any[] = [];
+        const postUserId: string[] = [];
         snapshot?.docs?.forEach((doc) => {
           postDocs.push(doc?.data());
           postUserId.push(doc.data().userId);
         });
 
-        let newLikedPosts: any = [];
-        postDocs.map((post: any) => {
-          likedPosts.map((postDetail: any) => {
+        const newLikedPosts: string[] = [];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        postDocs.map((post: IPost | any) => {
+          likedPosts.map((postDetail: ILikedPosts) => {
             if (
               post.postId === postDetail.postId &&
               postDetail.userId === localStore

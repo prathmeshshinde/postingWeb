@@ -1,24 +1,34 @@
-import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../../../App";
 import { message } from "antd";
 import { ICurrUser } from "../../../Interface/ICurrUser";
-import { IComment } from "../../../Interface/IComment";
+import { IPost } from "../../../Interface/IPost";
 
 export const handleComment = async (
   currUser: ICurrUser,
-  setError: any,
+  setError: React.Dispatch<React.SetStateAction<string>>,
   comment: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   postItem: any,
   username: string,
-  setComments: React.Dispatch<React.SetStateAction<IComment[]>>,
+  setComments: React.Dispatch<React.SetStateAction<IPost[]>>,
   setComment: React.Dispatch<React.SetStateAction<string>>,
   date: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   user: any
 ) => {
   if (!currUser) {
     message.error("Please login first");
     return;
   }
+  console.log(postItem);
   try {
     if (comment.trim().length !== 0) {
       const obj = {
@@ -28,22 +38,39 @@ export const handleComment = async (
         username: username,
         profile: currUser?.profile,
         id: postItem?.id,
+        parentPostId: postItem.id,
       };
       const res = await addDoc(
         collection(db, "posts", postItem?.id, "comments"),
         obj
       );
 
-      const obj2: any = { postId: res.id };
+      const obj2: {
+        postId: string;
+      } = { postId: res?.id };
+
       const getDoc = doc(db, "posts", postItem?.id, "comments", res.id);
       await updateDoc(getDoc, obj2);
 
-      setComments((prevState: any) => [{ ...obj, id: res.id }, ...prevState]);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      setComments((prevState: any[]) => [{ ...obj, id: res.id }, ...prevState]);
       setComment("");
+
+      const likedposts = query(collection(db, "posts"));
+      getDocs(likedposts).then((snapshot) => {
+        snapshot?.docs.forEach((document) => {
+          const obj = { comment: document.data().comment + 1 };
+
+          if (postItem.id === document.data().postId) {
+            const updateLikeCount = doc(db, "posts", postItem.id);
+            updateDoc(updateLikeCount, obj);
+          }
+        });
+      });
     } else {
       message.error("Please enter valid comment");
     }
-  } catch (err: any) {
+  } catch (err: unknown) {
     message.error("Something went wrong!");
     setError("Please Try Again!");
   }

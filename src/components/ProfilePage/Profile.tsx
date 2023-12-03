@@ -14,11 +14,13 @@ import {
   ILikedPosts,
   IRemoveBookmarkPosts,
 } from "../../Interface/ILikedAndBookmarkPosts";
+import { IPost } from "../../Interface/IPost";
 const { Content } = Layout;
 
 type NotificationType = "success" | "info" | "warning" | "error";
 
 interface IProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   posts: any;
   likedPosts: ILikedPosts[];
   deleteLikePost: IDeleteLikedPosts[];
@@ -33,11 +35,14 @@ const Profile: React.FC<IProps> = ({
   bookmarkPost,
   removeBookmarkPosts,
 }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { user, currUser, userDoc, setUpdateCurrUser, updateCurrUser }: any =
     useUserAuth();
-  const [isModalOpen, setIsModalOpen] = useState<any>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [userPost, setUserPost] = useState<any>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [userProfile, setUserProfile] = useState<any>(currUser);
   const [api, contextHolder] = notification.useNotification();
   const localStore = localStorage.getItem("userId");
@@ -59,6 +64,7 @@ const Profile: React.FC<IProps> = ({
     setIsModalOpen(false);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const getAllComments = async (obj: any) => {
     for (let i = 0; i < posts.length; i++) {
       const colRef = collection(db, "posts", posts[i]?.postId, "comments");
@@ -81,6 +87,7 @@ const Profile: React.FC<IProps> = ({
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateAllPosts = async (obj: any) => {
     for (let i = 0; i < userPost?.length; i++) {
       const updateAllPosts = doc(db, "posts", userPost[i].postId);
@@ -90,6 +97,7 @@ const Profile: React.FC<IProps> = ({
     setUserProfile(obj);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onFinish = async (values: any) => {
     try {
       const updateProfile = doc(db, "users", userDoc);
@@ -160,7 +168,7 @@ const Profile: React.FC<IProps> = ({
                   <Content
                     style={{ margin: "24px 16px 0", overflow: "initial" }}
                   >
-                    <div className="profile-main">
+                    <div className="profile-main" data-test="profile-test">
                       <div className="profile-head">
                         <div>
                           {currUser?.profile === "" ? (
@@ -191,7 +199,11 @@ const Profile: React.FC<IProps> = ({
                           )}
                         </div>
                         <div>
-                          <Button type="primary" onClick={showModal}>
+                          <Button
+                            type="primary"
+                            onClick={showModal}
+                            data-edit-button="edit-button"
+                          >
                             Edit Profile
                           </Button>
                         </div>
@@ -203,28 +215,34 @@ const Profile: React.FC<IProps> = ({
                       handleCancel={handleCancel}
                       onFinish={onFinish}
                       currUser={userProfile}
+                      data-show-modal="show-modal"
                     />
 
-                    {userPost.length === 0 ? (
-                      <div style={{ marginTop: "100px" }}>
-                        <Empty />
-                      </div>
-                    ) : (
-                      <div style={{ marginTop: "20px" }}>
-                        {userPost?.map((postItem: any, index: number) => {
-                          return (
-                            <SinglePost
-                              key={index}
-                              postItem={postItem}
-                              likedPosts={likedPosts}
-                              deleteLikePost={deleteLikePost}
-                              bookmarkPost={bookmarkPost}
-                              removeBookmarkPosts={removeBookmarkPosts}
-                            />
-                          );
-                        })}
-                      </div>
-                    )}
+                    <div data-user-posts="all-user-posts">
+                      {userPost.length === 0 ? (
+                        <div
+                          style={{ marginTop: "100px" }}
+                          data-show-empty-posts="empty-posts"
+                        >
+                          <Empty />
+                        </div>
+                      ) : (
+                        <div style={{ marginTop: "20px" }}>
+                          {userPost?.map((postItem: IPost, index: number) => {
+                            return (
+                              <SinglePost
+                                key={index}
+                                postItem={postItem}
+                                likedPosts={likedPosts}
+                                deleteLikePost={deleteLikePost}
+                                bookmarkPost={bookmarkPost}
+                                removeBookmarkPosts={removeBookmarkPosts}
+                              />
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
                   </Content>
                 </Layout>
               </Layout>

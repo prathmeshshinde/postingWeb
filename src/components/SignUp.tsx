@@ -15,9 +15,11 @@ const SignUp: React.FC = () => {
   const [error, setError] = useState<string>("");
   const navigate = useNavigate();
   const { Title } = Typography;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { signup }: any = useUserAuth();
   const db = getFirestore();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onFinish = async (values: any) => {
     try {
       setError("");
@@ -34,6 +36,7 @@ const SignUp: React.FC = () => {
         });
       });
       navigate("/");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message);
     }

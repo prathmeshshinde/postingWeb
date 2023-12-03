@@ -1,12 +1,13 @@
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../App";
 import { IBookmarkPosts } from "../../Interface/ILikedAndBookmarkPosts";
+import { IPost } from "../../Interface/IPost";
 
 export const getBookmarkPosts = (
   bookmarkPost: IBookmarkPosts[],
-  setError: any,
-  setLoading: any,
-  setUserPost: any
+  setError: React.Dispatch<React.SetStateAction<string>>,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setUserPost: React.Dispatch<React.SetStateAction<IPost[]>>
 ) => {
   const localStore = localStorage.getItem("userId");
 
@@ -17,14 +18,16 @@ export const getBookmarkPosts = (
   const colRef = collection(db, "posts");
   getDocs(colRef)
     .then((snapshot) => {
-      let postDocs: any = [];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const postDocs: any[] = [];
       snapshot.docs.forEach((doc) => {
         postDocs.push({ ...doc.data() });
       });
 
-      let newBookmarkedPosts: any = [];
+      const newBookmarkedPosts: IPost[] = [];
 
-      postDocs.map((post: any) => {
+      postDocs.map((post: IPost) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         bookmarkPost.map((postDetail: any) => {
           if (
             post.postId === postDetail.postId &&

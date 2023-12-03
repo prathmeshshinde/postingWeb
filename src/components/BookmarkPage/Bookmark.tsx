@@ -30,9 +30,10 @@ const Bookmark: React.FC<IProps> = ({
   bookmarkedPostId,
   likedPostsId,
 }) => {
-  const [userPost, setUserPost] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<any>();
+  const [userPost, setUserPost] = useState<IPost[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { currUser }: any = useUserAuth();
   const localStore = localStorage.getItem("userId");
 
@@ -57,11 +58,17 @@ const Bookmark: React.FC<IProps> = ({
             color: "#3087ff",
             fontWeight: "700",
           }}
+          data-testid="bookmark-posts-title"
         >
           Bookmarks
         </Divider>
         {error ? (
-          <p className="no-comments-text">Error Please try Again!</p>
+          <p
+            className="no-comments-text"
+            data-error-fetching-posts="error-fetching-posts"
+          >
+            Error Please try Again!
+          </p>
         ) : null}
 
         <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
@@ -72,14 +79,17 @@ const Bookmark: React.FC<IProps> = ({
               </Spin>
             </div>
           ) : (
-            <div>
+            <div data-testid="bookmark-posts-present">
               {userPost?.length === 0 ? (
-                <div style={{ marginTop: "100px" }}>
+                <div
+                  style={{ marginTop: "100px" }}
+                  data-bookmark-posts="empty-bookmark-page"
+                >
                   <Empty />
                 </div>
               ) : (
                 <div>
-                  {userPost.map((newPost: any, index: any) => {
+                  {userPost.map((newPost: IPost, index: number) => {
                     return (
                       <SinglePost
                         key={index}
@@ -100,7 +110,7 @@ const Bookmark: React.FC<IProps> = ({
           )}
 
           {!localStore ? (
-            <p className="no-comments-text">
+            <p className="no-comments-text" data-postid="login-text">
               Please login to see bookmarked posts
             </p>
           ) : null}

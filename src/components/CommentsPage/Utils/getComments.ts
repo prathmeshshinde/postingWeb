@@ -1,18 +1,19 @@
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../App";
-import { IComment } from "../../../Interface/IComment";
 import { message } from "antd";
+import { IPost } from "../../../Interface/IPost";
 
 export const getComments = async (
-  setError: any,
-  setComments: React.Dispatch<React.SetStateAction<IComment[]>>,
+  setError: React.Dispatch<React.SetStateAction<string>>,
+  setComments: React.Dispatch<React.SetStateAction<IPost[]>>,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   id: string
 ) => {
   const docRef = collection(db, "posts", id, "comments");
   getDocs(docRef)
     .then((snapshot) => {
-      let commentDocs: any = [];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const commentDocs: any[] = [];
       snapshot.docs.forEach((doc) => {
         commentDocs.push({ ...doc.data(), id: doc.id });
       });

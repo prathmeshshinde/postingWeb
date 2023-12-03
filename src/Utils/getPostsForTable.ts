@@ -1,17 +1,14 @@
 import { collection, getDocs, query } from "firebase/firestore";
 import { db } from "../App";
 import { message } from "antd";
-import { IPost } from "../Interface/IPost";
 
-export const getPosts = (
+export const getPostsForTable = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  limit: any,
-  scroll: number,
-  setPosts: React.Dispatch<React.SetStateAction<IPost[]>>,
+  setPosts: React.Dispatch<React.SetStateAction<any[]>>,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   const colRef = collection(db, "posts");
-  const q = query(colRef, limit(scroll));
+  const q = query(colRef);
   getDocs(q)
     .then((snapshot) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

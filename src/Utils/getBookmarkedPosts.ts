@@ -11,14 +11,15 @@ export const getBookmarkedPosts = (
     React.SetStateAction<IRemoveBookmarkPosts[]>
   >,
   setBookmarkPost: React.Dispatch<React.SetStateAction<IBookmarkPosts[]>>,
-  setBookmarkPostId: any
+  setBookmarkPostId: React.Dispatch<React.SetStateAction<string[]>>
 ) => {
   const bookmarkposts = query(collection(db, "bookmarks"));
   getDocs(bookmarkposts)
     .then((snapshot) => {
-      let bookmarkPosts: any = [];
-      let toRemoveBookmark: any = [];
-      let bookmarkPostId: any = [];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const bookmarkPosts: any[] = [];
+      const toRemoveBookmark: IRemoveBookmarkPosts[] = [];
+      const bookmarkPostId: string[] = [];
       snapshot?.docs.forEach((doc) => {
         bookmarkPosts.push(doc.data());
         toRemoveBookmark.push({ ...doc.data(), bookmarkedId: doc.id });

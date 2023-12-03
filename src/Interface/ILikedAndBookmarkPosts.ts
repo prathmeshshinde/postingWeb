@@ -1,12 +1,12 @@
 export interface IDeleteLikedPosts {
-  likedId: string;
-  postId: string;
-  userId: string;
+  likedId?: string;
+  postId?: string;
+  userId?: string;
 }
 
 export interface ILikedPosts {
-  postId: string;
-  userId: string;
+  postId?: string;
+  userId?: string;
 }
 
 export interface IBookmarkPosts {
@@ -16,6 +16,6 @@ export interface IBookmarkPosts {
 
 export interface IRemoveBookmarkPosts {
   bookmarkedId?: string;
-  postId: string;
-  userId: string;
+  postId?: string;
+  userId?: string;
 }

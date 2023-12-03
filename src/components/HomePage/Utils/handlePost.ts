@@ -2,10 +2,13 @@ import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../App";
 import { ICurrUser } from "../../../Interface/ICurrUser";
 
+type NotificationType = "success" | "info" | "warning" | "error";
+
 export const handlePost = async (
   currUser: ICurrUser,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   user: any,
-  openNotificationWithIcon: any,
+  openNotificationWithIcon: (type: NotificationType, message: string) => void,
   setPost: React.Dispatch<React.SetStateAction<string>>,
   post: string,
   date: string,
@@ -23,6 +26,9 @@ export const handlePost = async (
       userId: user.uid,
       username: username,
       profile: currUser?.profile,
+      likes: 0,
+      bookmarks: 0,
+      comment: 0,
     })
       .then((res) => {
         updateDoc(doc(db, "posts", res.id), {
@@ -30,7 +36,7 @@ export const handlePost = async (
         });
         openNotificationWithIcon("success", "Post Successful");
       })
-      .catch((err: any) => {
+      .catch(() => {
         openNotificationWithIcon("error", "Failed! Something went wrong.");
       });
     setPost("");

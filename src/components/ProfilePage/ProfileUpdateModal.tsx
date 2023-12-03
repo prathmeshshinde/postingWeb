@@ -1,7 +1,16 @@
 import { Button, Form, Input, Modal } from "antd";
 import React from "react";
 
-const ProfileUpdateModal: React.FC<any> = ({
+interface IProp {
+  isModalOpen: boolean;
+  handleCancel: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onFinish: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  currUser: any;
+}
+
+const ProfileUpdateModal: React.FC<IProp> = ({
   isModalOpen,
   handleCancel,
   onFinish,
@@ -24,6 +33,7 @@ const ProfileUpdateModal: React.FC<any> = ({
         name="nest-messages"
         onFinish={onFinish}
         style={{ maxWidth: 400 }}
+        data-submit-modal="cancel-submit-modal"
       >
         <Form.Item
           name={["username", "username"]}
@@ -51,7 +61,9 @@ const ProfileUpdateModal: React.FC<any> = ({
           wrapperCol={{ ...layout.wrapperCol }}
           style={{ textAlign: "end" }}
         >
-          <Button onClick={handleCancel}>Cancel</Button>
+          <Button onClick={handleCancel} data-cancel-modal="cancel-modal">
+            Cancel
+          </Button>
           <Button
             style={{ margin: "0px 0px 0px 10px" }}
             type="primary"

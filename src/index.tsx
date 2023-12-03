@@ -4,6 +4,8 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter as Router } from "react-router-dom";
+import { ConfigProvider } from "antd";
+import enUS from "antd/locale/en_US";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -11,7 +13,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Router>
-      <App />
+      <ConfigProvider locale={enUS}>
+        <App />
+      </ConfigProvider>
     </Router>
   </React.StrictMode>
 );

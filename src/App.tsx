@@ -24,6 +24,7 @@ import {
   ILikedPosts,
   IRemoveBookmarkPosts,
 } from "./Interface/ILikedAndBookmarkPosts";
+import Myposts from "./components/MyPosts/Myposts";
 
 initializeApp(config.firebaseConfig);
 export const db = getFirestore();
@@ -40,16 +41,19 @@ function App() {
   >([]);
   const location = useLocation();
   const [infinteLoader, setInfinteLoader] = useState<boolean>(true);
-  const [likedPostId, setLikedPostId] = useState<any>();
-  const [bookmarkPostId, setBookmarkPostId] = useState<any>();
+  const [likedPostId, setLikedPostId] = useState<string[]>([]);
+  const [bookmarkPostId, setBookmarkPostId] = useState<string[]>([]);
+  const [updatelikes, setUpdatelikes] = useState<boolean>(false);
 
-  const forInfiniteScroll = (e: any) => {
-    if (
-      e.target.scrollHeight - e.target.scrollTop <=
-      e.target.clientHeight + 10
-    ) {
-      setScroll((prevState) => prevState + 10);
-      setInfinteLoader(false);
+  const forInfiniteScroll = (e: React.UIEvent<HTMLElement>) => {
+    if (e.target instanceof HTMLElement) {
+      if (
+        e.target.scrollHeight - e.target.scrollTop <=
+        e.target.clientHeight + 10
+      ) {
+        setScroll((prevState) => prevState + 10);
+        setInfinteLoader(false);
+      }
     }
   };
 
@@ -61,7 +65,7 @@ function App() {
       setBookmarkPostId
     );
     getPosts(limit, scroll, setPosts, setLoading);
-  }, [scroll]);
+  }, [scroll, updatelikes]);
 
   return (
     <div className="App" onClick={(e) => forInfiniteScroll(e)}>
@@ -88,6 +92,8 @@ function App() {
                   infinteLoader={infinteLoader}
                   likedPostsId={likedPostId}
                   bookmarkedPostId={bookmarkPostId}
+                  updatelikes={updatelikes}
+                  setUpdatelikes={setUpdatelikes}
                 />
               }
             />
@@ -129,6 +135,8 @@ function App() {
                 />
               }
             />
+
+            <Route path="/myposts" element={<Myposts />} />
             <Route
               path="/profile"
               element={

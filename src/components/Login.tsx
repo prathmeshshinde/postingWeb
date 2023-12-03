@@ -6,14 +6,17 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 
 const Login: React.FC = () => {
   const [error, setError] = useState<string>("");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { login }: any = useUserAuth();
   const navigate = useNavigate();
   const { Title } = Typography;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onFinish = async (values: any) => {
     try {
       await login(values.email, values.password);
       navigate("/");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message);
     }

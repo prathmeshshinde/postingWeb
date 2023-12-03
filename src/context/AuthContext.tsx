@@ -24,6 +24,7 @@ const AuthContext: React.FC<IAuthContextProps> = (props) => {
   const { children } = props;
   const auth = getAuth();
   const [loading, setLoading] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [user, setUser] = useState<any>(null);
   const [username, setUsername] = useState<string>("");
   const [currUser, setCurrUser] = useState<ICurrUser>();
@@ -42,7 +43,7 @@ const AuthContext: React.FC<IAuthContextProps> = (props) => {
     return signOut(auth);
   }
 
-  async function getUsername(userId: any) {
+  async function getUsername(userId: string) {
     const q = query(collection(db, "users"), where("userId", "==", userId));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
@@ -66,6 +67,7 @@ const AuthContext: React.FC<IAuthContextProps> = (props) => {
   }, [auth]);
 
   useEffect(() => {
+    // eslint-disable-next-line no-extra-boolean-cast
     if (!!user?.uid.length) {
       getUsername(user.uid);
     }

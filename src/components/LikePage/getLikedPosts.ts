@@ -2,15 +2,13 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../App";
 import { IPost } from "../../Interface/IPost";
 import { ILikedPosts } from "../../Interface/ILikedAndBookmarkPosts";
-import { ICurrUser } from "../../Interface/ICurrUser";
 import { message } from "antd";
 
 export const getLikedPosts = async (
   setUserPost: React.Dispatch<React.SetStateAction<IPost[]>>,
-  setError: any,
+  setError: React.Dispatch<React.SetStateAction<string>>,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-  likedPosts: ILikedPosts[],
-  currUser: ICurrUser
+  likedPosts: ILikedPosts[]
 ) => {
   const localStore = localStorage.getItem("userId");
   if (!localStore) {
@@ -21,12 +19,13 @@ export const getLikedPosts = async (
   const colRef = collection(db, "posts");
   await getDocs(colRef)
     .then((snapshot) => {
-      let postDocs: any = [];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const postDocs: any[] = [];
       snapshot.docs.forEach((doc) => {
         postDocs.push({ ...doc.data() });
       });
 
-      let newLikedPosts: any = [];
+      const newLikedPosts: IPost[] = [];
       postDocs.map((post: IPost) => {
         likedPosts.map((postDetail: ILikedPosts) => {
           if (

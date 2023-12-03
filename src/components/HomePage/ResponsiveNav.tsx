@@ -7,12 +7,14 @@ import {
   ReadOutlined,
   LogoutOutlined,
   LoginOutlined,
+  UsergroupAddOutlined,
 } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserAuth } from "../../context/AuthContext";
 import { Dropdown, MenuProps, Space, message } from "antd";
 
 const ResponsiveNav: React.FC = () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { signout, currUser }: any = useUserAuth();
   const navigate = useNavigate();
 
@@ -20,7 +22,7 @@ const ResponsiveNav: React.FC = () => {
     try {
       await signout();
       navigate("/login");
-    } catch (err: any) {
+    } catch (err: unknown) {
       message.error("Something went wrong");
     }
   };
@@ -43,11 +45,16 @@ const ResponsiveNav: React.FC = () => {
     },
     {
       key: "4",
+      label: <Link to="/myposts">My Posts</Link>,
+      icon: <UsergroupAddOutlined />,
+    },
+    {
+      key: "5",
       label: <Link to="/profile">Profile</Link>,
       icon: <UserOutlined />,
     },
     {
-      key: "5",
+      key: "6",
       danger: true,
       label: currUser ? (
         <p onClick={handleSignOut}>Logout</p>

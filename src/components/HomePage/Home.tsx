@@ -30,14 +30,16 @@ const Context = React.createContext({ name: "Default" });
 interface IHomeProps {
   posts: IPost[];
   loading: boolean;
-  forInfiniteScroll: any;
+  forInfiniteScroll: (e: React.UIEvent<HTMLElement>) => void;
   likedPosts: ILikedPosts[];
   deleteLikePost: IDeleteLikedPosts[];
   bookmarkPost: IBookmarkPosts[];
   removeBookmarkPosts: IRemoveBookmarkPosts[];
   infinteLoader: boolean;
-  likedPostsId: any;
-  bookmarkedPostId: any;
+  likedPostsId: string[];
+  bookmarkedPostId: string[];
+  updatelikes: boolean;
+  setUpdatelikes: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Home: React.FC<IHomeProps> = ({
@@ -51,10 +53,13 @@ const Home: React.FC<IHomeProps> = ({
   infinteLoader,
   likedPostsId,
   bookmarkedPostId,
+  updatelikes,
+  setUpdatelikes,
 }) => {
   const [post, setPost] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [limit, setLimit] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { user, username, currUser }: any = useUserAuth();
   const [api, contextHolder] = notification.useNotification();
 
@@ -69,7 +74,7 @@ const Home: React.FC<IHomeProps> = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPost(e.target.value);
-    var options: any = {
+    const options: Intl.DateTimeFormatOptions = {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -90,7 +95,7 @@ const Home: React.FC<IHomeProps> = ({
     <Context.Provider value={contextValue}>
       {contextHolder}
       <Layout className="margin-top">
-        <Layout
+        <div
           className="site-layout scroll-app"
           onScroll={(e) => forInfiniteScroll(e)}
         >
@@ -170,6 +175,8 @@ const Home: React.FC<IHomeProps> = ({
                           removeBookmarkPosts={removeBookmarkPosts}
                           likedPostsId={likedPostsId}
                           bookmarkedPostId={bookmarkedPostId}
+                          updatelikes={updatelikes}
+                          setUpdatelikes={setUpdatelikes}
                         />
                       );
                     })}
@@ -186,7 +193,7 @@ const Home: React.FC<IHomeProps> = ({
               </div>
             ) : null}
           </Content>
-        </Layout>
+        </div>
       </Layout>
     </Context.Provider>
   );
