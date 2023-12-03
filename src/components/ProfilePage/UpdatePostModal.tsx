@@ -5,7 +5,8 @@ import { db } from "../../App";
 
 interface IProp {
   isModalOpen: boolean;
-  handleCancel: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  handleCancel: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   post: any;
   toUpdateComments: boolean;
