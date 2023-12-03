@@ -304,12 +304,18 @@ const SinglePost: React.FC<ISinglePost> = ({
                       ) : (
                         <Tooltip title="Like">
                           <HeartOutlined
-                            onClick={() =>
-                              handleLike(
+                            onClick={async () =>
+                              await handleLike(
                                 postItem?.id,
                                 currUser,
                                 openNotificationWithIcon,
-                                () => setNoOfLikes((prev) => prev + 1)
+                                () => {
+                                  setNoOfLikes((prev) => prev + 1);
+                                  setLikedPostId((prevState: string[]) => [
+                                    ...prevState,
+                                    postItem.postId,
+                                  ]);
+                                }
                               )
                             }
                             style={{ fontSize: "20px", cursor: "pointer" }}
@@ -368,7 +374,13 @@ const SinglePost: React.FC<ISinglePost> = ({
                                 postItem?.id,
                                 currUser,
                                 openNotificationWithIcon,
-                                () => setNoOfBookmarks((prev) => prev + 1)
+                                () => {
+                                  setNoOfBookmarks((prev) => prev + 1);
+                                  setBookmarkPostId((prevState: string[]) => [
+                                    ...prevState,
+                                    postItem.postId,
+                                  ]);
+                                }
                               )
                             }
                             style={{
