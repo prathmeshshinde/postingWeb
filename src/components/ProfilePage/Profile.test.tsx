@@ -1,9 +1,8 @@
+import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import Profile from "./Profile";
 import { BrowserRouter as Router } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
-
-jest.mock("./Profile");
 
 describe("Profile Component", () => {
   test("renders loading spin while fetching posts", async () => {
@@ -24,7 +23,7 @@ describe("Profile Component", () => {
     );
   });
 
-  test("render all comments by user", async () => {
+  test("render all posts by user", async () => {
     render(
       <Router>
         <AuthContext>

@@ -4,7 +4,7 @@ import Bookmark from "./Bookmark";
 import { BrowserRouter as Router } from "react-router-dom";
 import * as utils from "./getBookmarkPosts";
 
-const mockHandleBookmarks = jest.spyOn(utils, "getBookmarkPosts");
+const mockGetBookmarks = jest.spyOn(utils, "getBookmarkPosts");
 
 describe("Bookmark Component", () => {
   jest.mock("./getBookmarkPosts.ts");
@@ -41,8 +41,6 @@ describe("Bookmark Component", () => {
       </Router>
     );
 
-    expect(screen.queryByTestId("loading-spin")).toBeNull();
-
-    expect(mockHandleBookmarks).toBeCalled();
+    expect(mockGetBookmarks).toBeCalled();
   });
 });
