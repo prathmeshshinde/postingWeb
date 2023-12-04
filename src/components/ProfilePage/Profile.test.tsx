@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import Profile from "./Profile";
 import { BrowserRouter as Router } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
@@ -18,9 +18,7 @@ describe("Profile Component", () => {
       </Router>
     );
 
-    await waitFor(() =>
-      expect(screen.queryByTestId("loading-spin")).toBeNull()
-    );
+    expect(screen.queryByTestId("loading-spin")).toBeNull();
   });
 
   test("render all posts by user", async () => {

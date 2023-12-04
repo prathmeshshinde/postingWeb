@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import Bookmark from "./Bookmark";
 import { BrowserRouter as Router } from "react-router-dom";
 import * as utils from "./getBookmarkPosts";
@@ -22,9 +22,7 @@ describe("Bookmark Component", () => {
       </Router>
     );
 
-    await waitFor(() =>
-      expect(screen.queryByTestId("loading-spin")).toBeNull()
-    );
+    expect(screen.queryByTestId("loading-spin")).toBeNull();
   });
 
   test("renders bookmarked posts", async () => {
