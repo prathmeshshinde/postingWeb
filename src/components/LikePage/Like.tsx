@@ -83,9 +83,9 @@ const Like: React.FC<IProps> = ({
             </div>
           ) : (
             <div data-testid="liked-posts-present">
-              <div>
+              <div className="like-page-container">
                 {userPost?.length !== 0 && !loading ? (
-                  <div>
+                  <div className="post-id">
                     {userPost.map((newPost: IPost, index: number) => {
                       return (
                         <SinglePost

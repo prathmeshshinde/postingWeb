@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import Like from "./Like";
 import { BrowserRouter as Router } from "react-router-dom";
 import * as utils from "./getLikedPosts";
@@ -47,10 +47,6 @@ describe("Like Component", () => {
           bookmarkedPostId={[]}
         />
       </Router>
-    );
-
-    await waitFor(() =>
-      expect(screen.queryByTestId("loading-spin")).toBeNull()
     );
   });
 

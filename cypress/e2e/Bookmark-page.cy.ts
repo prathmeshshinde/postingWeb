@@ -1,7 +1,10 @@
 describe("Bookmark page", () => {
-  it("renders Bookmark page", () => {
+  beforeEach(() => {
     cy.visit("/bookmark");
+    localStorage.getItem("userId");
+  });
 
+  it("renders Bookmark page", () => {
     cy.get('[data-testid="bookmark-posts-title"]').should("exist");
   });
 

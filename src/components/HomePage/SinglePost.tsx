@@ -138,6 +138,7 @@ const SinglePost: React.FC<ISinglePost> = ({
           onConfirm={handleOk}
           okText="Yes"
           cancelText="No"
+          data-delete-post="delete-post"
         >
           <p className="delete-button" data-delete-post="delete-post">
             Delete
@@ -264,6 +265,7 @@ const SinglePost: React.FC<ISinglePost> = ({
                   <Tooltip title="Comment">
                     <CommentOutlined
                       style={{ fontSize: "20px", marginLeft: "20px" }}
+                      className="handle-comment"
                     />
                   </Tooltip>
                 </Link>
@@ -299,6 +301,7 @@ const SinglePost: React.FC<ISinglePost> = ({
                               cursor: "pointer",
                               color: "#1677ff",
                             }}
+                            className="handle-dislike"
                           />
                         </Tooltip>
                       ) : (
@@ -318,6 +321,7 @@ const SinglePost: React.FC<ISinglePost> = ({
                                 }
                               )
                             }
+                            className="handle-like"
                             style={{ fontSize: "20px", cursor: "pointer" }}
                           />
                         </Tooltip>
@@ -364,6 +368,7 @@ const SinglePost: React.FC<ISinglePost> = ({
                               cursor: "pointer",
                               color: "#1677ff",
                             }}
+                            className="handle-remove-bookmark"
                           />
                         </Tooltip>
                       ) : (
@@ -387,6 +392,7 @@ const SinglePost: React.FC<ISinglePost> = ({
                               fontSize: "20px",
                               cursor: "pointer",
                             }}
+                            className="handle-bookmark"
                           />
                         </Tooltip>
                       )}

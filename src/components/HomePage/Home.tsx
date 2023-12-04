@@ -131,6 +131,8 @@ const Home: React.FC<IHomeProps> = ({
                       placeholder="Write Post"
                       value={post}
                       onChange={(e) => handleChange(e)}
+                      autoFocus
+                      data-post-input="post-input-field"
                     />
                   </Form.Item>
 

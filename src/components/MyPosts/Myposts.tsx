@@ -89,12 +89,22 @@ const Myposts = () => {
       dataIndex: "likes",
       key: "likes",
       width: 20,
+      formItemProps: () => {
+        return {
+          rules: [{ required: true, message: "Please Enter valid number" }],
+        };
+      },
     },
     {
       title: "Bookmarks",
       dataIndex: "bookmarks",
       key: "bookmarks",
       width: 20,
+      formItemProps: () => {
+        return {
+          rules: [{ required: true, message: "Please Enter valid number" }],
+        };
+      },
     },
     {
       title: "Action",
@@ -291,7 +301,7 @@ const Myposts = () => {
   }, []);
 
   return (
-    <div style={{ width: "100%" }}>
+    <div style={{ width: "100%" }} data-table-myposts="table-myposts">
       <Layout className="margin-top">
         <Layout className="site-layout">
           <Header />
@@ -347,22 +357,6 @@ const Myposts = () => {
                         onSave: async (rowKey, data) => {
                           updateTable(data);
                         },
-                        deletePopconfirmMessage: (
-                          <Popconfirm
-                            title="Delete the post"
-                            description="Are you sure to delete this post?"
-                            // onConfirm={handleOk}
-                            okText="Yes"
-                            cancelText="No"
-                          >
-                            <p
-                              className="delete-button"
-                              data-delete-post="delete-post"
-                            >
-                              Delete
-                            </p>
-                          </Popconfirm>
-                        ),
                       }}
                       expandable={{
                         expandedRowRender,
@@ -390,7 +384,7 @@ const Myposts = () => {
                       style={{ padding: "10px" }}
                       recordCreatorProps={false}
                       options={{
-                        reload: true,
+                        reload: false,
                         setting: false,
                       }}
                     />
