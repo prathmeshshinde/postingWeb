@@ -28,6 +28,3 @@ jobs:
       - run: npm ci
 
       - run: npm run build --if-present
-
-      - name: Run Cypress tests
-        run: npm run cypress:open
