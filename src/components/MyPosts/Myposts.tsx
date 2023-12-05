@@ -155,7 +155,9 @@ const Myposts = () => {
             deletePost(row);
           }}
           className={
-            localStore === row.userId ? "display-edit" : "display-none"
+            localStore === row.userId
+              ? "display-edit delete-button"
+              : "display-none"
           }
         >
           <Text
