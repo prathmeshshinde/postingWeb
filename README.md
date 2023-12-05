@@ -2,6 +2,8 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+Here is the API structure of the database :- https://docs.google.com/document/d/1GQYU3ILob02eHlJMoUjzcyFkQWM9NDUIi3rfh5TmCCA/edit?usp=sharing
+
 ## Available Scripts
 
 ### `git clone https://github.com/prathmeshshinde/postingv3.git`
