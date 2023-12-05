@@ -1,5 +1,5 @@
 import { Layout, Popconfirm, Spin, Typography } from "antd";
-import React, { useEffect, useRef, useState } from "react";
+import React, { Key, useEffect, useRef, useState } from "react";
 import Header from "../HomePage/Header";
 import type {
   ActionType,
@@ -47,6 +47,10 @@ const Myposts = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [id, setId] = useState<any>();
   const [parentPost, setParentPost] = useState<GithubIssueItem>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [expandedRowKey, setExpandedRowKey] = useState<
+    readonly Key[] | undefined
+  >();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const deletePost = async (data: any) => {
@@ -77,7 +81,7 @@ const Myposts = () => {
       title: "Posts",
       dataIndex: "post",
       key: "post",
-      width: 5,
+      width: 0,
       formItemProps: () => {
         return {
           rules: [{ required: true, message: "Please Enter valid post" }],
@@ -88,28 +92,30 @@ const Myposts = () => {
       title: "Likes",
       dataIndex: "likes",
       key: "likes",
-      width: 20,
+      width: 100,
       formItemProps: () => {
         return {
           rules: [{ required: true, message: "Please Enter valid number" }],
         };
       },
+      editable: false,
     },
     {
       title: "Bookmarks",
       dataIndex: "bookmarks",
       key: "bookmarks",
-      width: 20,
+      width: 100,
       formItemProps: () => {
         return {
           rules: [{ required: true, message: "Please Enter valid number" }],
         };
       },
+      editable: false,
     },
     {
       title: "Action",
       valueType: "option",
-      width: 20,
+      width: 10,
       render: (_, row) => [
         <Text
           type="success"
@@ -210,12 +216,18 @@ const Myposts = () => {
             maxLength={10}
             name="protable"
             columns={[
-              { title: "Date", dataIndex: "date", key: "date", width: 20 },
-              { title: "Comment", dataIndex: "post", key: "post", width: 20 },
+              {
+                title: "Date",
+                editable: false,
+                dataIndex: "date",
+                key: "date",
+                width: 100,
+              },
+              { title: "Comment", dataIndex: "post", key: "post", width: 0 },
               {
                 title: "Action",
                 valueType: "option",
-                width: 20,
+                width: 10,
                 render: (_, row) => [
                   <Text
                     type="success"
@@ -298,7 +310,7 @@ const Myposts = () => {
 
   useEffect(() => {
     getPostsForTable(setPosts, setLoading);
-  }, []);
+  }, [comments]);
 
   return (
     <div style={{ width: "100%" }} data-table-myposts="table-myposts">
@@ -361,6 +373,8 @@ const Myposts = () => {
                       expandable={{
                         expandedRowRender,
                         onExpand(expanded, record) {
+                          setExpandedRowKey([]);
+                          setExpandedRowKey(record.id);
                           if (expanded) {
                             setParentPost(record);
 
@@ -375,7 +389,9 @@ const Myposts = () => {
                         rowExpandable: (record) => record.comment !== 0,
                         onExpandedRowsChange: (record) => {
                           setId(record[0]);
+                          setExpandedRowKey(record);
                         },
+                        expandedRowKeys: expandedRowKey,
                       }}
                       dateFormatter="string"
                       headerTitle="Posts Table"

@@ -9,6 +9,7 @@ export const getComments = async (
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   id: string
 ) => {
+  setComments([]);
   const docRef = collection(db, "posts", id, "comments");
   getDocs(docRef)
     .then((snapshot) => {
