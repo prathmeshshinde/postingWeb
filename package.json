@@ -37,8 +37,8 @@
     "eject": "react-scripts eject",
     "cypress:open": "cypress open",
     "coverage": "npm test -- --coverage",
-    "lint:eslint": "eslint . src --ext .ts",
-    "lint": "eslint --ext .ts,.tsx ./src"
+    "lint": "eslint --ext .ts,.tsx ./src",
+    "lint:css": "stylelint src/**/*.css"
   },
   "eslintConfig": {
     "extends": [
