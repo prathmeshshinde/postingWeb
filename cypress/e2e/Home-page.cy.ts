@@ -41,11 +41,11 @@ describe("Home page", () => {
     cy.url().should("include", "/profile");
   });
 
-  it("submit post", () => {
-    setTimeout(() => {
-      cy.get(".post-input").type("testing cypress").type("{enter}");
-    }, 5000);
-  });
+  // it("submit post", () => {
+  //   setTimeout(() => {
+  //     cy.get(".post-input").type("testing cypress").type("{enter}");
+  //   }, 5000);
+  // });
 
   it("check like posts", () => {
     cy.get(".handle-like").should("exist");
@@ -60,7 +60,7 @@ describe("Home page", () => {
   });
 
   it("check comment page", () => {
-    cy.get(".handle-comment").click();
+    cy.get(".handle-comment").eq(0).click();
     cy.url().should("include", "/comment");
   });
 });

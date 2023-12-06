@@ -32,3 +32,5 @@ jobs:
       - run: npm test
 
       - run: npm run cypress:open
+
+      - run: npm run lint
