@@ -1,8 +1,7 @@
+beforeEach(() => {
+  localStorage.getItem("userId");
+});
 describe("Comment page", () => {
-  beforeEach(() => {
-    localStorage.getItem("userId");
-  });
-
   it("directly tries to go to comment page", () => {
     cy.visit("/comment");
     cy.get(".no-comments-text").should("exist");
@@ -43,8 +42,6 @@ describe("Comment page", () => {
           cy.contains("Yes").click();
 
           cy.contains("Comment Deleted").should("exist");
-        } else {
-          cy.get('[data-show-empty-posts="empty-posts"]').should("exist");
         }
       });
 

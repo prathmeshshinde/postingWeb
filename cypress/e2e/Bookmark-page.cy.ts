@@ -1,23 +1,23 @@
+beforeEach(() => {
+  cy.visit("/login");
+  localStorage.getItem("userId");
+  const typedEmail = "issac@gmail.com";
+  const typedPass = "omkar123";
+
+  cy.get('[data-login-mail="login-mail-field"]')
+    .type(typedEmail)
+    .should("have.value", typedEmail);
+
+  cy.get('[data-login-pass="login-pass-field"]')
+    .type(typedPass)
+    .should("have.value", typedPass);
+
+  cy.get(".login-form-button").click();
+
+  cy.url().should("include", "/");
+});
+
 describe("Bookmark page", () => {
-  beforeEach(() => {
-    cy.visit("/login");
-    localStorage.getItem("userId");
-    const typedEmail = "issac@gmail.com";
-    const typedPass = "omkar123";
-
-    cy.get('[data-login-mail="login-mail-field"]')
-      .type(typedEmail)
-      .should("have.value", typedEmail);
-
-    cy.get('[data-login-pass="login-pass-field"]')
-      .type(typedPass)
-      .should("have.value", typedPass);
-
-    cy.get(".login-form-button").click();
-
-    cy.url().should("include", "/");
-  });
-
   it("renders Bookmark page", () => {
     cy.visit("/bookmark");
     cy.get('[data-testid="bookmark-posts-title"]')
