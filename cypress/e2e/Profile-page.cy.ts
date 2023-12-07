@@ -34,6 +34,8 @@ describe("Profile page", () => {
 
     cy.get('[data-submit-modal="cancel-submit-modal"]').submit();
 
+    cy.wait(2000);
+
     cy.contains("Successfully updated profile").should("exist");
   });
 
@@ -99,6 +101,7 @@ describe("Profile page", () => {
   });
 
   it("check deleting posts", () => {
+    cy.visit("/profile");
     cy.wait(3000);
     cy.get('[data-user-posts="all-user-posts"]').then(($el) => {
       if ($el.find('[data-testid="posts"]').length > 0) {

@@ -38,7 +38,7 @@ const Header: React.FC = () => {
               Log out
             </Button>
           ) : (
-            <Button type="primary">
+            <Button type="primary" data-logout="data-logout">
               <Link to="/login">Log In</Link>
             </Button>
           )}

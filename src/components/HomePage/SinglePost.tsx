@@ -327,6 +327,7 @@ const SinglePost: React.FC<ISinglePost> = ({
                               color: "#1677ff",
                             }}
                             className="handle-dislike"
+                            data-dislike-button="data-dislike-button"
                           />
                         </Tooltip>
                       ) : (

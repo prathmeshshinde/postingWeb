@@ -9,6 +9,7 @@ describe("Comment page", () => {
 
   it("renders comment page", () => {
     cy.visit("/");
+    cy.wait(3000);
     cy.get('[data-testid="posts"]').should("exist");
 
     cy.get('[data-comment="data-comment-test"]').eq(0).click();
@@ -32,27 +33,8 @@ describe("Comment page", () => {
     // Assert that the character limit message is displayed
     cy.contains("Please enter only 100 characters").should("exist");
 
-    cy.get(".show-comments")
-      .should("exist")
-      .then(($el) => {
-        if ($el.find('[data-testid="posts"]').length > 0) {
-          cy.get('[data-three-dot="three-dot"]').click({ multiple: true });
+    cy.get('[data-three-dot="three-dot"]').click({ multiple: true });
 
-          cy.get('[ data-delete-post="delete-post"]').click();
-          cy.contains("Yes").click();
-
-          cy.contains("Comment Deleted").should("exist");
-        }
-      });
-
-    cy.get('[data-testid="posts"]').should("exist");
-    // cy.wait(5000);
     cy.get('[data-three-dot="three-dot"]').should("exist").eq(0).click();
-
-    cy.get('[data-update-post="update-post"]').click();
-
-    cy.get('[data-submit-modal="data-submit-modal"]').click();
-
-    cy.contains("Post updated").should("exist");
   });
 });

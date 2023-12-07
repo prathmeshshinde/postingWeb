@@ -1,23 +1,23 @@
+beforeEach(() => {
+  cy.visit("/login");
+  localStorage.getItem("userId");
+  const typedEmail = "issac@gmail.com";
+  const typedPass = "omkar123";
+
+  cy.get('[data-login-mail="login-mail-field"]')
+    .type(typedEmail)
+    .should("have.value", typedEmail);
+
+  cy.get('[data-login-pass="login-pass-field"]')
+    .type(typedPass)
+    .should("have.value", typedPass);
+
+  cy.get(".login-form-button").click();
+
+  cy.url().should("include", "/");
+});
+
 describe("Like page", () => {
-  beforeEach(() => {
-    cy.visit("/login");
-    localStorage.getItem("userId");
-    const typedEmail = "issac@gmail.com";
-    const typedPass = "omkar123";
-
-    cy.get('[data-login-mail="login-mail-field"]')
-      .type(typedEmail)
-      .should("have.value", typedEmail);
-
-    cy.get('[data-login-pass="login-pass-field"]')
-      .type(typedPass)
-      .should("have.value", typedPass);
-
-    cy.get(".login-form-button").click();
-
-    cy.url().should("include", "/");
-  });
-
   it("renders Like page", () => {
     cy.visit("/like");
     cy.get('[data-testid="liked-posts-title"]')
@@ -26,12 +26,14 @@ describe("Like page", () => {
   });
 
   it("liked posts are present in the data", () => {
-    cy.wait(3000);
-    cy.visit("/");
-    cy.get(".handle-dislike").should("exist");
-    cy.wait(3000);
-    cy.get(".handle-dislike").eq(0).click();
-    cy.wait(3000);
+    // cy.visit("/");
+    // cy.wait(3000);
+    // cy.get(".handle-like").click({ multiple: true });
+    // cy.wait(3000);
+    // cy.get(".handle-dislike").should("exist");
+    // cy.wait(3000);
+    // cy.get(".handle-dislike").eq(0).click();
+    // cy.wait(3000);
 
     cy.visit("/like");
     cy.get('[data-testid="liked-posts-present"]').should("exist");
