@@ -27,7 +27,5 @@ describe("Comment Component", () => {
         />
       </Router>
     );
-    // expect(screen.getByTestId("comment-component")).toBeInTheDocument();
-    // const movie = await expect(screen.getByText("the lion king"));
   });
 });

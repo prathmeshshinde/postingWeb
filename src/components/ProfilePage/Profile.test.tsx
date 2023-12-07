@@ -67,6 +67,17 @@ describe("Profile Component", () => {
 
   it("handles Edit Profile button click", async () => {
     // Mock the user context values
+    render(
+      <Router>
+        <Profile
+          posts={[]}
+          likedPosts={[]}
+          deleteLikePost={[]}
+          bookmarkPost={[]}
+          removeBookmarkPosts={[]}
+        />
+      </Router>
+    );
     const mockUserContextValues = {
       user: { email: "test@example.com" },
       currUser: {
@@ -83,18 +94,6 @@ describe("Profile Component", () => {
     };
 
     mockUseUserAuth.mockReturnValue(mockUserContextValues);
-
-    render(
-      <Router>
-        <Profile
-          posts={[]}
-          likedPosts={[]}
-          deleteLikePost={[]}
-          bookmarkPost={[]}
-          removeBookmarkPosts={[]}
-        />
-      </Router>
-    );
 
     // Wait for the loading to complete
 

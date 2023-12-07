@@ -1,5 +1,11 @@
 import React from "react";
-import { render, fireEvent, waitFor, screen } from "@testing-library/react";
+import {
+  render,
+  fireEvent,
+  waitFor,
+  screen,
+  act,
+} from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
 import SignUp from "./SignUp";
 
@@ -45,19 +51,20 @@ describe("SignUp Component", () => {
       </Router>
     );
 
-    fireEvent.change(getByPlaceholderText("Email"), {
-      target: { value: "test@example.com" },
-    });
-    fireEvent.change(getByPlaceholderText("Username"), {
-      target: { value: "testuser" },
-    });
-    fireEvent.change(getByPlaceholderText("Password"), {
-      target: { value: "password123" },
-    });
+    act(() => {
+      fireEvent.change(getByPlaceholderText("Email"), {
+        target: { value: "test@example.com" },
+      });
+      fireEvent.change(getByPlaceholderText("Username"), {
+        target: { value: "testuser" },
+      });
+      fireEvent.change(getByPlaceholderText("Password"), {
+        target: { value: "password123" },
+      });
+      const button = screen.getByTestId("signup-button");
 
-    const button = screen.getByTestId("signup-button");
-
-    fireEvent.click(button);
+      fireEvent.click(button);
+    });
 
     await waitFor(() => {
       expect(window.location.pathname).toBe("/");

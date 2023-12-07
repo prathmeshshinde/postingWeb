@@ -348,6 +348,7 @@ const SinglePost: React.FC<ISinglePost> = ({
                               )
                             }
                             className="handle-like"
+                            data-handle-like="handle-like"
                             style={{ fontSize: "20px", cursor: "pointer" }}
                           />
                         </Tooltip>

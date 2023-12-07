@@ -32,7 +32,7 @@ describe("Like Component", () => {
       </Router>
     );
 
-    expect(screen.getByText("Liked Posts")).toBeInTheDocument();
+    expect(screen.getByText("My Likes")).toBeInTheDocument();
   });
 
   test("renders loading spin while fetching liked posts", async () => {
@@ -65,5 +65,26 @@ describe("Like Component", () => {
     );
 
     expect(mockHandleLikes).toBeCalled();
+  });
+
+  test("renders liked posts", async () => {
+    render(
+      <Router>
+        <Like
+          likedPosts={[]}
+          deleteLikePost={[]}
+          bookmarkPost={[]}
+          removeBookmarkPosts={[]}
+          likedPostsId={[]}
+          bookmarkedPostId={[]}
+        />
+      </Router>
+    );
+
+    screen.getByText("Please login to see liked posts");
+
+    expect(mockHandleLikes).toBeCalled();
+
+    screen.getByText("Log In").click();
   });
 });
