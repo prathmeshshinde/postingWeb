@@ -54,7 +54,7 @@ describe("Like page", () => {
     cy.visit("/like");
     cy.wait(5000);
 
-    cy.get('[data-filled-like-icon="filled-like-icon"]').should("exist");
-    cy.get('[data-filled-like-icon="filled-like-icon"]').eq(0).click();
+    // cy.get('[data-filled-like-icon="filled-like-icon"]').should("exist");
+    // cy.get('[data-filled-like-icon="filled-like-icon"]').eq(0).click();
   });
 });

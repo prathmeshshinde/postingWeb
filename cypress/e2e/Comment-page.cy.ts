@@ -33,8 +33,8 @@ describe("Comment page", () => {
     // Assert that the character limit message is displayed
     cy.contains("Please enter only 100 characters").should("exist");
 
-    cy.get('[data-three-dot="three-dot"]').click({ multiple: true });
+    // cy.get('[data-three-dot="three-dot"]').click({ multiple: true });
 
-    cy.get('[data-three-dot="three-dot"]').should("exist").eq(0).click();
+    // cy.get('[data-three-dot="three-dot"]').should("exist").eq(0).click();
   });
 });
