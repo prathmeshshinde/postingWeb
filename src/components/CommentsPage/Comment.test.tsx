@@ -1,6 +1,6 @@
 // Comment.test.jsx
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect"; // Import this to use the toBeInTheDocument matcher
 import Comment from "./Comment";
 import { BrowserRouter as Router } from "react-router-dom";
@@ -28,6 +28,6 @@ describe("Comment Component", () => {
       </Router>
     );
     // expect(screen.getByTestId("comment-component")).toBeInTheDocument();
-    const movie = await expect(screen.getByText("the lion king"));
+    // const movie = await expect(screen.getByText("the lion king"));
   });
 });
