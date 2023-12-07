@@ -1,4 +1,4 @@
-import { Layout, Popconfirm, Spin, Typography } from "antd";
+import { Divider, Layout, Popconfirm, Spin, Typography } from "antd";
 import React, { Key, useEffect, useRef, useState } from "react";
 import Header from "../HomePage/Header";
 import type {
@@ -323,6 +323,16 @@ const Myposts = () => {
       <Layout className="margin-top">
         <Layout className="site-layout">
           <Header />
+          <Divider
+            style={{
+              fontSize: "22px",
+              color: "#3087ff",
+              fontWeight: "700",
+            }}
+            data-testid="liked-posts-title"
+          >
+            My Posts
+          </Divider>
           <div className="table-div pro-table">
             {error ? (
               <p>Something went wrong please try later!</p>
