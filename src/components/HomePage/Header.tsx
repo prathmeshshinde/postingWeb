@@ -30,7 +30,11 @@ const Header: React.FC = () => {
         <ResponsiveNav />
         <div className="button-logout">
           {localStore ? (
-            <Button type="primary" onClick={handleSignOut}>
+            <Button
+              type="primary"
+              onClick={handleSignOut}
+              data-logout="data-logout"
+            >
               Log out
             </Button>
           ) : (

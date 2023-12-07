@@ -60,6 +60,7 @@ const SignUp: React.FC = () => {
                 fontSize: "15px",
                 fontWeight: "500",
               }}
+              data-error-signup="data-error-signup"
             >
               {error}
             </p>
@@ -78,6 +79,7 @@ const SignUp: React.FC = () => {
               <Input
                 prefix={<UserOutlined className="site-form-item-icon" />}
                 placeholder="Email"
+                signup-input-email="signup-input-email"
               />
             </Form.Item>
             <Form.Item
@@ -89,6 +91,7 @@ const SignUp: React.FC = () => {
               <Input
                 prefix={<UserOutlined className="site-form-item-icon" />}
                 placeholder="Username"
+                signup-input-username="signup-input-username"
               />
             </Form.Item>
             <Form.Item
@@ -101,6 +104,7 @@ const SignUp: React.FC = () => {
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
                 placeholder="Password"
+                signup-input-pass="signup-input-pass"
               />
             </Form.Item>
 
@@ -109,6 +113,7 @@ const SignUp: React.FC = () => {
                 type="primary"
                 htmlType="submit"
                 className="login-form-button"
+                data-testid="signup-button"
               >
                 Sign Up
               </Button>

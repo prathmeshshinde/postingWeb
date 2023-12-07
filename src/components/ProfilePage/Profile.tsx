@@ -38,6 +38,7 @@ const Profile: React.FC<IProps> = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { user, currUser, userDoc, setUpdateCurrUser, updateCurrUser }: any =
     useUserAuth();
+
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [userPost, setUserPost] = useState<any>([]);

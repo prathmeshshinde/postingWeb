@@ -79,15 +79,17 @@ const Comment: React.FC<IProps> = ({
   };
 
   useEffect(() => {
-    getComments(setError, setComments, setLoading, postItem?.id);
-    getPost();
+    if (postItem) {
+      getComments(setError, setComments, setLoading, postItem?.id);
+      getPost();
+    }
   }, [toUpdateComments]);
 
   return (
     <>
       <Layout className="profile-payout-div margin-top">
         <Layout className="site-layout scroll-app ">
-          {!postItem && !location ? (
+          {!postItem || !location ? (
             <p className="no-comments-text">You can not access this page</p>
           ) : (
             <>
@@ -106,6 +108,7 @@ const Comment: React.FC<IProps> = ({
                       color: "#3087ff",
                       fontWeight: "700",
                     }}
+                    data-comment-page-title="comment-page-title"
                   >
                     Post
                   </Divider>
@@ -165,6 +168,7 @@ const Comment: React.FC<IProps> = ({
                           placeholder="Comment on Post"
                           value={comment}
                           onChange={(e) => handleChange(e)}
+                          data-post-comment-input="data-post-comment-input"
                         />
                       </Form.Item>
 
@@ -173,6 +177,7 @@ const Comment: React.FC<IProps> = ({
                           type="primary"
                           htmlType="submit"
                           style={{ height: "40px" }}
+                          data-submit-comment="data-submit-comment"
                         >
                           Comment
                         </Button>
@@ -188,7 +193,7 @@ const Comment: React.FC<IProps> = ({
                     </Spin>
                   </div>
                 ) : (
-                  <div>
+                  <div className="show-comments">
                     {comments?.length === 0 ? (
                       <div style={{ marginTop: "40px" }}>
                         <Empty />

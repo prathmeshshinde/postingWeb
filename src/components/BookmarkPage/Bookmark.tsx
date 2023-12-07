@@ -64,7 +64,7 @@ const Bookmark: React.FC<IProps> = ({
           }}
           data-testid="bookmark-posts-title"
         >
-          Bookmarks
+          My Bookmarks
         </Divider>
         {error ? (
           <p
@@ -92,7 +92,7 @@ const Bookmark: React.FC<IProps> = ({
                   <Empty />
                 </div>
               ) : (
-                <div>
+                <div data-bookmarked-post="data-bookmarked-posts">
                   {userPost.map((newPost: IPost, index: number) => {
                     return (
                       <SinglePost

@@ -26,7 +26,7 @@ const Login: React.FC = () => {
       <div className="form-div" style={{ height: "100vh" }}>
         <div className="form-box">
           <div className="form-title">
-            <Title level={3} type="secondary">
+            <Title level={3} type="secondary" data-login-title="login-title">
               Login
             </Title>
           </div>
@@ -39,6 +39,7 @@ const Login: React.FC = () => {
                 fontSize: "15px",
                 fontWeight: "500",
               }}
+              data-error-id="data-error-id"
             >
               {error}
             </p>
@@ -56,6 +57,7 @@ const Login: React.FC = () => {
               <Input
                 prefix={<UserOutlined className="site-form-item-icon" />}
                 placeholder="Email"
+                data-login-mail="login-mail-field"
               />
             </Form.Item>
             <Form.Item
@@ -68,6 +70,7 @@ const Login: React.FC = () => {
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
                 placeholder="Password"
+                data-login-pass="login-pass-field"
               />
             </Form.Item>
 

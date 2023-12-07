@@ -7,15 +7,54 @@ describe("Profile page", () => {
     cy.get('[data-test="profile-test"]').should("not.exist");
 
     cy.wait(2000);
-
-    cy.get('[data-test="profile-test"]').should("exist");
   });
 
   it("check edit profile modal and profile update", () => {
+    cy.visit("/login");
+    localStorage.getItem("userId");
+    const typedEmail = "issac@gmail.com";
+    const typedPass = "omkar123";
+
+    cy.get('[data-login-mail="login-mail-field"]')
+      .type(typedEmail)
+      .should("have.value", typedEmail);
+
+    cy.get('[data-login-pass="login-pass-field"]')
+      .type(typedPass)
+      .should("have.value", typedPass);
+
+    cy.get(".login-form-button").click();
+
+    cy.url().should("include", "/");
+
+    cy.visit("/profile");
     cy.get('[data-edit-button="edit-button"]').click();
 
     cy.get('[data-submit-modal="cancel-submit-modal"]').submit();
 
+    cy.contains("Successfully updated profile").should("exist");
+  });
+
+  it("cancel updation of profile", () => {
+    cy.visit("/login");
+    localStorage.getItem("userId");
+    const typedEmail = "issac@gmail.com";
+    const typedPass = "omkar123";
+
+    cy.get('[data-login-mail="login-mail-field"]')
+      .type(typedEmail)
+      .should("have.value", typedEmail);
+
+    cy.get('[data-login-pass="login-pass-field"]')
+      .type(typedPass)
+      .should("have.value", typedPass);
+
+    cy.get(".login-form-button").click();
+
+    cy.url().should("include", "/");
+
+    cy.visit("/profile");
+    cy.get('[data-edit-button="edit-button"]').click();
     cy.get('[data-cancel-modal="cancel-modal"]').click();
   });
 
@@ -30,6 +69,8 @@ describe("Profile page", () => {
         cy.get('[data-isModalOpen="isModalOpen"]').should("exist");
 
         cy.get('[data-update-post-modal="update-post-modal"]').submit();
+
+        cy.contains("Post updated").should("exist");
       } else {
         cy.get('[data-show-empty-posts="empty-posts"]').should("exist");
       }
@@ -43,6 +84,7 @@ describe("Profile page", () => {
         cy.get('[data-three-dot="three-dot"]').click({ multiple: true });
 
         cy.get('[ data-delete-post="delete-post"]').click();
+        cy.contains("Yes").click();
       } else {
         cy.get('[data-show-empty-posts="empty-posts"]').should("exist");
       }

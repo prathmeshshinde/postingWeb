@@ -2,7 +2,6 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../App";
 import { IPost } from "../../Interface/IPost";
 import { ILikedPosts } from "../../Interface/ILikedAndBookmarkPosts";
-import { message } from "antd";
 
 export const getLikedPosts = async (
   setUserPost: React.Dispatch<React.SetStateAction<IPost[]>>,
@@ -41,7 +40,6 @@ export const getLikedPosts = async (
       setLoading(false);
     })
     .catch((err) => {
-      message.error("Something went wrong!");
       setError(err.message);
     });
 };

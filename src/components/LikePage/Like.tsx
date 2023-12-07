@@ -62,7 +62,7 @@ const Like: React.FC<IProps> = ({
           }}
           data-testid="liked-posts-title"
         >
-          Liked Posts
+          My Likes
         </Divider>
 
         {error && currUser ? (

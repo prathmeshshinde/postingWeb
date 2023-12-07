@@ -68,7 +68,7 @@ function App() {
   }, [scroll, updatelikes]);
 
   return (
-    <div className="App" onClick={(e) => forInfiniteScroll(e)}>
+    <div className="App" onClick={(e) => forInfiniteScroll(e)} data-foo="bar">
       <AuthContext>
         <Layout hasSider>
           {location.pathname !== "/login" && location.pathname !== "/signup" ? (

@@ -138,6 +138,7 @@ const Home: React.FC<IHomeProps> = ({
                       type="primary"
                       htmlType="submit"
                       style={{ height: "40px" }}
+                      data-post-post="post-post"
                     >
                       Post
                     </Button>
@@ -188,7 +189,7 @@ const Home: React.FC<IHomeProps> = ({
               </div>
             )}
 
-            {infinteLoader && !loading ? (
+            {infinteLoader && !loading && posts.length > 10 ? (
               <div className="loading-spin-infinte">
                 <Spin tip="Loading" size="large">
                   <div className="content" />

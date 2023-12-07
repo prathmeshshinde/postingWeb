@@ -1,10 +1,10 @@
 export const config = {
   firebaseConfig: {
-    apiKey: "AIzaSyAy1ofVikB6y3zz5zJuDNgVQM3v68P_eAU",
-    authDomain: "postingv3-2bc2e.firebaseapp.com",
-    projectId: "postingv3-2bc2e",
-    storageBucket: "postingv3-2bc2e.appspot.com",
-    messagingSenderId: "955659143299",
-    appId: "1:955659143299:web:b976cac0f286b66e0f73b6",
+    apiKey: "AIzaSyD29Lb7IB7898eUkHjSTIPYzr3bYXO0BFY",
+    authDomain: "posting-v2-fbbbf.firebaseapp.com",
+    projectId: "posting-v2-fbbbf",
+    storageBucket: "posting-v2-fbbbf.appspot.com",
+    messagingSenderId: "627759101498",
+    appId: "1:627759101498:web:daff87b0b00fc861076703",
   },
 };

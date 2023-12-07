@@ -97,11 +97,17 @@ const UpdatePostModal: React.FC<IProp> = ({
             wrapperCol={{ ...layout.wrapperCol }}
             style={{ textAlign: "end" }}
           >
-            <Button onClick={handleCancel}>Cancel</Button>
+            <Button
+              onClick={handleCancel}
+              data-cancel-modal="data-cancel-modal"
+            >
+              Cancel
+            </Button>
             <Button
               style={{ margin: "0px 0px 0px 10px" }}
               type="primary"
               htmlType="submit"
+              data-submit-modal="data-submit-modal"
             >
               Submit
             </Button>

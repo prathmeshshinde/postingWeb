@@ -139,6 +139,7 @@ const SinglePost: React.FC<ISinglePost> = ({
           okText="Yes"
           cancelText="No"
           data-delete-post="delete-post"
+          className="popconfirm"
         >
           <p className="delete-button" data-delete-post="delete-post">
             Delete
@@ -354,6 +355,7 @@ const SinglePost: React.FC<ISinglePost> = ({
                         level={5}
                         type="secondary"
                         className="like-count-text"
+                        data-like-count="data-like-count"
                       >
                         {noOfLikes}
                       </Title>
@@ -393,6 +395,7 @@ const SinglePost: React.FC<ISinglePost> = ({
                               color: "#1677ff",
                             }}
                             className="handle-remove-bookmark"
+                            // data-testid="remove-bookmark-button"
                           />
                         </Tooltip>
                       ) : (
@@ -417,6 +420,7 @@ const SinglePost: React.FC<ISinglePost> = ({
                               cursor: "pointer",
                             }}
                             className="handle-bookmark"
+                            data-bookmark-icon="data-bookmark-icon"
                           />
                         </Tooltip>
                       )}
@@ -424,6 +428,7 @@ const SinglePost: React.FC<ISinglePost> = ({
                         level={5}
                         type="secondary"
                         className="like-count-text"
+                        data-bookmark-count="data-bookmark-count"
                       >
                         {noOfBookmarks}
                       </Title>

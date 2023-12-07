@@ -57,9 +57,13 @@ const ResponsiveNav: React.FC = () => {
       key: "6",
       danger: true,
       label: currUser ? (
-        <p onClick={handleSignOut}>Logout</p>
+        <p onClick={handleSignOut} data-handle-logout="handle-logout">
+          Logout
+        </p>
       ) : (
-        <Link to="/login">Login</Link>
+        <Link to="/login" data-handle-logout="handle-logout">
+          Login
+        </Link>
       ),
       icon: currUser ? <LogoutOutlined /> : <LoginOutlined />,
     },
@@ -67,7 +71,7 @@ const ResponsiveNav: React.FC = () => {
 
   return (
     <div className="responsive-nav-container">
-      <Dropdown menu={{ items }} trigger={["click"]}>
+      <Dropdown className="dropdown-menu" menu={{ items }} trigger={["click"]}>
         <Space>
           <MenuOutlined
             className="nav-icon-main"
