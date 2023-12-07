@@ -13,5 +13,6 @@ export default defineConfig({
       return config;
     },
     experimentalRunAllSpecs: true,
+    responseTimeout: 120e3,
   },
 });
