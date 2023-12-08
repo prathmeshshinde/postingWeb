@@ -29,10 +29,10 @@ The user can also update their Profile image, Username, and Bio.
 ## Testing
 Testing of this web app is done using Jest and Cypress. I have for you here the test coverage reports of the tests.
 
-Test coverage report of jest
+Test coverage report of jest- 08/12/2023
 ![jest test coverage](https://github.com/prathmeshshinde/postingWeb/assets/55370612/8f8e4027-3ee2-4d93-a46e-308907e4b4d1)
 
-Test coverage report of Cypress.
+Test coverage report of Cypress- 08/12/2023
 ![cypress test coverage](https://github.com/prathmeshshinde/postingWeb/assets/55370612/c68da080-a602-406e-8b5e-e52ee089b3ff)
 
 ## Used [Capacitor](https://capacitorjs.com/) for building a native app from the existing code base.
