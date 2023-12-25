@@ -15,8 +15,9 @@ import { Dropdown, MenuProps, Space, message } from "antd";
 
 const ResponsiveNav: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { signout, currUser }: any = useUserAuth();
+  const { signout }: any = useUserAuth();
   const navigate = useNavigate();
+  const localStore = localStorage.getItem("userId");
 
   const handleSignOut = async () => {
     try {
@@ -56,8 +57,12 @@ const ResponsiveNav: React.FC = () => {
     {
       key: "6",
       danger: true,
-      label: currUser ? (
-        <p onClick={handleSignOut} data-handle-logout="handle-logout">
+      label: localStore ? (
+        <p
+          onClick={handleSignOut}
+          data-handle-logout="handle-logout"
+          data-testid="handle-res-logout"
+        >
           Logout
         </p>
       ) : (
@@ -65,7 +70,13 @@ const ResponsiveNav: React.FC = () => {
           Login
         </Link>
       ),
-      icon: currUser ? <LogoutOutlined /> : <LoginOutlined />,
+      icon: localStore ? (
+        <div data-testid="logout-icon">
+          <LogoutOutlined />
+        </div>
+      ) : (
+        <LoginOutlined />
+      ),
     },
   ];
 
@@ -74,6 +85,7 @@ const ResponsiveNav: React.FC = () => {
       <Dropdown className="dropdown-menu" menu={{ items }} trigger={["click"]}>
         <Space>
           <MenuOutlined
+            data-testid="menu-click"
             className="nav-icon-main"
             style={{ fontSize: "20px", marginTop: "10px" }}
           />

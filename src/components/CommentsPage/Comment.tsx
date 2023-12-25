@@ -52,23 +52,30 @@ const Comment: React.FC<IProps> = ({
   const [loading, setLoading] = useState<boolean>(true);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [mainPost, setMainPost] = useState<any>([]);
-  const [error, setError] = useState<string>("");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [error, setError] = useState<any>();
   const [toUpdateComments, setToUpdateComments] = useState<boolean>(false);
   const [parentPost, setParentPost] = useState<string>();
   const [postLoading, setPostLoading] = useState<boolean>(true);
 
   const getPost = async () => {
+    // try {
     const docRef = doc(db, "posts", postItem?.id);
     const document = await getDoc(docRef);
     const post = { ...document.data(), id: postItem?.id };
+
     setMainPost(post);
     setPostLoading(false);
     setParentPost(post?.id);
+    // } catch (err) {
+    //   setError(err);
+    // }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
-    const current = new Date();
+    const current = Date.now();
+
     setDate(current);
 
     if (e.target.value.length >= 100) {
@@ -90,137 +97,144 @@ const Comment: React.FC<IProps> = ({
       <Layout className="profile-payout-div margin-top">
         <Layout className="site-layout scroll-app ">
           {!postItem || !location ? (
-            <p className="no-comments-text">You can not access this page</p>
+            <p className="no-comments-text" data-testid="not-accessible">
+              You can not access this page
+            </p>
           ) : (
             <>
               <Header />
-              <Content style={{ margin: "0px 10px 0", overflow: "initial" }}>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Divider
+              {error ? (
+                <p className="no-comments-text" data-testid="server-error">
+                  Error Please try Again!
+                </p>
+              ) : (
+                <Content style={{ margin: "0px 10px 0", overflow: "initial" }}>
+                  <div
                     style={{
-                      fontSize: "22px",
-                      color: "#3087ff",
-                      fontWeight: "700",
-                    }}
-                    data-comment-page-title="comment-page-title"
-                  >
-                    Post
-                  </Divider>
-                </div>
-
-                {error ? (
-                  <p className="no-comments-text">Error Please try Again!</p>
-                ) : null}
-
-                {postLoading ? (
-                  <div className="skeleton-div">
-                    <Skeleton avatar active />
-                  </div>
-                ) : (
-                  <SinglePost
-                    postItem={mainPost}
-                    likedPosts={likedPosts}
-                    deleteLikePost={deleteLikePost}
-                    bookmarkPost={bookmarkPost}
-                    removeBookmarkPosts={removeBookmarkPosts}
-                    setToUpdateComments={setToUpdateComments}
-                    toUpdateComments={toUpdateComments}
-                  />
-                )}
-
-                <Divider>Comments</Divider>
-                {limit ? (
-                  <p className="limit-text">Please enter only 100 characters</p>
-                ) : null}
-                <div className="post-div" style={{ margin: "20px 0px" }}>
-                  <Space.Compact
-                    style={{
-                      height: "40px",
                       display: "flex",
-                      justifyContent: "center",
+                      justifyContent: "space-between",
+                      alignItems: "center",
                     }}
                   >
-                    <Form
-                      style={{ display: "flex", justifyContent: "center" }}
-                      onFinish={() =>
-                        handleComment(
-                          currUser,
-                          setError,
-                          comment,
-                          postItem,
-                          username,
-                          setComments,
-                          setComment,
-                          date,
-                          user
-                        )
-                      }
+                    <Divider
+                      style={{
+                        fontSize: "22px",
+                        color: "#3087ff",
+                        fontWeight: "700",
+                      }}
+                      data-comment-page-title="comment-page-title"
+                      data-testid="comments-title"
                     >
-                      <Form.Item>
-                        <Input
-                          className="post-input"
-                          placeholder="Comment on Post"
-                          value={comment}
-                          onChange={(e) => handleChange(e)}
-                          data-post-comment-input="data-post-comment-input"
-                        />
-                      </Form.Item>
-
-                      <Form.Item>
-                        <Button
-                          type="primary"
-                          htmlType="submit"
-                          style={{ height: "40px" }}
-                          data-submit-comment="data-submit-comment"
-                        >
-                          Comment
-                        </Button>
-                      </Form.Item>
-                    </Form>
-                  </Space.Compact>
-                </div>
-
-                {loading ? (
-                  <div className="loading-spin">
-                    <Spin tip="Loading" size="large">
-                      <div className="content" />
-                    </Spin>
+                      Post
+                    </Divider>
                   </div>
-                ) : (
-                  <div className="show-comments">
-                    {comments?.length === 0 ? (
-                      <div style={{ marginTop: "40px" }}>
-                        <Empty />
-                      </div>
-                    ) : (
-                      comments?.map((postItem: IPost, index: number) => {
-                        return (
-                          <SinglePost
-                            compare={location?.state.postItem.userId}
-                            deleteId={postItem?.id}
-                            postItem={postItem}
-                            key={index}
-                            postCommentDeleltId={mainPost}
-                            likedPosts={likedPosts}
-                            deleteLikePost={deleteLikePost}
-                            bookmarkPost={bookmarkPost}
-                            removeBookmarkPosts={removeBookmarkPosts}
-                            setToUpdateComments={setToUpdateComments}
-                            toUpdateComments={toUpdateComments}
-                            parentPost={parentPost}
+
+                  {postLoading ? (
+                    <div className="skeleton-div">
+                      <Skeleton avatar active />
+                    </div>
+                  ) : (
+                    <SinglePost
+                      postItem={mainPost}
+                      likedPosts={likedPosts}
+                      deleteLikePost={deleteLikePost}
+                      bookmarkPost={bookmarkPost}
+                      removeBookmarkPosts={removeBookmarkPosts}
+                      setToUpdateComments={setToUpdateComments}
+                      toUpdateComments={toUpdateComments}
+                    />
+                  )}
+
+                  <Divider>Comments</Divider>
+                  {limit ? (
+                    <p className="limit-text">
+                      Please enter only 100 characters
+                    </p>
+                  ) : null}
+                  <div className="post-div" style={{ margin: "20px 0px" }}>
+                    <Space.Compact
+                      style={{
+                        height: "40px",
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Form
+                        style={{ display: "flex", justifyContent: "center" }}
+                        onFinish={() =>
+                          handleComment(
+                            currUser,
+                            setError,
+                            comment,
+                            postItem,
+                            username,
+                            setComments,
+                            setComment,
+                            date,
+                            user
+                          )
+                        }
+                      >
+                        <Form.Item>
+                          <Input
+                            className="post-input"
+                            placeholder="Comment on Post"
+                            value={comment}
+                            onChange={(e) => handleChange(e)}
+                            data-post-comment-input="data-post-comment-input"
                           />
-                        );
-                      })
-                    )}
+                        </Form.Item>
+
+                        <Form.Item>
+                          <Button
+                            type="primary"
+                            htmlType="submit"
+                            style={{ height: "40px" }}
+                            data-submit-comment="data-submit-comment"
+                          >
+                            Comment
+                          </Button>
+                        </Form.Item>
+                      </Form>
+                    </Space.Compact>
                   </div>
-                )}
-              </Content>
+
+                  {loading ? (
+                    <div className="loading-spin">
+                      <Spin tip="Loading" size="large">
+                        <div className="content" />
+                      </Spin>
+                    </div>
+                  ) : (
+                    <div className="show-comments">
+                      {comments?.length === 0 ? (
+                        <div style={{ marginTop: "40px" }}>
+                          <Empty />
+                        </div>
+                      ) : (
+                        comments?.map((postItem: IPost, index: number) => {
+                          return (
+                            <SinglePost
+                              compare={location?.state.postItem.userId}
+                              deleteId={postItem?.id}
+                              postItem={postItem}
+                              key={index}
+                              postCommentDeleltId={mainPost}
+                              likedPosts={likedPosts}
+                              deleteLikePost={deleteLikePost}
+                              bookmarkPost={bookmarkPost}
+                              removeBookmarkPosts={removeBookmarkPosts}
+                              setToUpdateComments={setToUpdateComments}
+                              toUpdateComments={toUpdateComments}
+                              parentPost={parentPost}
+                            />
+                          );
+                        })
+                      )}
+                    </div>
+                  )}
+                </Content>
+              )}
             </>
           )}
         </Layout>

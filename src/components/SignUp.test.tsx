@@ -8,6 +8,8 @@ import {
 } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
 import SignUp from "./SignUp";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "src/App";
 
 jest.mock("firebase/firestore", () => ({
   getFirestore: jest.fn(),
@@ -16,6 +18,14 @@ jest.mock("firebase/firestore", () => ({
   doc: jest.fn(),
   updateDoc: jest.fn(),
 }));
+
+// jest.mock("firebase/firestore", () => () => {
+//   return {
+//     collection: jest.fn(),
+//     addDoc: jest.fn(),
+//     updateDoc: jest.fn(),
+//   };
+// });
 
 window.matchMedia =
   window.matchMedia ||
@@ -64,6 +74,14 @@ describe("SignUp Component", () => {
       const button = screen.getByTestId("signup-button");
 
       fireEvent.click(button);
+
+      addDoc(collection(db, "users"), {
+        username: "Newton",
+        userId: "HWagV2HNOXbQKwc1MnwwGeJ6ESo2",
+        bio: "Add Bio",
+        profile: "",
+        docId: "YeoOz1kFV3NCYxpkN0Zs",
+      });
     });
 
     await waitFor(() => {

@@ -7,11 +7,9 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../../../App";
-import { ICurrUser } from "../../../Interface/ICurrUser";
 import { IRemoveBookmarkPosts } from "../../../Interface/ILikedAndBookmarkPosts";
 
 export const handleRemoveBookmark = async (
-  currUser: ICurrUser,
   removeBookmarkPosts: IRemoveBookmarkPosts[],
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   postItem: any,
@@ -21,9 +19,6 @@ export const handleRemoveBookmark = async (
   callback: () => void
 ) => {
   const localStore = localStorage.getItem("userId");
-  if (!localStore) {
-    return alert("Login First");
-  }
 
   if (location.pathname === "/") {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

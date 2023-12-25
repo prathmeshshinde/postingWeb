@@ -1,8 +1,8 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
-import Header from "./Header";
 import { act } from "react-dom/test-utils";
+import ResponsiveNav from "./ResponsiveNav";
 
 window.matchMedia =
   window.matchMedia ||
@@ -14,26 +14,30 @@ window.matchMedia =
     };
   };
 
-describe("Header Component", () => {
-  it("renders Header component correctly", () => {
+describe("Responsive Navbar Component", () => {
+  it("renders Responsive Nav component correctly", () => {
     render(
       <Router>
-        <Header />
+        <ResponsiveNav />
       </Router>
     );
-
-    // Ensure the logo is rendered
-    expect(screen.getByTestId("logo-title")).toBeInTheDocument();
   });
 
   it("handles logout click and redirects to /login", async () => {
+    localStorage.setItem("userId", "HWagV2HNOXbQKwc1MnwwGeJ6ESo2");
     render(
       <Router>
-        <Header />
+        <ResponsiveNav />
       </Router>
     );
 
-    screen.getByText("Log In");
+    const menuClick = screen.getByTestId("menu-click");
+
+    act(() => {
+      fireEvent.click(menuClick);
+    });
+
+    screen.getByTestId("logout-icon");
   });
 
   it("handles signOut button", async () => {
@@ -41,11 +45,16 @@ describe("Header Component", () => {
 
     render(
       <Router>
-        <Header />
+        <ResponsiveNav />
       </Router>
     );
 
-    const signOut = screen.getByTestId("logout-button");
+    const menuClick = screen.getByTestId("menu-click");
+
+    act(() => {
+      fireEvent.click(menuClick);
+    });
+    const signOut = screen.getByTestId("handle-res-logout");
 
     act(() => {
       fireEvent.click(signOut);

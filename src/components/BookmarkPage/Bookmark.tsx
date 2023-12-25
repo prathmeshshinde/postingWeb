@@ -114,7 +114,11 @@ const Bookmark: React.FC<IProps> = ({
           )}
 
           {!localStore ? (
-            <p className="no-comments-text" data-postid="login-text">
+            <p
+              className="no-comments-text"
+              data-postid="login-text"
+              data-testid="login-tet"
+            >
               Please login to see bookmarked posts
             </p>
           ) : null}

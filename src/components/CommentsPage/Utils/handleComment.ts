@@ -24,7 +24,8 @@ export const handleComment = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   user: any
 ) => {
-  if (!currUser) {
+  const localStore = localStorage.getItem("userId");
+  if (!localStore) {
     message.error("Please login first");
     return;
   }
@@ -70,7 +71,6 @@ export const handleComment = async (
       message.error("Please enter valid comment");
     }
   } catch (err: unknown) {
-    message.error("Something went wrong!");
     setError("Please Try Again!");
   }
 };

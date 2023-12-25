@@ -77,6 +77,7 @@ const Home: React.FC<IHomeProps> = ({
     setPost(e.target.value);
 
     const current = Date.now();
+
     setDate(current);
 
     if (e.target.value.length >= 100) {
@@ -94,6 +95,7 @@ const Home: React.FC<IHomeProps> = ({
       <Layout className="margin-top">
         <div
           className="site-layout scroll-app"
+          data-testid="scroll-test"
           onScroll={(e) => forInfiniteScroll(e)}
         >
           <Header />
@@ -147,7 +149,9 @@ const Home: React.FC<IHomeProps> = ({
               </Space.Compact>
             </div>
             {limit ? (
-              <p className="limit-text">Please enter only 100 characters</p>
+              <p className="limit-text" data-testid="text-limit-on-post">
+                Please enter only 100 characters
+              </p>
             ) : null}
 
             {loading ? (
@@ -159,11 +163,17 @@ const Home: React.FC<IHomeProps> = ({
             ) : (
               <div>
                 {posts.length === 0 ? (
-                  <div style={{ marginTop: "100px" }}>
+                  <div
+                    style={{ marginTop: "100px" }}
+                    data-testid="posts-not-present"
+                  >
                     <Empty />
                   </div>
                 ) : (
-                  <div style={{ marginTop: "20px" }}>
+                  <div
+                    style={{ marginTop: "20px" }}
+                    data-testid="posts-on-home-page"
+                  >
                     {posts
                       ?.sort((a, b) => {
                         return b.date - a.date;
@@ -190,7 +200,10 @@ const Home: React.FC<IHomeProps> = ({
             )}
 
             {infinteLoader && !loading && posts.length > 10 ? (
-              <div className="loading-spin-infinte">
+              <div
+                className="loading-spin-infinte"
+                data-testid="infinite-loader"
+              >
                 <Spin tip="Loading" size="large">
                   <div className="content" />
                 </Spin>

@@ -8,13 +8,11 @@ import {
 } from "firebase/firestore";
 import { db } from "../../../App";
 import { message } from "antd";
-import { ICurrUser } from "../../../Interface/ICurrUser";
 
 type NotificationType = "success" | "info" | "warning" | "error";
 
 export const handleBookmark = async (
   post_id: string,
-  currUser: ICurrUser,
   openNotificationWithIcon: (type: NotificationType, message: string) => void,
   callback: () => void
 ) => {
@@ -30,7 +28,6 @@ export const handleBookmark = async (
 
     const Bookmarkposts = query(collection(db, "posts"));
 
-    // getting the bookmark posts and mapping through them to update the bookmark value
     getDocs(Bookmarkposts).then((snapshot) => {
       snapshot?.docs.forEach((document) => {
         const obj = { bookmarks: document.data().bookmarks + 1 };

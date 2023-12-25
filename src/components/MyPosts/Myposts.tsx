@@ -286,11 +286,12 @@ const Myposts = () => {
                         border: "1px solid green",
                         borderRadius: "8px",
                         padding: "0px 5px",
-                        width: "60px",
+                        width: "100px",
                         textAlign: "center",
+                        fontSize: "11px",
                       }}
                     >
-                      Delete
+                      Delete Comment
                     </Text>
                   </Popconfirm>,
                 ],
@@ -419,6 +420,7 @@ const Myposts = () => {
                         reload: false,
                         setting: false,
                       }}
+                      data-testid="table-row-myposts"
                     />
                   </ProForm>
                 )}

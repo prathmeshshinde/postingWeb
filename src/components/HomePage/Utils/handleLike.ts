@@ -8,13 +8,11 @@ import {
 } from "firebase/firestore";
 import { db } from "../../../App";
 import { message } from "antd";
-import { ICurrUser } from "../../../Interface/ICurrUser";
 
 type NotificationType = "success" | "info" | "warning" | "error";
 
 export const handleLike = async (
   post_id: string,
-  currUser: ICurrUser,
   openNotificationWithIcon: (type: NotificationType, message: string) => void,
   callback: () => void
 ) => {

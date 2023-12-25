@@ -34,6 +34,7 @@ const Header: React.FC = () => {
               type="primary"
               onClick={handleSignOut}
               data-logout="data-logout"
+              data-testid="logout-button"
             >
               Log out
             </Button>

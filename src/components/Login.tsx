@@ -26,7 +26,12 @@ const Login: React.FC = () => {
       <div className="form-div" style={{ height: "100vh" }}>
         <div className="form-box">
           <div className="form-title">
-            <Title level={3} type="secondary" data-login-title="login-title">
+            <Title
+              level={3}
+              type="secondary"
+              data-login-title="login-title"
+              data-testid="login-page-title"
+            >
               Login
             </Title>
           </div>

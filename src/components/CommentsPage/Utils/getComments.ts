@@ -1,6 +1,5 @@
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../App";
-import { message } from "antd";
 import { IPost } from "../../../Interface/IPost";
 
 export const getComments = async (
@@ -48,7 +47,6 @@ export const getComments = async (
       setLoading(false);
     })
     .catch((err) => {
-      message.error("Something went wrong!");
       setError(err.message);
     });
 };

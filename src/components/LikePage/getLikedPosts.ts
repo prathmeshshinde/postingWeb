@@ -10,6 +10,7 @@ export const getLikedPosts = async (
   likedPosts: ILikedPosts[]
 ) => {
   const localStore = localStorage.getItem("userId");
+
   if (!localStore) {
     setLoading(false);
     return;

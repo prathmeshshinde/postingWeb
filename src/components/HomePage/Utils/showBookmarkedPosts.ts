@@ -2,7 +2,6 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../App";
 import { IBookmarkPosts } from "../../../Interface/ILikedAndBookmarkPosts";
 import { IPost } from "../../../Interface/IPost";
-import { ICurrUser } from "../../../Interface/ICurrUser";
 import { message } from "antd";
 
 export const showBookmarkedPosts = (
@@ -11,7 +10,6 @@ export const showBookmarkedPosts = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   location: any,
   postItem: IPost,
-  currUser: ICurrUser,
   setBookmarkPostId: React.Dispatch<React.SetStateAction<string[]>>
 ) => {
   const localStore = localStorage.getItem("userId");

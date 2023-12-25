@@ -62,7 +62,7 @@ const SinglePost: React.FC<ISinglePost> = ({
   const location = useLocation();
   const [api, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
-
+  const localstore = localStorage.getItem("userId");
   const openNotificationWithIcon = (
     type: NotificationType,
     message: string
@@ -120,7 +120,7 @@ const SinglePost: React.FC<ISinglePost> = ({
   };
 
   const content = (
-    <div>
+    <div data-testid="content-div">
       <div>
         {currUser?.userId === compare &&
         currUser?.userId !== postItem?.userId ? null : (
@@ -128,6 +128,7 @@ const SinglePost: React.FC<ISinglePost> = ({
             className="update-button"
             onClick={() => updatePost()}
             data-update-post="update-post"
+            data-testid="update-post-button"
           >
             Update the post
           </p>
@@ -140,6 +141,7 @@ const SinglePost: React.FC<ISinglePost> = ({
           cancelText="No"
           data-delete-post="delete-post"
           className="popconfirm"
+          data-testid="delete-posts-button"
         >
           <p className="delete-button" data-delete-post="delete-post">
             Delete
@@ -157,7 +159,6 @@ const SinglePost: React.FC<ISinglePost> = ({
       location,
       postItem,
       likedPostsId,
-      currUser,
       setLikedPostId
     );
     showBookmarkedPosts(
@@ -165,7 +166,6 @@ const SinglePost: React.FC<ISinglePost> = ({
       bookmarkPost,
       location,
       postItem,
-      currUser,
       setBookmarkPostId
     );
     setNoOfLikes(postItem?.likes);
@@ -199,7 +199,7 @@ const SinglePost: React.FC<ISinglePost> = ({
             <div className="post-user">
               <div>
                 {postItem?.profile === "" ? (
-                  <div className="text-conatainer">
+                  <div className="text-conatainer" data-testid="text-profile">
                     <p className="text-profile">
                       {postItem?.username.charAt(0)}
                     </p>
@@ -219,22 +219,27 @@ const SinglePost: React.FC<ISinglePost> = ({
                 <p className="post-date">{datePost()}</p>
               </div>
             </div>
-            <div style={{ position: "relative" }}>
+            <div style={{ position: "relative" }} data-testid="data-div-id">
               <div>
                 {location.pathname !== "/like" &&
                 location.pathname !== "/bookmark" &&
-                currUser ? (
+                localstore ? (
                   <Popover
                     placement="leftTop"
                     content={content}
                     trigger="hover"
+                    data-testid="div-main"
                   >
-                    <div style={{ display: "flex", justifyContent: "end" }}>
-                      {currUser?.userId === postItem?.userId ||
-                      currUser?.userId === compare ? (
+                    <div
+                      style={{ display: "flex", justifyContent: "end" }}
+                      data-testid="div-main"
+                    >
+                      {localstore === postItem?.userId ||
+                      localstore === compare ? (
                         <MoreOutlined
                           style={{ fontSize: "20px", color: "#000" }}
                           data-three-dot="three-dot"
+                          data-testid="three-dot-test"
                         />
                       ) : null}
                     </div>
@@ -297,16 +302,19 @@ const SinglePost: React.FC<ISinglePost> = ({
               ) : null}
 
               {location.pathname !== "/bookmark" ? (
-                <div data-like-button="like-button-like-page">
+                <div
+                  data-like-button="like-button-like-page"
+                  data-testid="like-button-page"
+                >
                   {location.pathname !== "/profile" ? (
                     <div style={{ display: "flex", alignItems: "center" }}>
                       {likedPostId?.includes(postItem?.postId) ? (
                         <Tooltip title="Dislike">
                           <HeartFilled
                             data-filled-like-icon="filled-like-icon"
+                            data-testid="filled-like-icon-post"
                             onClick={async () => {
                               await handleDislike(
-                                currUser,
                                 deleteLikePost,
                                 postItem,
                                 handleRemoveLike,
@@ -336,7 +344,6 @@ const SinglePost: React.FC<ISinglePost> = ({
                             onClick={async () =>
                               await handleLike(
                                 postItem?.id,
-                                currUser,
                                 openNotificationWithIcon,
                                 () => {
                                   setNoOfLikes((prev) => prev + 1);
@@ -350,6 +357,7 @@ const SinglePost: React.FC<ISinglePost> = ({
                             className="handle-like"
                             data-handle-like="handle-like"
                             style={{ fontSize: "20px", cursor: "pointer" }}
+                            data-testid="outline-like-icon-post"
                           />
                         </Tooltip>
                       )}
@@ -367,16 +375,19 @@ const SinglePost: React.FC<ISinglePost> = ({
               ) : null}
 
               {location.pathname !== "/like" ? (
-                <div data-bookmark-button="bookmark-button-bookmark-page">
+                <div
+                  data-bookmark-button="bookmark-button-bookmark-page"
+                  data-testid="bookmark-button-page"
+                >
                   {location.pathname !== "/profile" ? (
                     <div style={{ display: "flex", alignItems: "center" }}>
                       {bookmarkPostId?.includes(postItem?.postId) ? (
                         <Tooltip title="Remove Bookmark">
                           <ReadFilled
                             data-filled-bookmark-icon="filled-bookmark-icon"
+                            data-testid="remove-bookmark-posts"
                             onClick={() =>
                               handleRemoveBookmark(
-                                currUser,
                                 removeBookmarkPosts,
                                 postItem,
                                 location,
@@ -406,7 +417,6 @@ const SinglePost: React.FC<ISinglePost> = ({
                             onClick={() =>
                               handleBookmark(
                                 postItem?.id,
-                                currUser,
                                 openNotificationWithIcon,
                                 () => {
                                   setNoOfBookmarks((prev) => prev + 1);
@@ -423,6 +433,7 @@ const SinglePost: React.FC<ISinglePost> = ({
                             }}
                             className="handle-bookmark"
                             data-bookmark-icon="data-bookmark-icon"
+                            data-testid="outline-bookmark-icon-post"
                           />
                         </Tooltip>
                       )}

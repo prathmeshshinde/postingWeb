@@ -2,7 +2,6 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../App";
 import { ILikedPosts } from "../../../Interface/ILikedAndBookmarkPosts";
 import { IPost } from "../../../Interface/IPost";
-import { ICurrUser } from "../../../Interface/ICurrUser";
 
 export const showLikedPosts = (
   likedPosts: ILikedPosts[],
@@ -10,7 +9,6 @@ export const showLikedPosts = (
   location: any,
   postItem: IPost,
   likedPostsId: string[] | undefined,
-  currUser: ICurrUser,
   setLikedPostId: React.Dispatch<React.SetStateAction<string[]>>
 ) => {
   const localStore = localStorage.getItem("userId");

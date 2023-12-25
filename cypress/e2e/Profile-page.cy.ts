@@ -30,13 +30,14 @@ describe("Profile page", () => {
 
     cy.wait(3000);
 
-    // cy.get('[data-edit-button="edit-button"]').click();
+    cy.get('[data-edit-button="edit-button"]').click();
 
-    // cy.get('[data-submit-modal="cancel-submit-modal"]').submit();
+    cy.get('[data-submit-modal="cancel-submit-modal"]').submit();
 
-    // cy.wait(2000);
+    cy.wait(2000);
 
-    // cy.contains("Successfully updated profile").should("exist");
+    cy.contains("Successfully updated profile").should("exist");
+    cy.wait(3000);
   });
 
   it("cancel updation of profile", () => {
@@ -60,8 +61,8 @@ describe("Profile page", () => {
     cy.visit("/profile");
 
     cy.wait(3000);
-    // cy.get('[data-edit-button="edit-button"]').click();
-    // cy.get('[data-cancel-modal="cancel-modal"]').click();
+    cy.get('[data-edit-button="edit-button"]').click();
+    cy.get('[data-cancel-modal="cancel-modal"]').click();
   });
 
   it("check menu on posts", () => {
@@ -83,35 +84,35 @@ describe("Profile page", () => {
     cy.url().should("include", "/");
     cy.visit("/profile");
     cy.wait(3000);
-    // cy.get('[data-user-posts="all-user-posts"]').then(($el) => {
-    //   if ($el.find('[data-testid="posts"]').length > 0) {
-    //     cy.get('[data-three-dot="three-dot"]').click({ multiple: true });
+    cy.get('[data-user-posts="all-user-posts"]').then(($el) => {
+      if ($el.find('[data-testid="posts"]').length > 0) {
+        cy.get('[data-three-dot="three-dot"]').click({ multiple: true });
 
-    //     cy.get('[data-update-post="update-post"]').click();
+        cy.get('[data-update-post="update-post"]').eq(0).click();
 
-    //     cy.get('[data-isModalOpen="isModalOpen"]').should("exist");
+        cy.get('[data-isModalOpen="isModalOpen"]').should("exist");
 
-    //     cy.get('[data-update-post-modal="update-post-modal"]').submit();
+        cy.get('[data-update-post-modal="update-post-modal"]').submit();
 
-    //     cy.contains("Post updated").should("exist");
-    //   } else {
-    //     cy.get('[data-show-empty-posts="empty-posts"]').should("exist");
-    //   }
-    // });
+        cy.contains("Post updated").should("exist");
+      } else {
+        cy.get('[data-show-empty-posts="empty-posts"]').should("exist");
+      }
+    });
   });
 
   it("check deleting posts", () => {
     cy.visit("/profile");
     cy.wait(3000);
-    // cy.get('[data-user-posts="all-user-posts"]').then(($el) => {
-    //   if ($el.find('[data-testid="posts"]').length > 0) {
-    //     cy.get('[data-three-dot="three-dot"]').click({ multiple: true });
+    cy.get('[data-user-posts="all-user-posts"]').then(($el) => {
+      if ($el.find('[data-testid="posts"]').length > 0) {
+        cy.get('[data-three-dot="three-dot"]').click({ multiple: true });
 
-    //     cy.get('[ data-delete-post="delete-post"]').click();
-    //     cy.contains("Yes").click();
-    //   } else {
-    //     cy.get('[data-show-empty-posts="empty-posts"]').should("exist");
-    //   }
-    // });
+        cy.get('[ data-delete-post="delete-post"]').click();
+        cy.contains("Yes").click();
+      } else {
+        cy.get('[data-show-empty-posts="empty-posts"]').should("exist");
+      }
+    });
   });
 });

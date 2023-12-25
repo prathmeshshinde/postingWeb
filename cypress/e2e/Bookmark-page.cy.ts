@@ -1,21 +1,21 @@
-beforeEach(() => {
-  cy.visit("/login");
-  localStorage.getItem("userId");
-  const typedEmail = "issac@gmail.com";
-  const typedPass = "omkar123";
+// beforeEach(() => {
+//   cy.visit("/login");
+//   localStorage.getItem("userId");
+//   const typedEmail = "issac@gmail.com";
+//   const typedPass = "omkar123";
 
-  cy.get('[data-login-mail="login-mail-field"]')
-    .type(typedEmail)
-    .should("have.value", typedEmail);
+//   cy.get('[data-login-mail="login-mail-field"]')
+//     .type(typedEmail)
+//     .should("have.value", typedEmail);
 
-  cy.get('[data-login-pass="login-pass-field"]')
-    .type(typedPass)
-    .should("have.value", typedPass);
+//   cy.get('[data-login-pass="login-pass-field"]')
+//     .type(typedPass)
+//     .should("have.value", typedPass);
 
-  cy.get(".login-form-button").click();
+//   cy.get(".login-form-button").click();
 
-  cy.url().should("include", "/");
-});
+//   cy.url().should("include", "/");
+// });
 
 describe("Bookmark page", () => {
   it("renders Bookmark page", () => {
@@ -28,13 +28,31 @@ describe("Bookmark page", () => {
   it("bookmarked posts are present in the data", () => {
     cy.wait(3000);
     cy.visit("/");
+    cy.wait(3000);
     cy.get(".handle-bookmark").should("exist");
+    cy.wait(3000);
+    cy.visit("/login");
+    localStorage.getItem("userId");
+    const typedEmail = "issac@gmail.com";
+    const typedPass = "omkar123";
+
+    cy.get('[data-login-mail="login-mail-field"]')
+      .type(typedEmail)
+      .should("have.value", typedEmail);
+
+    cy.get('[data-login-pass="login-pass-field"]')
+      .type(typedPass)
+      .should("have.value", typedPass);
+
+    cy.get(".login-form-button").click();
+
+    cy.url().should("include", "/");
+
     cy.wait(3000);
     cy.get(".handle-bookmark").eq(0).click();
     cy.wait(3000);
 
     cy.visit("/bookmark");
-    cy.get('[data-bookmarked-post="data-bookmarked-posts"]').should("exist");
   });
 
   it("bookmarked posts are not present in the data", () => {

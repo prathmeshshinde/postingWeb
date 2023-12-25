@@ -22,8 +22,10 @@ describe("SignUp Component", () => {
     cy.wait(1000);
 
     cy.get('[data-testid="signup-button"]').click();
-
     cy.wait(1000);
+
+    cy.url().should("eq", "http://localhost:3000/");
+    cy.get('[data-testid="logo-title"]').should("exist");
 
     cy.get('[data-error-signup="data-error-signup"]').should("not.exist");
 

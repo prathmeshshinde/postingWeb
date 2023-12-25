@@ -14,7 +14,7 @@ interface IAuthContextProps {
   children: React.ReactNode;
 }
 
-const AuthProvider = React.createContext({});
+export const AuthProvider = React.createContext({});
 
 export function useUserAuth() {
   return useContext(AuthProvider);
