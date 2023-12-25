@@ -35,6 +35,12 @@ Test coverage report of jest- 08/12/2023
 Test coverage report of Cypress- 08/12/2023
 ![cypress test coverage](https://github.com/prathmeshshinde/postingWeb/assets/55370612/c68da080-a602-406e-8b5e-e52ee089b3ff)
 
+Test coverage report of jest- 26/12/2023
+![jest coverage](https://github.com/prathmeshshinde/postingWeb/assets/55370612/4fd07100-0dba-45e2-ba3d-c15143ac977b)
+
+Test coverage report of Cypress- 26/12/2023
+![cypress coverage](https://github.com/prathmeshshinde/postingWeb/assets/55370612/c451bbe0-a11a-40d9-8922-7e841d674228)
+
 ## Used [Capacitor](https://capacitorjs.com/) for building a native app from the existing code base.
 here are some screenshots of the capacitor app
 
